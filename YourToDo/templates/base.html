@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>YourToDo | {% block pageTitle %}{% endblock %}</title>
+		{% load staticfiles %}
+
+		<!-- #TODO: Create & add favicon -->
+
+        <!-- CSS -->
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+
+        <!-- JS -->
+        <script src="{% static 'js/bootstrap.js' %}"></script>
+        <script src="{% static 'js/app.js' %}"></script>
+
+        <!-- Fonts -->
+        <link href='https://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" id="btnCollapse" data-toggle="collapse" data-target="#navbar-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="#" class="navbar-brand">YourToDo</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                        	<a href="#">home</a>
+                        </li>
+                        <li>
+                        	<a href="#">about</a>
+                        </li>
+                        <li>
+                        	<a href="#">contact</a>
+                        </li>
+                        <li>
+                        	<a href="#"><img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" /></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+		
+	</body>
+</html>
