@@ -36,6 +36,8 @@ urlpatterns += patterns('',
     url(r'^logout/$',   'YourToDo.views.logout'),
     url(r'^loggedin/$', 'YourToDo.views.loggedin'),
     url(r'^invalid/$',  'YourToDo.views.invalid_login'),
+    url(r'^registration/$', 'YourToDo.views.registration'),
+    url(r'^registration_success/$', 'YourToDo.views.registration_success'),
     
     ("^", include("mezzanine.urls")),
 )
