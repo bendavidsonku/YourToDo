@@ -1,0 +1,25 @@
+.user-pic-nav {
+	width: 32px;
+	height: 32px;
+	margin-top: -5px;
+}
+
+nav {
+	font-family: 'Titillium Web', sans-serif;
+	height: 72px;
+}
+
+.navbar-brand {
+	font-size: 36px;
+	line-height: 36px;
+}
+
+ul.navbar-nav>li {
+	font-size: 20px;
+	line-height: 20px;
+	margin-top: 10px;
+}
+
+.top {
+	margin-top: 72px;
+}
