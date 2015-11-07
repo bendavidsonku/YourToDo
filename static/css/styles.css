@@ -1,3 +1,9 @@
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+
 .user-pic-nav {
 	width: 32px;
 	height: 32px;
@@ -22,4 +28,71 @@ ul.navbar-nav>li {
 
 .top {
 	margin-top: 72px;
+}
+
+
+
+.base-header {
+	height: 450px;
+	background-color: #424875;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	color: #fff;
+}
+
+.base-header h4>a {
+	text-decoration: underline;
+	color: #fff;
+}
+
+.base-header a:hover {
+	color: #000;
+}
+
+.base-header button {
+	width: 200px;
+	margin: 20px;
+}
+
+.base-header-content {
+
+}
+
+.base-content {
+	height: 450px;
+	background-color: #5F648D;
+	color: #fff;
+}
+
+.base-footer {
+	background-color: #424875;
+	color: #fff;
+	text-align: center;
+	height: 100%;
+	min-height: 1200px;
+}
+
+.base-footer p {
+	margin-top: 20px;
+}
+
+.form-signin {
+	
+}
+
+.form-signin input {
+	width: 300px;
+	padding: 15px;
+	margin-top: 10px;
+	font-size: 18px;
+}
+
+.form-signin .submit {
+	margin-top: 40px;
+}
+
+.form-signin a {
+	text-decoration: underline;
 }

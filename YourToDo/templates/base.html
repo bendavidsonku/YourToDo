@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<title>YourToDo | {% block pageTitle %}{% endblock %}</title>
+		<title>YourToDo | {% block pageTitle %}Home{% endblock %}</title>
 		{% load staticfiles %}
 
 		<!-- #TODO: Create & add favicon -->
@@ -11,9 +11,9 @@
         <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 
         <!-- JS -->
+        <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.js' %}"></script>
         <script src="{% static 'js/app.js' %}"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
         <!-- Fonts -->
         <link href='https://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
@@ -29,23 +29,26 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="#" class="navbar-brand">YourToDo</a>
+                    <a href="/" class="navbar-brand">YourToDo</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="navbar-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                        	<a href="#">home</a>
+                        	<a href="/">home</a>
                         </li>
                         <li>
-                        	<a href="#">about</a>
+                        	<a href="/about">about</a>
                         </li>
                         <li>
-                        	<a href="#">contact</a>
+                        	<a href="/contact">contact</a>
                         </li>
                         {% if user.is_authenticated %}
                         <li>
-                        	<a href="#"><img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />{{ user.username }}'s account</a>
+                        	<a href="/account"><img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />{{ user.username }}'s account</a>
+                        </li>
+                        <li>
+                            <a href="/logout"><button>Sign Out</button></a>
                         </li>
                         {% else %}
                         <li>
@@ -59,14 +62,30 @@
 
         <div class="top">
             {% block content %}
-            <div class="container">
-                {% if user.is_authenticated %}
-                <a href="logout/"><button>Sign Out</button></a>
-                {% else %}
-                <a href="login/"><button>Sign In</button></a>
-                <a href="#"><button>Sign Up</button></a>
-                {% endif %}
-            </div>
+            <section class="base-header">
+                <div class="container">
+                    <h2>A new way to organize your life</h2><br>
+                    <h4>We've made it easy to create useful, organized planners that will allow you to stay productive even when you've got a million things to do.</h4>
+                    {% if not user.is_authenticated %}
+                        <a href="/login"><button class="btn btn-lg btn-success">Sign In</button></a>
+                        <a href="/registration"><button class="btn btn-lg btn-success">Sign Up</button></a>
+                    {% else %}
+                        <a href="/planner"><button class="btn btn-lg btn-success">View My Planner</button></a>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="base-content">
+                <div class="container">
+                    
+                </div>
+            </section>
+            
+            <section class="base-footer">
+                <div class="container">
+                    <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
+                </div>
+            </section>
             {% endblock %}
         </div>
 		

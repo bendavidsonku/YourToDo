@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 
+{% block pageTitle %}Sign In{% endblock %}
+
 {% block content %}
     <div class="container">
-        {% if form.errors %}
-            <p>Sorry, that's not a valid username or password</p>
-        {% endif %}
+        <div class="form-signin col-lg-">
+            <h2>Sign In</h2><br>
+            {% if form.errors %}
+                <p>Sorry, that's not a valid username or password</p>
+            {% endif %}
 
-        <form action="/auth/" method="post">{% csrf_token %}
-            <label for="username">Username:</label>
-            <input type="text" name="username" value="" id="username"><br>
-            <label for="password">Password:</label>
-            <input type="password" name="password" value="" id="password">
+            <form action="/auth/" method="post">{% csrf_token %}
+                <input type="text" name="username" placeholder="Username" id="username"><br>
+                <input type="password" name="password" placeholder="Password" id="password"><br>
 
-            <input type="submit" value="login" />
-        </form>
+                <input type="submit" class="btn btn-success submit" value="Login" />
+            </form><br>
 
-        <a href="/registration">or click here to sign up</a>
+            <a href="/registration">or click here to sign up</a>
+        </div>
     </div>
 {% endblock %}
