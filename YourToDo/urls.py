@@ -31,6 +31,10 @@ urlpatterns += patterns('',
 
     url(r"^$", direct_to_template, {"template": "base.html"}, name="home"),
 
+    # Static Pages
+    url(r'^about/$',    'YourToDo.views.about'),
+    url(r'^contact/$',    'YourToDo.views.contact'),
+
     # User Authentication Urls
     url(r'^login/$',    'YourToDo.views.login'),
     url(r'^auth/$',     'YourToDo.views.auth_view'),
