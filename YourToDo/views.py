@@ -2,6 +2,8 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.core.context_processors import csrf
+from django.template import RequestContext
+
 from YourToDo.forms import defaultUserRegistrationForm
 
 def login(request):
@@ -34,18 +36,19 @@ def logout(request):
     return render_to_response('auth/logout.html')
 
 def registration(request):
-    if request.method == 'POST':
-        form = defaultUserRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/registration_success/')
-
     args = {}
     args.update(csrf(request))
 
-    args['form'] = defaultUserRegistrationForm()
+    if request.method == 'POST':
+        form = defaultUserRegistrationForm(request.POST)
+        args['form'] = form
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/registration_success/')
+    else:
+        args['form'] = defaultUserRegistrationForm()
 
-    return render_to_response('auth/registration.html', args)
+    return render_to_response('auth/registration.html', args, context_instance=RequestContext(request))
 
 def registration_success(reqest):
         return render_to_response('auth/registration_success.html')
