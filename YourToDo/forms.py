@@ -2,10 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-class UniqueUserEmailField(forms.EmailField):
-    """
-    An EmailField which only is valid if no User has that email.
-    """
+class UniqueEmailField(forms.EmailField):
+   
     def validate(self, value):
         super(forms.EmailField, self).validate(value)
         try:
@@ -19,7 +17,7 @@ class UniqueUserEmailField(forms.EmailField):
 class defaultUserRegistrationForm(UserCreationForm):
 	username = forms.CharField(label = 'Username', max_length=30, help_text=('Length: 30 characters or fewer. Letters, digits and '
                     '@/./+/-/_ only.'), widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-	email = UniqueUserEmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'E-mail address'}))
+	email = UniqueEmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'E-mail address'}))
 	first_name = forms.CharField(label = "First Name", required = True,  widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
 	last_name = forms.CharField(label = "Last Name", required = True,  widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
 	password1 = forms.CharField(label = "Password", required = True,  widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
