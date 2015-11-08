@@ -3,7 +3,16 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.contrib.auth.forms import UserCreationForm
+from django.template import RequestContext
 
+# Static Page Views
+def about(request):
+    return render_to_response('static/about.html', context_instance = RequestContext(request))
+
+def contact(request):
+    return render_to_response('static/contact.html', context_instance = RequestContext(request))
+
+# Authentication Views
 def login(request):
     c = {}
     c.update(csrf(request))
@@ -21,10 +30,7 @@ def auth_view(request):
         return HttpResponseRedirect('/invalid')
 
 def loggedin(request):
-    return render_to_response('auth/loggedin.html', 
-        {
-            'user': request.user
-        })
+    return render_to_response('auth/loggedin.html', context_instance = RequestContext(request))
 
 def invalid_login(request):
     return render_to_response('auth/invalid.html')

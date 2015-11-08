@@ -59,10 +59,10 @@
                 </div>
             </div>
         </nav>
-
-        <div class="top">
+        
+        <div class="wrapper">
             {% block content %}
-            <section class="base-header">
+            <div class="base-header">
                 <div class="container">
                     <h2>A new way to organize your life</h2><br>
                     <h4>We've made it easy to create useful, organized planners that will allow you to stay productive even when you've got a million things to do.</h4>
@@ -73,21 +73,18 @@
                         <a href="/planner"><button class="btn btn-lg btn-success">View My Planner</button></a>
                     {% endif %}
                 </div>
-            </section>
+            </div>
 
-            <section class="base-content">
+            <div class="base-content bg-light">
                 <div class="container">
                     
                 </div>
-            </section>
+            </div>
             
-            <section class="base-footer">
-                <div class="container">
-                    <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
-                </div>
-            </section>
+            <div class="footer">
+                <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
+            </div>
             {% endblock %}
         </div>
-		
 	</body>
 </html>

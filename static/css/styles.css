@@ -1,8 +1,27 @@
 html, body {
+	margin: 0;
+	padding: 0;
 	height: 100%;
-	overflow: hidden;
+	padding-top: 36px;
 }
 
+.wrapper {
+	min-height: 100%;
+	position: relative;
+	background-color: #5F648D;
+}
+
+.header {
+
+}
+
+.content {
+
+}
+
+.bg-light {
+	background-color: #5F648D;
+}
 
 .user-pic-nav {
 	width: 32px;
@@ -26,16 +45,10 @@ ul.navbar-nav>li {
 	margin-top: 10px;
 }
 
-.top {
-	margin-top: 72px;
-}
-
-
-
 .base-header {
 	height: 450px;
 	background-color: #424875;
-	text-align: center;
+	text-align: center !important;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
@@ -56,30 +69,28 @@ ul.navbar-nav>li {
 	margin: 20px;
 }
 
-.base-header-content {
-
-}
-
 .base-content {
 	height: 450px;
-	background-color: #5F648D;
 	color: #fff;
 }
 
-.base-footer {
+.footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
 	background-color: #424875;
 	color: #fff;
+	width: 100%;
+	height: 50px;
 	text-align: center;
-	height: 100%;
-	min-height: 1200px;
-}
-
-.base-footer p {
-	margin-top: 20px;
+	padding: 17px;
 }
 
 .form-signin {
-	
+	color: #fff;
+	margin-top: 35px;
+	margin-bottom: 45px;
+	padding-bottom: 50px;
 }
 
 .form-signin input {
@@ -89,10 +100,51 @@ ul.navbar-nav>li {
 	font-size: 18px;
 }
 
+.form-signin-input {
+	color: #000;
+}
+
 .form-signin .submit {
 	margin-top: 40px;
 }
 
 .form-signin a {
 	text-decoration: underline;
+	color: #fff;
+}
+
+/* About Page Styles */
+.about {
+	color: #fff;
+	text-align: justify;
+}
+
+.about h3 {
+	text-align: left;
+}
+
+.about-header {
+	padding-top: 35px;
+	padding-bottom: 45px;
+	background-color: #424875;
+}
+
+.about-header p, .about-content p {
+	font-size: 16px;
+}
+
+.about-content {
+	padding-top: 35px;
+	padding-bottom: 65px;
+}
+
+.about-profile-pic {
+	width: 200px;
+	height: 200px;
+	margin: 20px 15px 15px 0px;
+	float: left;
+}
+
+.about-bio-sep {
+	margin-bottom: 30px;
 }
