@@ -113,6 +113,59 @@ ul.navbar-nav>li {
 	color: #fff;
 }
 
+.form-registration h2 {
+	color: #fff;
+	margin-top: 35px;
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+}
+
+.form-registration .username p {
+	color: #fff;
+}
+
+.form-registration label {
+	width: 100px;
+	height: 45px;
+	margin-top: 10px;
+	font-size: 18px;
+	color: #fff;
+}
+
+.form-registration input {
+	width: 220px;
+	height: 45px;
+	padding: 15px;
+	margin-top: 10px;
+	font-size: 18px;
+}
+
+.form-registration .password2 label {
+	width: 210px;
+	height: 45px;
+	margin-top: 10px;
+	font-size: 18px;
+	color: #fff;
+}
+
+.form-registration #confirm_registration {
+	padding: 0px;
+	margin-top: 20px;
+	margin-left: 0px;
+	width: 435px;
+}
+
+.form-registration .errorlist li {
+	display: inline;
+	background-color: #c43131;
+	box-shadow: 0 0 2px #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+}
+
 /* About Page Styles */
 .about {
 	color: #fff;
@@ -147,4 +200,8 @@ ul.navbar-nav>li {
 
 .about-bio-sep {
 	margin-bottom: 30px;
+}
+
+.container h1 {
+	color:;
 }
