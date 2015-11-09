@@ -158,12 +158,24 @@ ul.navbar-nav>li {
 .form-registration .errorlist li {
 	display: inline;
 	background-color: #c43131;
-	box-shadow: 0 0 2px #c43131;
 	border: 5px solid;
 	border-color: #c43131;
 	border-radius: 5px;
 	color: #000;
 	font-weight: bold;
+}
+
+.registration-success {
+	color: #fff;
+}
+
+.first-login {
+	color: #000;
+	font-size: 20px;
+}
+
+#login-link {
+	color: #6c6;
 }
 
 /* About Page Styles */
