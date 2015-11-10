@@ -25,7 +25,7 @@ def contact(request):
             message += "\n\r" + form.cleaned_data['name']
             sender = form.cleaned_data['sender']
 
-            recipients = ['jaysanco@gmail.com']
+            recipients = ['ytdplanner@gmail.com']
 
             send_mail(subject, message, sender, recipients)
             return HttpResponseRedirect('/contact_success/')
