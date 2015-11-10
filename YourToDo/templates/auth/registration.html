@@ -2,10 +2,46 @@
 
 {% block content %}
 	<div class="container">
-		<h1>Register</h1>
-		<form action="/registration/" method="post">{% csrf_token %}
-			{{form}}
-			<input type="submit" value="Register" />
-		</form>
+		<div class="form-registration">
+			<h2>Registration</h2>
+			<form action="/registration/" method="post">{% csrf_token %}
+				<div class="username">
+					<label for="{{ form.username.id_for_label }}">Username:</label>
+					{{ form.username }}
+					<p>Length: 30 characters or fewer. Letters, digits and '
+                    '@/./+/-/_ only.'<p>
+                    {{ form.username.errors }}
+				</div>
+				<div class="first_name">
+					<label for="{{ form.first_name.id_for_label }}">First Name:</label>
+					{{ form.first_name }}
+					{{ form.first_name.errors }}
+				</div>
+				<div class="last_name">
+					<label for="{{ form.last_name.id_for_label }}">Last Name:</label>
+					{{ form.last_name }}
+					{{ form.last_name.errors }}
+				</div>
+				<div class="email">
+					<label for="{{ form.email.id_for_label }}">Email:</label>
+					{{ form.email }}
+					{{ form.email.errors }}
+				</div>
+				<div class="password1">
+					<label for="{{ form.password1.id_for_label }}">Password:</label>
+					{{ form.password1 }}
+					{{ form.password1.errors }}
+				</div>
+				<div class="password2">
+					<label for="{{ form.password2.id_for_label }}">Password Confirmation:</label>
+					{{ form.password2 }}
+					{{ form.password2.errors }}
+				</div>
+				<input type="submit" class="btn btn-success submit" id="confirm_registration" value="Register"/>
+			</form>
+		</div>
+		<div class="footer">
+            <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
+        </div>
 	</div>
 {% endblock %}

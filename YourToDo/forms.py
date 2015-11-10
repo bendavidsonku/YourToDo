@@ -15,13 +15,12 @@ class UniqueEmailField(forms.EmailField):
             pass
 
 class defaultUserRegistrationForm(UserCreationForm):
-	username = forms.CharField(label = 'Username', max_length=30, help_text=('Length: 30 characters or fewer. Letters, digits and '
-                    '@/./+/-/_ only.'), widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+	username = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'placeholder': 'Username'}), required = True)
 	email = UniqueEmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'E-mail address'}))
-	first_name = forms.CharField(label = "First Name", required = True,  widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
-	last_name = forms.CharField(label = "Last Name", required = True,  widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
-	password1 = forms.CharField(label = "Password", required = True,  widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-	password2 = forms.CharField(label = "Password confirmation", required = True,  widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
+	first_name = forms.CharField(required = True,  widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
+	last_name = forms.CharField(required = True,  widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
+	password1 = forms.CharField(required = True,  widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+	password2 = forms.CharField(required = True,  widget=forms.PasswordInput(attrs={'placeholder': 'Re-type Password'}))
 
 	class Meta:
 		model = User
