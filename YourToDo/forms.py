@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 class UniqueEmailField(forms.EmailField):
    
@@ -36,3 +37,7 @@ class defaultUserRegistrationForm(UserCreationForm):
 				user.save()
 
 			return user
+
+class defaultAuthenticationForm(AuthenticationForm):
+	username = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
