@@ -38,10 +38,9 @@ urlpatterns += patterns('',
 
     # User Authentication Urls
     url(r'^login/$',    'YourToDo.views.login'),
-    url(r'^auth/$',     'YourToDo.views.auth_view'),
     url(r'^logout/$',   lambda request: logout_then_login(request, "/"), name='logout'),
-    url(r'^loggedin/$', 'YourToDo.views.loggedin'),
-    url(r'^invalid/$',  'YourToDo.views.invalid_login'),
+
+    # User Registration Urls
     url(r'^registration/$', 'YourToDo.views.registration'),
     url(r'^registration_success/$', 'YourToDo.views.registration_success'),
     

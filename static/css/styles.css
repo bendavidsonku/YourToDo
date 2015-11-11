@@ -85,31 +85,32 @@ ul.navbar-nav>li {
 	padding: 17px;
 }
 
-.form-signin {
+.form-signin h2 {
 	color: #fff;
-	margin-top: 35px;
-	margin-bottom: 45px;
-	padding-bottom: 50px;
 }
 
 .form-signin input {
 	width: 300px;
+	height: 70px;
 	padding: 15px;
-	margin-top: 10px;
-	font-size: 18px;
+	margin-top: 5px;
+	font-size: 24px;
 }
 
-.form-signin-input {
+.form-signin p {
+	display: inline;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
 	color: #000;
-}
-
-.form-signin .submit {
-	margin-top: 40px;
+	font-weight: bold;
+	font-size: 16px;
 }
 
 .form-signin a {
-	text-decoration: underline;
 	color: #fff;
+	font-size: 16px;
 }
 
 .form-registration h2 {
