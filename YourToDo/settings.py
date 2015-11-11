@@ -155,6 +155,15 @@ DATABASES = {
     }
 }
 
+##################
+# EMAIL SETTINGS #
+##################
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ytdplanner@gmail.com'
+EMAIL_HOST_PASSWORD = 'softwareengineer'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 #########
 # PATHS #
