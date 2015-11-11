@@ -34,6 +34,7 @@ urlpatterns += patterns('',
     # Static Pages
     url(r'^about/$',    'YourToDo.views.about'),
     url(r'^contact/$',    'YourToDo.views.contact'),
+    url(r'^contact_success/$', 'YourToDo.views.contact_success'),
 
     # User Authentication Urls
     url(r'^login/$',    'YourToDo.views.login'),

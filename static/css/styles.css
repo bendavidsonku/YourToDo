@@ -70,7 +70,6 @@ ul.navbar-nav>li {
 }
 
 .base-content {
-	height: 450px;
 	color: #fff;
 }
 
@@ -164,6 +163,34 @@ ul.navbar-nav>li {
 	border-radius: 5px;
 	color: #000;
 	font-weight: bold;
+}
+
+.form-contact {
+	color: #fff;
+}
+
+.form-contact-text {
+	font-size: 22px;
+	text-align: center;
+	margin-top: -10px;
+}
+
+.form-contact input, .form-contact textarea {
+	width: 100%;
+	padding: 15px;
+	margin-top: 10px;
+	font-size: 18px;
+	color: #000;
+}
+
+.form-contact input.submit {
+	color: #fff;
+}
+
+.contact-success {
+	color: #fff;
+	text-align: center;
+	margin-top: 45px;
 }
 
 .registration-success {
