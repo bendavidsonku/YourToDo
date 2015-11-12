@@ -12,7 +12,7 @@
 
         <!-- JS -->
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/app.js' %}"></script>
 
         <!-- Fonts -->
@@ -44,15 +44,22 @@
                         	<a href="/contact">contact</a>
                         </li>
                         {% if user.is_authenticated %}
-                        <li>
-                        	<a href="/account"><img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />{{ user.username }}'s account</a>
-                        </li>
-                        <li>
-                            <a href="/logout"><button>Sign Out</button></a>
+                        <li class="dropdown">
+                            <a href="/account" id="acctDropDown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="acctDropDown">
+                                <li></li>
+                                <a href="/planner"><li>Planner</li></a>
+                                <a href="/account"><li>Settings</li></a>
+                                <li role="separator" class="divider"></li>
+                                <a href="/logout"><li>Sign Out</li></a>
+                            </ul>
                         </li>
                         {% else %}
                         <li>
-                            <a href="/login">sign in/register</a>
+                            <a href="/login">sign in</a>
                         </li>
                         {% endif %}
                     </ul>
