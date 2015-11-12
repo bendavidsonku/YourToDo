@@ -253,3 +253,21 @@ ul.navbar-nav>li {
 	min-width: 0px !important;
 	width: 120px;
 }
+
+@media screen and (max-width: 767px) {
+	.no-mobile {
+		display: block;
+		text-align: center;
+		height: 100%;
+		color: #fff;
+	}
+	.wrapper {
+		display: none;
+	}
+} 
+
+@media screen and (min-width: 768px) {
+	.no-mobile {
+		display: none;
+	}
+}

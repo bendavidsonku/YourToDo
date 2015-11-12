@@ -46,11 +46,11 @@
                         {% if user.is_authenticated %}
                         <li class="dropdown">
                             <a href="/account" id="acctDropDown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <!-- #TODO Add user specific image from database: requires adding this to database for every user -->
                                 <img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />
                             </a>
 
                             <ul class="dropdown-menu" aria-labelledby="acctDropDown">
-                                <li></li>
                                 <a href="/planner"><li>Planner</li></a>
                                 <a href="/account"><li>Settings</li></a>
                                 <li role="separator" class="divider"></li>
@@ -92,6 +92,15 @@
                 <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
             </div>
             {% endblock %}
+        </div>
+        <div class="no-mobile bg-light">
+            <div class="container">
+                <h2>YourToDo has not been developed for mobile devices.</h2>
+                <h3>Please increase your viewport or try a larger device.</h3>
+            </div>
+            <div class="footer">
+                <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
+            </div>
         </div>
 	</body>
 </html>
