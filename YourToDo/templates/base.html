@@ -48,11 +48,11 @@
                         	<a href="/account"><img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />{{ user.username }}'s account</a>
                         </li>
                         <li>
-                            <a href="/logout"><button>Sign Out</button></a>
+                            <a href="/accounts/logout"><button>Sign Out</button></a>
                         </li>
                         {% else %}
                         <li>
-                            <a href="/login">sign in/register</a>
+                            <a href="/accounts/login">sign in/register</a>
                         </li>
                         {% endif %}
                     </ul>
@@ -67,8 +67,8 @@
                     <h2>A new way to organize your life</h2><br>
                     <h4>We've made it easy to create useful, organized planners that will allow you to stay productive even when you've got a million things to do.</h4>
                     {% if not user.is_authenticated %}
-                        <a href="/login"><button class="btn btn-lg btn-success">Sign In</button></a>
-                        <a href="/registration"><button class="btn btn-lg btn-success">Sign Up</button></a>
+                        <a href="/accounts/login"><button class="btn btn-lg btn-success">Sign In</button></a>
+                        <a href="/accounts/register"><button class="btn btn-lg btn-success">Sign Up</button></a>
                     {% else %}
                         <a href="/planner"><button class="btn btn-lg btn-success">View My Planner</button></a>
                     {% endif %}
