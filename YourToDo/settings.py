@@ -230,8 +230,13 @@ INSTALLED_APPS = (
     "mezzanine.forms",
     "mezzanine.galleries",
     "mezzanine.twitter",
+
+    #Django-Registration-Redux installation
     'registration',
+
+    #Lib holds templates for html files
     'lib',
+    
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )
