@@ -230,6 +230,8 @@ INSTALLED_APPS = (
     "mezzanine.forms",
     "mezzanine.galleries",
     "mezzanine.twitter",
+    'registration',
+    'lib',
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )
@@ -328,3 +330,8 @@ except ImportError:
     pass
 else:
     set_dynamic_settings(globals())
+
+#Django-registration-Redux Settings
+ACCOUNT_ACTIVATION_DAYS = 1
+REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = '/'
