@@ -37,7 +37,7 @@ def contact(request):
 def contact_success(request):
         return render_to_response('static/contact_success.html')
 
-def ytdLogout(request):
+def logout(request):
 	auth.logout(request)
 	return render_to_response('base.html')
 

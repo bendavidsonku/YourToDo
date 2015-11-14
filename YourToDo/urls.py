@@ -9,7 +9,7 @@ from django.contrib.auth.views import logout_then_login
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
 
-from YourToDo.views import ytdLogout
+from YourToDo.views import logout
 
 admin.autodiscover()
 
@@ -40,7 +40,7 @@ urlpatterns += patterns('',
     url(r'^contact_success/$', 'YourToDo.views.contact_success'),
     
     # Django Registration Redux Urls
-    url(r'^accounts/logout/', 'YourToDo.views.ytdLogout', name='auth_logout'),
+    url(r'^accounts/logout/', 'YourToDo.views.logout', name='auth_logout'),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
     ("^", include("mezzanine.urls")),
