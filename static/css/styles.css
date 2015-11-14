@@ -87,6 +87,7 @@ ul.navbar-nav>li {
 
 .form-signin h2 {
 	color: #fff;
+	margin-top: 0;
 }
 
 .form-signin input {
@@ -98,6 +99,10 @@ ul.navbar-nav>li {
 }
 
 .form-signin p {
+	color: #fff;
+}
+
+.form-signin .errorlist p {
 	display: inline;
 	background-color: #c43131;
 	border: 5px solid;
@@ -109,50 +114,41 @@ ul.navbar-nav>li {
 }
 
 .form-signin a {
-	color: #fff;
+	color: #6c6;
 	font-size: 16px;
 }
 
 .form-registration h2 {
 	color: #fff;
-	margin-top: 35px;
-	margin-bottom: 10px;
-	padding-bottom: 20px;
+	margin-top: 0;
 }
 
-.form-registration .username p {
-	color: #fff;
+.form-registration .registration-username input {
+	margin-bottom: 8px;
 }
 
-.form-registration label {
-	width: 100px;
-	height: 45px;
-	margin-top: 10px;
-	font-size: 18px;
+.form-registration .registration-username p {
 	color: #fff;
+	margin-bottom: -5px
 }
 
 .form-registration input {
-	width: 220px;
-	height: 45px;
-	padding: 15px;
+	width: 240px;
+	height: 55px;
+	padding: 10px;
 	margin-top: 10px;
+	margin-bottom: 5px;
 	font-size: 18px;
 }
 
-.form-registration .password2 label {
-	width: 210px;
-	height: 45px;
-	margin-top: 10px;
-	font-size: 18px;
-	color: #fff;
+.form-registration .registration-username .errorlist {
+	margin-top: 15px;
 }
 
-.form-registration #confirm_registration {
-	padding: 0px;
-	margin-top: 20px;
-	margin-left: 0px;
-	width: 435px;
+.form-registration .errorlist {
+	margin-top: 10px;
+	margin-bottom: 5px;
+	margin-left: -40px;
 }
 
 .form-registration .errorlist li {
@@ -163,6 +159,83 @@ ul.navbar-nav>li {
 	border-radius: 5px;
 	color: #000;
 	font-weight: bold;
+}
+
+.registration-success {
+	font-size: 25px;
+	color: #fff;
+}
+
+.activation-complete {
+	font-size: 25px;
+	color: #fff;
+}
+
+.activation-complete a {
+	color: #6c6;
+}
+
+.activation-failure {
+	font-size: 25px;
+	color: #fff;
+}
+
+.activation-failure a {
+	color: #6c6;
+}
+
+.password-reset-form p {
+	color: #fff;
+	font-size: 25px
+}
+
+.password-reset-form .password-reset-email input {
+	width: 270px;
+	height: 50px;
+	font-size: 20px;
+	padding-left: 10px;
+}
+
+.password-reset-done p {
+	color: #fff;
+	font-size: 25px;
+}
+
+.password-reset-confirm p {
+	color: #fff;
+	font-size: 25px;
+}
+
+.password-reset-confirm input {
+	width: 250px;
+	height: 50px;
+	padding-left: 10px;
+	font-size: 20px;
+}
+
+.password-reset-confirm .errorlist {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: -40px;
+}
+
+.password-reset-confirm .errorlist li {
+	display: inline;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+}
+
+.password-reset-complete p {
+	font-size: 25px;
+	color: #fff;
+}
+
+.password-reset-complete a {
+	color: #6c6;
 }
 
 .form-contact {
@@ -191,19 +264,6 @@ ul.navbar-nav>li {
 	color: #fff;
 	text-align: center;
 	margin-top: 45px;
-}
-
-.registration-success {
-	color: #fff;
-}
-
-.first-login {
-	color: #fff;
-	font-size: 20px;
-}
-
-.login-link {
-	color: #6c6;
 }
 
 /* About Page Styles */
