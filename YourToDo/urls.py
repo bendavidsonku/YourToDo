@@ -5,8 +5,11 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
 
+
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
+
+from YourToDo.views import ytdLogout
 
 admin.autodiscover()
 
@@ -35,15 +38,11 @@ urlpatterns += patterns('',
     url(r'^about/$',    'YourToDo.views.about'),
     url(r'^contact/$',    'YourToDo.views.contact'),
     url(r'^contact_success/$', 'YourToDo.views.contact_success'),
-
-    # User Authentication Urls
-    url(r'^login/$',    'YourToDo.views.login'),
-    url(r'^logout/$',   lambda request: logout_then_login(request, "/"), name='logout'),
-
-    # User Registration Urls
-    url(r'^registration/$', 'YourToDo.views.registration'),
-    url(r'^registration_success/$', 'YourToDo.views.registration_success'),
     
+    # Django Registration Redux Urls
+    url(r'^accounts/logout/', 'YourToDo.views.ytdLogout', name='auth_logout'),
+    url(r'^accounts/', include('registration.backends.default.urls')),
+
     ("^", include("mezzanine.urls")),
 )
 
