@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+	<div class='activation-failure'>
+		<br>
+		<p>Either your activation link has expired or your account is already active.
+		Please re-register or, if you think you are seeing this link as an error, contact us at the link below and we will help you resolve this issue.</p>
+		<a href="/contact/">Contact Us</a>
+	</div>
+</div>
+{% endblock %}
+
+
+{% comment %}
+**registration/activate.html**
+
+Used if account activation fails. With the default setup, has the following context:
+
+``activation_key``
+    The activation key used during the activation attempt.
+{% endcomment %}

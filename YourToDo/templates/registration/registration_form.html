@@ -1,0 +1,50 @@
+{% extends "registration/registration_base.html" %}
+{% load i18n %}
+{% load placeholder %}
+
+{% block title %}{% trans "Register for an account" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="form-registration">
+		<br>
+	    <h2>Register Here</h2>
+		<form method="post" action="">{% csrf_token %}
+			<div class="registration-username">
+				{{ form.username|placeholder:"Username" }}
+				<p>Required. 30 characters or fewer. <br> Letters, digits and @/./+/-/_ only.</p>
+				{{ form.username.errors }}
+			</div>
+			<div class="registration-email">
+				{{ form.email|placeholder:"Email" }}
+				{{ form.email.errors }}
+			</div>
+			<div class="registration-password1">
+				{{ form.password1|placeholder:"Password" }}
+				{{ form.password1.errors }}
+			</div>
+			<div class="registration-password2">
+				{{ form.password2|placeholder:"Re-type Password" }}
+				{{ form.password2.errors }}
+			</div>
+			<br>
+		    <input type="submit" class="btn btn-lg btn-success" value="{% trans 'Submit' %}" />
+		</form>
+	</div>
+</div>
+<div class="footer">
+            <p>&copy; 2015 YourToDo - A DavidOfferHackIneau Company</p>
+</div>
+{% endblock %}
+
+{% comment %}
+**registration/registration_form.html**
+Used to show the form users will fill out to register. By default, has
+the following context:
+
+``form``
+    The registration form. This will be an instance of some subclass
+    of ``django.forms.Form``; consult `Django's forms documentation
+    <http://docs.djangoproject.com/en/dev/topics/forms/>`_ for
+    information on how to display this in a template.
+{% endcomment %}
