@@ -5,6 +5,7 @@ from django.contrib import auth
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.core.mail import send_mail
+import datetime
 
 from YourToDo.forms import ContactForm
 
@@ -47,4 +48,6 @@ def logout(request):
 #
 # At this point, I'm just making one layout to get started.
 def planner(request):
-    return render_to_response('planner/planner.html', context_instance = RequestContext(request))
+    args = {}
+    args['date'] = datetime.datetime.now()
+    return render_to_response('planner/planner.html', args, context_instance = RequestContext(request))

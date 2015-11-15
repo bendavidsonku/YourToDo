@@ -3,7 +3,154 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
-    <div class="container">
-        
+    <div class="container">           
+
+        <table class="planner-container">
+            <!-- Left Sidebar -->
+            <col class="planner-week-left-sidebar">
+            <!-- Days -->
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+
+            <!-- Planner Title & Mini Calendar -->
+            <tr>
+                <!-- Mini Calendar -->
+                <td rowspan="3">
+                    Mini Calendar Goes in here!!!
+                </td>
+                <td class="planner-title" colspan="7">
+                    My Planner
+                </td>
+            </tr>
+
+            <!-- Top content: date selector, view selector, days -->
+            <tr height="40">
+                <!-- Date & view selectors -->
+                <td class="planner-date-selectors" colspan="4">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    {{ date | date:"F" }}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <!-- TODO get date range for the week (sunday-saturday) -->
+                    {{ date | date:"F" }}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </td>
+                <!-- Layout selectors (day, week, month) -->
+                <td class="planner-layout-selectors" colspan="3">
+                    <div><input type="radio" name="layout" value="day" id="planner-day"><label for="planner-day">Day</label></div>
+                    <div><input type="radio" name="layout" value="week" checked="checked" id="planner-week"><label for="planner-week">Week</label></div>
+                    <div><input type="radio" name="layout" value="month" id="planner-month"><label for="planner-month">Month</label></div>
+                </td>
+            </tr>
+            
+            <!-- Days -->
+            <tr class="planner-week-days">
+                <td>Sunday</td>
+                <td>Monday</td>
+                <td>Tuesday</td>
+                <td>Wednesday</td>
+                <td>Thurday</td>
+                <td>Friday</td>
+                <td>Saturday</td>
+            </tr>
+        </table>
+
+        <!-- TODO: Add custom scrollbars that don't look awful -->
+
+        <div class="planner-week-content">
+            <table class="planner-container">
+                <!-- Left Sidebar -->
+                <col class="planner-week-left-sidebar">
+                <!-- Days -->
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-primary">
+                        EECS 448
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-success">
+                        EECS 645
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-warning">
+                        MATH 526
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-danger">
+                        COMS 130
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-info">
+                        ECON 142
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-success">
+                        GYM
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+
+        </table>
     </div>
 {% endblock %}
