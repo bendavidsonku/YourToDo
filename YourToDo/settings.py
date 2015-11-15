@@ -339,4 +339,4 @@ else:
 #Django-registration-Redux Settings
 ACCOUNT_ACTIVATION_DAYS = 1
 REGISTRATION_AUTO_LOGIN = True
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/planner'
