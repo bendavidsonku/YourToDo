@@ -352,6 +352,32 @@ ul.navbar-nav>li {
 	font-size: 18px;
 }
 
+.planner-mini-calendar {
+	table-layout: fixed;
+	text-align: center;
+	border-collapse: collapse;
+	border-style: hidden;
+	font-size: 14px;
+}
+
+.planner-mini-calendar col {
+	width: 22px;
+}
+
+.planner-mini-calendar td {
+	border: 1px solid #fff;
+}
+
+.planner-mini-calendar-active td {
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #424875;
+}
+
+.planner-footer-padding {
+	padding-bottom: 48px; /* Make room for footer */
+}
+
 .planner-layout-selectors {
 	font-size: 16px;
 	border-left: 1px solid #fff;
@@ -396,6 +422,11 @@ ul.navbar-nav>li {
 	border-bottom: 0px solid transparent !important;
 }
 
+.planner-week-top-content td {
+	font-size: 16px;
+	height: 40px;
+}
+
 .planner-week-days td {
 	border: 1px solid #fff;
 	border-bottom: 0px;
@@ -412,6 +443,48 @@ ul.navbar-nav>li {
 	overflow-y: auto;
 }
 
+.planner-week-bottom {
+	border-bottom: 2px solid #424875;
+}
+
+.planner-week-bottom td {
+	border: 1px solid #fff;
+	border-top: 0px;
+	padding: 10px;
+}
+
+.planner-week-bottom-content {
+	font-size: 16px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.planner-week-bottom-category {
+	color: #fff;
+	font-size: 20px;
+	text-align: center;
+	vertical-align: center;
+}
+
+.planner-week-bottom-settings {
+	vertical-align: top;
+}
+
+.planner-week-bottom-settings button, 
+.planner-week-bottom-settings-settings {
+	width: 100%;
+	font-size: 16px;
+}
+
+.planner-week-bottom-settings-spacing {
+	margin-top: 10px;
+}
+
+.planner-week-bottom-settings-settings {
+	font-size: 20px;
+	margin-left: 10px;
+}
+
 /* Extra Large Devices */
 @media screen and (min-width: 1200px) {
 	.planner-week-left-sidebar {
@@ -420,6 +493,14 @@ ul.navbar-nav>li {
 
 	.planner-week-days-day {
 		width: 142px;
+	}
+
+	.planner-week-bottom-content {
+		width: 710px;
+	}
+
+	.planner-week-bottom-settings {
+		width: 284px;
 	}
 }
 
@@ -432,6 +513,14 @@ ul.navbar-nav>li {
 	.planner-week-days-day {
 		width: 113px;
 	}
+
+	.planner-week-bottom-content {
+		width: 565px;
+	}
+
+	.planner-week-bottom-settings {
+		width: 226px;
+	}
 }
 
 /* Medium Devices */
@@ -442,5 +531,13 @@ ul.navbar-nav>li {
 
 	.planner-week-days-day {
 		width: 82px;
+	}
+
+	.planner-week-bottom-content {
+		width: 410px;
+	}
+
+	.planner-week-bottom-settings {
+		width: 164px;
 	}
 }

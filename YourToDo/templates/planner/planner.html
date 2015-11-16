@@ -3,12 +3,12 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
-    <div class="container">           
+    <div class="container planner-footer-padding">
 
+        <!-- Table containing top content (could potentially be used for all views) -->
         <table class="planner-container">
-            <!-- Left Sidebar -->
+            <!-- Column Specification: Left sidebar, 7 days -->
             <col class="planner-week-left-sidebar">
-            <!-- Days -->
             <col class="planner-week-days-day">
             <col class="planner-week-days-day">
             <col class="planner-week-days-day">
@@ -17,31 +17,94 @@
             <col class="planner-week-days-day">
             <col class="planner-week-days-day">
 
-            <!-- Planner Title & Mini Calendar -->
+            <!-- Top Row: Mini Calendar/Title -->
             <tr>
                 <!-- Mini Calendar -->
                 <td rowspan="3">
-                    Mini Calendar Goes in here!!!
+                    <table class="planner-mini-calendar">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <tr>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                            <td>29</td>    
+                            <td>30</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                        </tr>
+                        <tr class="planner-mini-calendar-active">
+                            <td>9</td>
+                            <td>10</td>
+                            <td>11</td>
+                            <td>12</td>
+                            <td>13</td>
+                            <td>14</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                            <td>19</td>
+                            <td>20</td>
+                            <td>21</td>
+                            <td>22</td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                            <td>29</td>
+                        </tr>
+                        <tr>
+                            <td>30</td>
+                            <td>31</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                        </tr>
+                    </table>
                 </td>
+                <!-- Planner Title #TODO Let users name their own titles -->
                 <td class="planner-title" colspan="7">
                     My Planner
+                    <!-- {{ user.planner.title }} (possibly) -->
                 </td>
-            </tr>
+            </tr><!-- End Top Row -->
 
-            <!-- Top content: date selector, view selector, days -->
-            <tr height="40">
-                <!-- Date & view selectors -->
+            <!-- Top content -->
+            <tr class="planner-week-top-content">
                 <td class="planner-date-selectors" colspan="4">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                     {{ date | date:"F" }}
                     <span class="glyphicon glyphicon-chevron-right"></span>
 
+                    <!-- Weekly dates (i.e. "11/15 - 11/22") -->
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <!-- TODO get date range for the week (sunday-saturday) -->
+                    <!-- #TODO get date range for the week (sunday-saturday) -->
                     {{ date | date:"F" }}
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </td>
-                <!-- Layout selectors (day, week, month) -->
                 <td class="planner-layout-selectors" colspan="3">
                     <div><input type="radio" name="layout" value="day" id="planner-day"><label for="planner-day">Day</label></div>
                     <div><input type="radio" name="layout" value="week" checked="checked" id="planner-week"><label for="planner-week">Week</label></div>
@@ -49,25 +112,24 @@
                 </td>
             </tr>
             
-            <!-- Days -->
+            <!-- Days List -->
             <tr class="planner-week-days">
-                <td>Sunday</td>
                 <td>Monday</td>
                 <td>Tuesday</td>
                 <td>Wednesday</td>
                 <td>Thurday</td>
                 <td>Friday</td>
                 <td>Saturday</td>
-            </tr>
+                <td>Sunday</td>
+            </tr><!-- End Top Content -->
         </table>
 
         <!-- TODO: Add custom scrollbars that don't look awful -->
 
         <div class="planner-week-content">
             <table class="planner-container">
-                <!-- Left Sidebar -->
+                <!-- Column Specification: Left sidebar, 7 days -->
                 <col class="planner-week-left-sidebar">
-                <!-- Days -->
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
@@ -75,6 +137,7 @@
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
+
                 <tr class="planner-week-row">
                     <td class="planner-week-category-container btn-primary">
                         EECS 448
@@ -149,8 +212,42 @@
                 </tr>
             </table>
         </div>
+        
+        <!-- Bottom Content -->
+        <table class="planner-container planner-week-bottom">
+            <!-- Column Specification: Left sidebar, large middle, medium side -->
+            <col class="planner-week-left-sidebar">
+            <col class="planner-week-bottom-content">
+            <col class="planner-week-bottom-settings">
+    
+            <tr>
+                <td class="planner-week-bottom-category">
+                    Important &amp; Upcoming
+                </td>
+                <td class="planner-week-bottom-content">
+                    Upcoming events that you have marked as important will appear here. (Change date range in settings.)
+                </td>
+                <td class="planner-week-bottom-settings" rowspan="2">
+                    <button type="button" class="btn btn-default">New Event</button>
+                    <button type="button" class="btn btn-default planner-week-bottom-settings-spacing">New Category</button><br><br>
 
+                    <span class="glyphicon glyphicon-cog"></span><span class="planner-week-bottom-settings-settings">Settings</span>
+                </td>
+            </tr>
 
+            <tr>
+                <td class="planner-week-bottom-category">
+                    Notes
+                </td>
+                <td class="planner-week-bottom-content">
+                    You can write about anything in here that you need to keep track of. Here are some ideas:
+                    <ul>
+                        <li>Grocery List</li>
+                        <li>Go to the Bank</li>
+                        <li>Wash the Dog</li>
+                    </ul>
+                </td>
+            </tr>
         </table>
     </div>
 {% endblock %}

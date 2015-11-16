@@ -50,4 +50,5 @@ def logout(request):
 def planner(request):
     args = {}
     args['date'] = datetime.datetime.now()
+    args['currentViewDate'] = args['date']  # This will be updated on page.
     return render_to_response('planner/planner.html', args, context_instance = RequestContext(request))
