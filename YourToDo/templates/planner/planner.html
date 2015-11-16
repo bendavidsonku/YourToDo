@@ -3,7 +3,7 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
-    <div class="container planner-footer-padding">
+    <div class="container">
 
         <!-- Table containing top content (could potentially be used for all views) -->
         <table class="planner-container">
@@ -29,15 +29,18 @@
                         <col>
                         <col>
                         <col>
+                        
+                        <!-- Row 1 -->
                         <tr>
-                            <td>25</td>
-                            <td>26</td>
-                            <td>27</td>
-                            <td>28</td>
-                            <td>29</td>    
-                            <td>30</td>
+                            <td class="planner-mini-calendar-inactive">25</td>
+                            <td class="planner-mini-calendar-inactive">26</td>
+                            <td class="planner-mini-calendar-inactive">27</td>
+                            <td class="planner-mini-calendar-inactive">28</td>
+                            <td class="planner-mini-calendar-inactive">29</td>    
+                            <td class="planner-mini-calendar-inactive-last">30</td>
                             <td>1</td>
                         </tr>
+                        <!-- Row 2 -->
                         <tr>
                             <td>2</td>
                             <td>3</td>
@@ -47,6 +50,7 @@
                             <td>7</td>
                             <td>8</td>
                         </tr>
+                        <!-- Row 3 -->
                         <tr class="planner-mini-calendar-active">
                             <td>9</td>
                             <td>10</td>
@@ -56,6 +60,7 @@
                             <td>14</td>
                             <td>15</td>
                         </tr>
+                        <!-- Row 4 -->
                         <tr>
                             <td>16</td>
                             <td>17</td>
@@ -65,6 +70,7 @@
                             <td>21</td>
                             <td>22</td>
                         </tr>
+                        <!-- Row 5 -->
                         <tr>
                             <td>23</td>
                             <td>24</td>
@@ -74,14 +80,15 @@
                             <td>28</td>
                             <td>29</td>
                         </tr>
+                        <!-- Row 6 -->
                         <tr>
                             <td>30</td>
                             <td>31</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
+                            <td class="planner-mini-calendar-inactive">1</td>
+                            <td class="planner-mini-calendar-inactive">2</td>
+                            <td class="planner-mini-calendar-inactive">3</td>
+                            <td class="planner-mini-calendar-inactive">4</td>
+                            <td class="planner-mini-calendar-inactive">5</td>
                         </tr>
                     </table>
                 </td>

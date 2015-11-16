@@ -10,6 +10,7 @@ html, body {
 	min-height: 100%;
 	position: relative;
 	background-color: #5F648D;
+	padding-bottom: 50px;
 }
 
 .header {
@@ -374,8 +375,16 @@ ul.navbar-nav>li {
 	border: 1px solid #424875;
 }
 
-.planner-footer-padding {
-	padding-bottom: 48px; /* Make room for footer */
+.planner-mini-calendar-inactive {
+	color: #ABABAB;
+	border-left: 1px solid #ABABAB !important;
+	border-right: 1px solid #ABABAB !important;
+}
+
+/* Fixes border issue on first row last child */
+.planner-mini-calendar-inactive-last {
+	color: #ABABAB;
+	border-right: 1px solid #fff !important;
 }
 
 .planner-layout-selectors {
