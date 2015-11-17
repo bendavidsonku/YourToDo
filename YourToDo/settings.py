@@ -236,6 +236,9 @@ INSTALLED_APPS = (
 
     #Lib holds templates for html files
     'lib',
+
+    # Planner app installation
+    'planner',
     
     # "mezzanine.accounts",
     # "mezzanine.mobile",
