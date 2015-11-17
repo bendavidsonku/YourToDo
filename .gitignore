@@ -8,3 +8,16 @@ lib/__pycache__/admin.cpython-35.pyc
 lib/__pycache__/models.cpython-35.pyc
 lib/templatetags/__pycache__/__init__.cpython-35.pyc
 lib/templatetags/__pycache__/placeholder.cpython-35.pyc
+lib/migrations/__pycache__/__init__.cpython-35.pyc
+YourToDo/__pycache__/__init__.cpython-35.pyc
+YourToDo/__pycache__/settings.cpython-35.pyc
+lib/migrations/__pycache__/__init__.cpython-35.pyc
+planner/__pycache__/__init__.cpython-35.pyc
+planner/__pycache__/admin.cpython-35.pyc
+planner/__pycache__/category_color_choices.cpython-35.pyc
+planner/__pycache__/event_time_estimate_choices.cpython-35.pyc
+planner/__pycache__/models.cpython-35.pyc
+planner/__pycache__/planner_view_choices.cpython-35.pyc
+YourToDo/__pycache__/__init__.cpython-35.pyc
+YourToDo/__pycache__/settings.cpython-35.pyc
+YourToDo/__pycache__/urls.cpython-35.pyc
