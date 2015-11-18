@@ -21,71 +21,11 @@
             <tr>
                 <!-- Mini Calendar -->
                 <td rowspan="3">
-                    <table class="planner-mini-calendar">
-                        <!--  7 equally spaced columns  -->
-                        <col><col><col><col><col><col><col>
-                        
-                        <!-- Row 1 -->
-                        <tr>
-                            <td class="planner-mini-calendar-inactive">25</td>
-                            <td class="planner-mini-calendar-inactive">26</td>
-                            <td class="planner-mini-calendar-inactive">27</td>
-                            <td class="planner-mini-calendar-inactive">28</td>
-                            <td class="planner-mini-calendar-inactive">29</td>    
-                            <td class="planner-mini-calendar-inactive-last">30</td>
-                            <td>1</td>
-                        </tr>
-                        <!-- Row 2 -->
-                        <tr>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                            <td>8</td>
-                        </tr>
-                        <!-- Row 3 -->
-                        <tr class="planner-mini-calendar-active">
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                            <td>12</td>
-                            <td>13</td>
-                            <td>14</td>
-                            <td>15</td>
-                        </tr>
-                        <!-- Row 4 -->
-                        <tr>
-                            <td>16</td>
-                            <td>17</td>
-                            <td>18</td>
-                            <td>19</td>
-                            <td>20</td>
-                            <td>21</td>
-                            <td>22</td>
-                        </tr>
-                        <!-- Row 5 -->
-                        <tr>
-                            <td>23</td>
-                            <td>24</td>
-                            <td>25</td>
-                            <td>26</td>
-                            <td>27</td>
-                            <td>28</td>
-                            <td>29</td>
-                        </tr>
-                        <!-- Row 6 -->
-                        <tr>
-                            <td>30</td>
-                            <td>31</td>
-                            <td class="planner-mini-calendar-inactive">1</td>
-                            <td class="planner-mini-calendar-inactive">2</td>
-                            <td class="planner-mini-calendar-inactive">3</td>
-                            <td class="planner-mini-calendar-inactive">4</td>
-                            <td class="planner-mini-calendar-inactive">5</td>
-                        </tr>
-                    </table>
+                    <script type="text/javascript">
+                        var miniCal = new miniCal();
+                        miniCal.generateHTML();
+                        document.write(miniCal.getHTML());
+                    </script>
                 </td>
                 <!-- Planner Title #TODO Let users name their own titles -->
                 <td class="planner-title" colspan="7">
@@ -116,13 +56,13 @@
             
             <!-- Days List -->
             <tr class="planner-week-days">
+                <td>Sunday</td>
                 <td>Monday</td>
                 <td>Tuesday</td>
                 <td>Wednesday</td>
                 <td>Thurday</td>
                 <td>Friday</td>
                 <td>Saturday</td>
-                <td>Sunday</td>
             </tr><!-- End Top Content -->
         </table>
 

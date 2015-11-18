@@ -371,8 +371,8 @@ ul.navbar-nav>li {
 
 .planner-mini-calendar-active td {
 	background-color: #fff;
-	color: #000;
-	border: 1px solid #424875;
+	color: #000 !important;
+	border: 1px solid #424875 !important;
 }
 
 .planner-mini-calendar-inactive {
