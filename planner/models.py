@@ -7,22 +7,31 @@ from planner.category_color_choices import *
 from planner.event_time_estimate_choices import *
 
 
-#class PlannerManager(models.Manager):
-
-
 class Planner(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length = 30, null = True)
 	view = models.IntegerField(choices = VIEW_CHOICES, default = 2)
 	miscellaneousNotes = models.TextField(verbose_name = "Miscellaneous", null = True)
 
-	#objects = PlannerManager()
-
 	def __unicode__(self):
 		return self.name
 
 	def __str__(self):
 		return self.name + "'s planner"
+
+	def set_view(self, view):
+		self.view = view
+		self.save()
+
+	def get_view(self):
+		return self.view
+
+	def set_miscellaneousNotes(self, miscellaneousNotes):
+		self.miscellaneousNotes = miscellaneousNotes
+		self.save()
+
+	def get_miscellaneousNotes(self):
+		return self.miscellaneousNotes
 
 # If a user doesn't have a planner, generate it, if a user already has a planner, get it
 User.planner = property(lambda u: Planner.objects.get_or_create(user = u, name = u.get_username())[0])
