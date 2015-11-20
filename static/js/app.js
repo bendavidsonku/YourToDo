@@ -9,6 +9,11 @@ $(document).ready(function() {
         }
     );
 
+    $('.btn-layout-selector').click(function() {
+        localStorage.layoutType = $(this).html();
+        changeViewLayout();
+    });
+
 
     // Session Storage
     if (!(sessionStorage.viewDate)) {
@@ -18,12 +23,47 @@ $(document).ready(function() {
 
     // Local Storage
     if (!(localStorage.layoutType)) {
-        localStorage.layoutType = "week";
+        localStorage.layoutType = "Week";
     }
 
     changeViewDate("FIRST", 0);
+    changeViewLayout();
 });
 
+/*
+    Renders the current layoutType to the page
+
+    #TODO Actually make this work with different layouts
+*/
+function changeViewLayout() {
+    var btns = $(".btn-layout-selector");
+
+    // Remove active from all buttons
+    for(var index = 0; index < btns.length; index++) {
+         $(btns[index]).removeClass('active');
+    }
+
+    // 'Activate' the button that was clicked
+    switch(localStorage.layoutType) {
+    case 'Day':
+        $('#btn-layout-day').addClass('active');
+        break;
+    case 'Week':
+        $('#btn-layout-week').addClass('active');
+        break;
+    case 'Month':
+        $('#btn-layout-month').addClass('active');
+        break;
+    default:
+        console.log("Invalid layoutType: " + localStorage.layoutType);
+        break;
+
+    // #TODO --> Link to different view or something.
+    }
+}
+
+
+// Returns the current viewDate stored in sessionStorage
 function getViewDate() {
     return new Date(Date.parse(sessionStorage.viewDate));
 }
@@ -68,11 +108,9 @@ function changeViewDate(size, amount) {
     document.getElementById("planner-date-week-selector").innerHTML = getWeekString();
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
 
-    // #TODO show year on planner somewhere
-
     // If the mini calendar is on the page (day & week views), update it
     // Don't update it if this is the first time running this function
-    if(localStorage.layoutType != "month" && size != "FIRST") {
+    if(localStorage.layoutType != "Month" && size != "FIRST") {
         this.miniCal.handleDateChange();
     }
 }
@@ -124,6 +162,8 @@ this.getWeekString = function() {
 
     @note
         Use no parameters to use the current viewDate stored in sessionStorage
+
+    #TODO --> Be able to click on days and then update the cal/viewDate to that day.
 */
 this.miniCal = function(year, month, day) {
     viewDate = getViewDate();
