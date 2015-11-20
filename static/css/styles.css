@@ -387,25 +387,44 @@ ul.navbar-nav>li {
 	border-right: 1px solid #fff !important;
 }
 
-.planner-layout-selectors {
-	font-size: 16px;
-	border-left: 1px solid #fff;
-}
-
-.planner-layout-selectors label {
-	font-weight: normal;
-	padding: 0px 10px 0px 10px;
-}
-
 .planner-layout-selectors div {
-	width: 33.333333333%;
-	float: left;
-	text-align: center;
+	width: 100%;
+	padding-left: 3px;
+}
+
+.planner-layout-selectors button {
+	font-size: 14px;
+	width: 33%;
+	padding: 5px 0px 5px 0px;
 }
 
 .planner-date-selectors {
 	border-left: 1px solid #fff;
 	padding: 0px 10px 0px 10px;
+}
+
+.planner-date-selectors div {
+	float: left;
+}
+
+.planner-date-selectors span:hover {
+	cursor: pointer;
+	color: #e7e7e7;
+}
+
+.planner-date-month-selector {
+	width: 25%;
+	text-align: center;
+}
+
+.planner-date-year-selector {
+	width: 25%;
+	text-align: center;
+}
+
+.planner-date-week-selector {
+	width: 50%;
+	text-align: center;
 }
 
 .planner-week-row td {
