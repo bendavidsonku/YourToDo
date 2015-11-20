@@ -9,6 +9,7 @@ from planner.event_time_estimate_choices import *
 
 #class PlannerManager(models.Manager):
 
+
 class Planner(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length = 30, null = True)
@@ -25,6 +26,7 @@ class Planner(models.Model):
 
 # If a user doesn't have a planner, generate it, if a user already has a planner, get it
 User.planner = property(lambda u: Planner.objects.get_or_create(user = u, name = u.get_username())[0])
+
 
 class CategoryManager(models.Manager):
 	def create_category(self, request, name, color, order):
@@ -86,8 +88,9 @@ class CategoryManager(models.Manager):
 
 	def update_category_order(self, request, name, newOrder):
 		plannerId = request.planner.id
-		existingCategoryList = super(CategoryManager, self).filter(owner = plannerId)
+		existingCategoryList = Category.objects.get_categories_in_order(request)
 		desiredCategoryToUpdate = existingCategoryList.get(name = name)
+		originalCategoryOrder = desiredCategoryToUpdate.get_order()
 
 		temp = False
 		orderAlreadyTakenIndex = 0
@@ -106,7 +109,8 @@ class CategoryManager(models.Manager):
 				if orderIndex.order < orderAlreadyTakenIndex:
 					pass
 				else:
-					orderIndex.set_order(orderIndex.order + 1)
+					if orderIndex.order < originalCategoryOrder:
+						orderIndex.set_order(orderIndex.order + 1)
 
 		desiredCategoryToUpdate.set_order(newOrder)
 		
@@ -122,6 +126,7 @@ class CategoryManager(models.Manager):
 				orderIndex.set_order(orderIndex.order - 1)
 
 		return categoryToDelete.delete()
+
 
 class Category(models.Model):
 	owner = models.ForeignKey(Planner)
@@ -157,6 +162,7 @@ class Category(models.Model):
 
 	def get_order(self):
 		return self.order
+
 
 #class EventManager(models.Manager):
 
