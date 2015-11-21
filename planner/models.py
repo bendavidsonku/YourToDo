@@ -20,6 +20,13 @@ class Planner(models.Model):
 	def __str__(self):
 		return self.name + "'s planner"
 
+	def set_name(self, name):
+		self.name = name
+		self.save()
+
+	def get_name(self):
+		return self.name
+
 	def set_view(self, view):
 		self.view = view
 		self.save()
@@ -210,6 +217,10 @@ class EventManager(models.Manager):
 		plannerId = request.planner.id
 		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
 		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId)
+
+	def get_all_events(self, request):
+		plannerId = request.planner.id
+		return super(EventManager, self).filter(parentPlanner = plannerId)
 
 	def update_event_dateOfEvent(self, request, categoryName, name, currentDateOfEvent, newDateOfEvent):
 		eventToUpdate = Event.objects.get_single_event(request, categoryName, name, currentDateOfEvent)

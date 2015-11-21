@@ -31,3 +31,5 @@ class EventForm(ModelForm):
 	class Meta:
 		model = Event
 		fields = ['name', 'description', 'important', 'timeEstimate', 'timeStart', 'timeEnd', 'dateOfEvent', 'complete']
+
+
