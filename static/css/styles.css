@@ -428,7 +428,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-row td {
-	border: 1px solid #fff;
+	border: 1px solid rgba(255,255,255,.3);
 }
 
 .planner-week-row {
@@ -568,4 +568,64 @@ ul.navbar-nav>li {
 	.planner-week-bottom-settings {
 		width: 164px;
 	}
+}
+
+.planner-category-color-1 {
+ 	background-color: #CC4040;
+}
+
+.planner-category-color-2 {
+ 	background-color: #AD2222;
+}
+
+.planner-category-color-3 {
+ 	background-color: #ED6969;
+}
+
+.planner-category-color-4 {
+ 	background-color: #19449E;
+}
+
+.planner-category-color-5 {
+ 	background-color: #10327B;
+}
+
+.planner-category-color-6 {
+ 	background-color: #2D75D9;
+}
+
+.planner-category-color-7 {
+ 	background-color: #32881B;
+}
+
+.planner-category-color-8 {
+ 	background-color: #1A6806;
+}
+
+.planner-category-color-9 {
+ 	background-color: #4CA135;
+}
+
+.planner-category-color-10 {
+	background-color: #BBBB00
+}
+
+.planner-category-color-11 {
+	background-color: #A89500;
+}
+
+.planner-category-color-12 {
+	background-color: #B17A00;
+}
+
+.planner-category-color-13 {
+	background-color: #B46793;
+}
+
+.planner-category-color-14 {
+	background-color: #0A6C65;
+}
+
+.planner-category-color-15 {
+	background-color: #1C2335;
 }

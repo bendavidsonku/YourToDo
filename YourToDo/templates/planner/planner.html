@@ -95,10 +95,18 @@
 
                 {% for category in categoriesInPlanner %}
                     <tr class="planner-week-row">
-                    <td class="planner-week-category-container planner-week-category-color-{{ category.get_color }}">
+                    <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
                         {{ category.get_name }}
                     </td>
-                    <td></td>
+                    <td>
+                        <!--{% for event in eventsInPlanner %}
+                            {% if event.get_parentCategory == category %}
+                                {% if event.get_dateOfEvent == getDateOfDay() %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}-->
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>

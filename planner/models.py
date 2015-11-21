@@ -259,6 +259,9 @@ class Event(models.Model):
 	def get_event_id(self):
 		return self.id
 
+	def get_parentCategory(self):
+		return self.parentCategory
+
 	def set_dateOfEvent(self, dateOfEvent):
 		self.dateOfEvent = dateOfEvent
 		self.save()

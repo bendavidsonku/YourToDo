@@ -267,3 +267,18 @@ this.miniCal = function(year, month, day) {
         document.getElementById("planner-mini-calendar").innerHTML = this.getHTML();
     }
 } 
+
+// Returns the date of the specified day in the week
+getDateOfDay = function(day) {
+    date = getViewDate();
+    date.setDate(date.getDate() - date.getDay() + day);
+
+    monthPadding = "";
+
+    if(date.getMonth() + 1 <= 9) {
+        monthPadding = "0";
+    }
+
+    // Return the date string ("2015-11-21" for example)
+    return date.getFullYear() + "-" + monthPadding + (date.getMonth() + 1) + "-" + date.getDate();
+}
