@@ -1,9 +1,10 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from planner.category_color_choices import *
-from planner.event_day_choices import *
 from planner.event_time_estimate_choices import *
 from planner.planner_view_choices import *
 
@@ -178,62 +179,62 @@ class Category(models.Model):
 
 
 class EventManager(models.Manager):
-	def create_event_with_timeBox(self, request, categoryName, day, name, description, important, timeEstimate, timeStart, timeEnd):
+	def create_event_with_timeBox(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)
 		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
 
-		if existingEventsInGivenCategory.filter(name = name).filter(day = day).exists():
+		if existingEventsInGivenCategory.filter(name = name).filter(dateOfEvent = dateOfEvent).exists():
 			raise ValidationError("Days cannot contain multiple events of the same name")
 
-		return self.create(parentPlanner = plannerId, parentCategory = categoryId, day = day, name = name,
+		return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
 			description = description, important = important, timeEstimate = timeEstimate, timeStart = timeStart, timeEnd = timeEnd)
 
-	def create_event_no_timeBox(self, request, categoryName, day, name, description, important, timeEstimate):
+	def create_event_no_timeBox(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)
 		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
 
-		if existingEventsInGivenCategory.filter(name = name).filter(day = day).exists():
+		if existingEventsInGivenCategory.filter(name = name).filter(dateOfEvent = dateOfEvent).exists():
 			raise ValidationError("Days cannot contain multiple events of the same name")
 
-		return self.create(parentPlanner = plannerId, parentCategory = categoryId, day = day, name = name,
+		return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
 			description = description, important = important, timeEstimate = timeEstimate)
 
-	def get_single_event(self, request, categoryName, name, day):
+	def get_single_event(self, request, categoryName, name, dateOfEvent):
 		plannerId = request.planner.id
 		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
-		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId).filter(name = name).get(day = day)
+		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId).filter(name = name).get(dateOfEvent = dateOfEvent)
 
 	def get_event_list(self, request, categoryName):
 		plannerId = request.planner.id
 		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
 		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId)
 
-	def update_event_day(self, request, categoryName, name, currentDay, newDay):
-		eventToUpdate = Event.objects.get_single_event(request, categoryName, name, currentDay)
+	def update_event_dateOfEvent(self, request, categoryName, name, currentDateOfEvent, newDateOfEvent):
+		eventToUpdate = Event.objects.get_single_event(request, categoryName, name, currentDateOfEvent)
 		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
 
-		if existingEventsInGivenCategory.filter(name = name).filter(day = newDay).exists():
+		if existingEventsInGivenCategory.filter(name = name).filter(dateOfEvent = newDateOfEvent).exists():
 			raise ValidationError("You cannot move this event to a day with an event of the same name")
 
-		eventToUpdate.set_day(newDay)
+		eventToUpdate.set_dateOfEvent(newDateOfEvent)
 
-	def delete_event(self, request, categoryName, name, day):
-		eventToDelete = Event.objects.get_single_event(request, categoryName, name, day)
+	def delete_event(self, request, categoryName, name, dateOfEvent):
+		eventToDelete = Event.objects.get_single_event(request, categoryName, name, dateOfEvent)
 		return eventToDelete.delete()
 
 
 class Event(models.Model):
 	parentPlanner = models.ForeignKey(Planner)
 	parentCategory = models.ForeignKey(Category)
-	day = models.IntegerField(choices = DAY_CHOICES, default = 1)
 	name = models.CharField(max_length = 60, default = "Name")
 	description = models.CharField(max_length = 500, default = "Description")
 	important = models.BooleanField(default = False)
 	timeEstimate = models.IntegerField(choices = TIME_ESTIMATE_CHOICES, default = 1)
 	timeStart = models.TimeField(auto_now = False, auto_now_add = False, null = True)
 	timeEnd = models.TimeField(auto_now = False, auto_now_add = False, null = True)
+	dateOfEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now)
 	complete = models.BooleanField(default = False)
 
 	objects = EventManager()
@@ -247,12 +248,12 @@ class Event(models.Model):
 	def get_event_id(self):
 		return self.id
 
-	def set_day(self, day):
-		self.day = day
+	def set_dateOfEvent(self, dateOfEvent):
+		self.dateOfEvent = dateOfEvent
 		self.save()
 
-	def get_day(self):
-		return self.day
+	def get_dateOfEvent(self):
+		return self.dateOfEvent
 
 	def set_name(self, name):
 		self.name = name
