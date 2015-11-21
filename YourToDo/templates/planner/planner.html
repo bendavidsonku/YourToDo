@@ -3,6 +3,9 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
+    {% load staticfiles %}
+    <!-- Include Planner javascript -->
+    <script src="{% static 'js/planner.js' %}"></script>
     <div class="container">
 
         <!-- Table containing top content (could potentially be used for all views) -->
