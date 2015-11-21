@@ -14,6 +14,11 @@ $(document).ready(function() {
         changeViewLayout();
     });
 
+    // Prevent highlighting when clicking date selectors too fast
+    $('.planner-date-selectors-button').mousedown(function(e) {
+        e.preventDefault();
+    });
+
 
     // Session Storage
     if (!(sessionStorage.viewDate)) {

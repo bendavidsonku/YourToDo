@@ -401,30 +401,36 @@ ul.navbar-nav>li {
 .planner-date-selectors {
 	border-left: 1px solid #fff;
 	padding: 0px 10px 0px 10px;
+	line-height: 24px;
 }
 
 .planner-date-selectors div {
 	float: left;
-}
-
-.planner-date-selectors span:hover {
-	cursor: pointer;
-	color: #e7e7e7;
+	text-align: left;
 }
 
 .planner-date-month-selector {
-	width: 25%;
-	text-align: center;
+	width: 30%;
 }
 
 .planner-date-year-selector {
 	width: 25%;
-	text-align: center;
 }
 
 .planner-date-week-selector {
-	width: 50%;
-	text-align: center;
+	width: 45%;
+}
+
+.planner-date-selectors-btn-group {
+	padding-right: 10px;
+}
+
+.btn-date-selector {
+	padding: 3px;
+}
+
+.btn-date-selector span {
+	margin-bottom: 2px;
 }
 
 .planner-week-row td {
