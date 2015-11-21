@@ -5,7 +5,6 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
 
-
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
 
@@ -35,14 +34,18 @@ urlpatterns += patterns('',
     url(r"^$", direct_to_template, {"template": "base.html"}, name="home"),
 
     # Static Pages
-    url(r'^about/$',    'YourToDo.views.about'),
-    url(r'^contact/$',    'YourToDo.views.contact'),
-    url(r'^contact_success/$', 'YourToDo.views.contact_success'),
+    url(r'^about/$',            'YourToDo.views.about'),
+    url(r'^contact/$',          'YourToDo.views.contact'),
+    url(r'^contact_success/$',  'YourToDo.views.contact_success'),
     
-    # Django Registration Redux Urls
-    url(r'^accounts/logout/', 'YourToDo.views.logout', name='auth_logout'),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    # Accounts Urls
+    url(r'^accounts/logout/',   'YourToDo.views.logout', name='auth_logout'),
+    url(r'^accounts/',          include('registration.backends.default.urls')),
 
+    # Application Urls
+    url(r'^planner/',           'YourToDo.views.planner'),
+
+    # Include All Mezzanine Urls
     ("^", include("mezzanine.urls")),
 )
 

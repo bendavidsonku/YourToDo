@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}Planner{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <!-- Table containing top content (could potentially be used for all views) -->
+        <table class="planner-container">
+            <!-- Column Specification: Left sidebar, 7 days -->
+            <col class="planner-week-left-sidebar">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+            <col class="planner-week-days-day">
+
+            <!-- Top Row: Mini Calendar/Title -->
+            <tr>
+                <!-- Mini Calendar -->
+                <td rowspan="3" id="planner-mini-calendar">
+                    <script type="text/javascript">
+                        var miniCal = new miniCal();
+                        miniCal.handleDateChange();
+                    </script>
+                </td>
+                <!-- Planner Title #TODO Let users name their own titles -->
+                <td class="planner-title" colspan="7">
+                    My Planner
+                    <!-- {{ user.planner.title }} (possibly) -->
+                </td>
+            </tr><!-- End Top Row -->
+
+            <!-- Top content -->
+            <tr class="planner-week-top-content">
+                <td class="planner-date-selectors" colspan="5">
+                    <!-- #TODO get the fucking chevrons to stay in the same spot -->
+                    <!-- Monthly dates (i.e. "< Nov. >") -->
+                    <div class="planner-date-month-selector">
+                        <span class="glyphicon glyphicon-chevron-left planner-date-selectors-button" onclick="changeViewDate('MONTH', -1)"></span>
+                        <span id="planner-date-month-selector"></span>
+                        <span class="glyphicon glyphicon-chevron-right planner-date-selectors-button" onclick="changeViewDate('MONTH', 1)"></span>
+                    </div>
+
+                    <!-- Weekly dates (i.e. "< 11/15 - 11/22 >") -->
+                    <div class="planner-date-week-selector">
+                        <span class="glyphicon glyphicon-chevron-left planner-date-selectors-button" onclick="changeViewDate('WEEK', -1)"></span>
+                        <span id="planner-date-week-selector"></span>
+                        <span class="glyphicon glyphicon-chevron-right planner-date-selectors-button" onclick="changeViewDate('WEEK', 1)"></span>
+                    </div>
+
+                    <!-- Years (i.e. "< 2015 >" ) -->
+                    <div class="planner-date-year-selector">
+                        <span class="glyphicon glyphicon-chevron-left planner-date-selectors-button" onclick="changeViewDate('YEAR', -1)"></span>
+                        <span id="planner-date-year-selector"></span>
+                        <span class="glyphicon glyphicon-chevron-right planner-date-selectors-button" onclick="changeViewDate('YEAR', 1)"></span>
+                    </div>
+                </td>
+                <td class="planner-layout-selectors" colspan="2">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-day">Day</button>
+                        <button type="button" class="btn btn-default btn-layout-selector active" id="btn-layout-week">Week</button>
+                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-month">Month</button>
+                    </div>
+                </td>
+            </tr>
+            
+            <!-- Days List -->
+            <tr class="planner-week-days">
+                <td>Sunday</td>
+                <td>Monday</td>
+                <td>Tuesday</td>
+                <td>Wednesday</td>
+                <td>Thurday</td>
+                <td>Friday</td>
+                <td>Saturday</td>
+            </tr><!-- End Top Content -->
+        </table>
+
+        <!-- TODO: Add custom scrollbars that don't look awful -->
+
+        <div class="planner-week-content">
+            <table class="planner-container">
+                <!-- Column Specification: Left sidebar, 7 days -->
+                <col class="planner-week-left-sidebar">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-primary">
+                        EECS 448
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-success">
+                        EECS 645
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-warning">
+                        MATH 526
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-danger">
+                        COMS 130
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-info">
+                        ECON 142
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="planner-week-row">
+                    <td class="planner-week-category-container btn-success">
+                        GYM
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Bottom Content -->
+        <table class="planner-container planner-week-bottom">
+            <!-- Column Specification: Left sidebar, large middle, medium side -->
+            <col class="planner-week-left-sidebar">
+            <col class="planner-week-bottom-content">
+            <col class="planner-week-bottom-settings">
+    
+            <tr>
+                <td class="planner-week-bottom-category">
+                    Important &amp; Upcoming
+                </td>
+                <td class="planner-week-bottom-content">
+                    Upcoming events that you have marked as important will appear here. (Change date range in settings.)
+                </td>
+                <td class="planner-week-bottom-settings" rowspan="2">
+                    <button type="button" class="btn btn-default">New Event</button>
+                    <button type="button" class="btn btn-default planner-week-bottom-settings-spacing">New Category</button><br><br>
+
+                    <span class="glyphicon glyphicon-cog"></span><span class="planner-week-bottom-settings-settings">Settings</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="planner-week-bottom-category">
+                    Notes
+                </td>
+                <td class="planner-week-bottom-content">
+                    You can write about anything in here that you need to keep track of. Here are some ideas:
+                    <ul>
+                        <li>Grocery List</li>
+                        <li>Go to the Bank</li>
+                        <li>Wash the Dog</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

@@ -39,6 +39,15 @@
                         <li>
                         	<a href="/">home</a>
                         </li>
+                        {% if user.is_authenticated %}
+                        <li>
+                            <a href="/planner">planner</a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="/accounts/login">planner</a>
+                        </li>
+                        {% endif %}
                         <li>
                         	<a href="/about">about</a>
                         </li>
@@ -47,7 +56,7 @@
                         </li>
                         {% if user.is_authenticated %}
                         <li class="dropdown">
-                            <a href="/account" id="acctDropDown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a data-target="#" id="acctDropDown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <!-- #TODO Add user specific image from database: requires adding this to database for every user -->
                                 <img class="user-pic-nav" src="{% static 'media/images/default_user.png' %}" alt="User Profile Picture" />
                             </a>

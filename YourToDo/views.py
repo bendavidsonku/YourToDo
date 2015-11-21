@@ -41,4 +41,10 @@ def logout(request):
 	auth.logout(request)
 	return render_to_response('base.html')
 
-
+# TODO
+# Update this view to include all supported layouts (day, week, and month)
+# We're either going to need to send a different html layout here, or something.
+#
+# At this point, I'm just making one layout to get started.
+def planner(request):
+    return render_to_response('planner/planner.html', context_instance = RequestContext(request))
