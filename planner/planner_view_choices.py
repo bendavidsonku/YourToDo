@@ -1,5 +1,5 @@
 VIEW_CHOICES = (
-	(1, ("Day View")),
-	(2, ("Week View")),
-	(3, ("Calendar View"))
+	(1, ("Day")),
+	(2, ("Week")),
+	(3, ("Month"))
 	)
