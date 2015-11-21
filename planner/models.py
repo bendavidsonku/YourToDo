@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-from planner.planner_view_choices import *
 from planner.category_color_choices import *
+from planner.event_day_choices import *
 from planner.event_time_estimate_choices import *
-
+from planner.planner_view_choices import *
 
 class Planner(models.Model):
 	user = models.OneToOneField(User)
@@ -32,6 +32,7 @@ class Planner(models.Model):
 
 	def get_miscellaneousNotes(self):
 		return self.miscellaneousNotes
+
 
 # If a user doesn't have a planner, generate it, if a user already has a planner, get it
 User.planner = property(lambda u: Planner.objects.get_or_create(user = u, name = u.get_username())[0])
@@ -151,6 +152,9 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 
+	def get_category_id(self):
+		return self.id
+
 	def set_color(self, color):
 		self.color = color
 		self.save()
@@ -173,12 +177,57 @@ class Category(models.Model):
 		return self.order
 
 
-#class EventManager(models.Manager):
+class EventManager(models.Manager):
+	def create_event_with_timeBox(self, request, categoryName, day, name, description, important, timeEstimate, timeStart, timeEnd):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
+
+		if existingEventsInGivenCategory.filter(name = name).filter(day = day).exists():
+			raise ValidationError("Days cannot contain multiple events of the same name")
+
+		return self.create(parentPlanner = plannerId, parentCategory = categoryId, day = day, name = name,
+			description = description, important = important, timeEstimate = timeEstimate, timeStart = timeStart, timeEnd = timeEnd)
+
+	def create_event_no_timeBox(self, request, categoryName, day, name, description, important, timeEstimate):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
+
+		if existingEventsInGivenCategory.filter(name = name).filter(day = day).exists():
+			raise ValidationError("Days cannot contain multiple events of the same name")
+
+		return self.create(parentPlanner = plannerId, parentCategory = categoryId, day = day, name = name,
+			description = description, important = important, timeEstimate = timeEstimate)
+
+	def get_single_event(self, request, categoryName, name, day):
+		plannerId = request.planner.id
+		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
+		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId).filter(name = name).get(day = day)
+
+	def get_event_list(self, request, categoryName):
+		plannerId = request.planner.id
+		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
+		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId)
+
+	def update_event_day(self, request, categoryName, name, currentDay, newDay):
+		eventToUpdate = Event.objects.get_single_event(request, categoryName, name, currentDay)
+		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
+
+		if existingEventsInGivenCategory.filter(name = name).filter(day = newDay).exists():
+			raise ValidationError("You cannot move this event to a day with an event of the same name")
+
+		eventToUpdate.set_day(newDay)
+
+	def delete_event(self, request, categoryName, name, day):
+		eventToDelete = Event.objects.get_single_event(request, categoryName, name, day)
+		return eventToDelete.delete()
 
 
 class Event(models.Model):
 	parentPlanner = models.ForeignKey(Planner)
 	parentCategory = models.ForeignKey(Category)
+	day = models.IntegerField(choices = DAY_CHOICES, default = 1)
 	name = models.CharField(max_length = 60, default = "Name")
 	description = models.CharField(max_length = 500, default = "Description")
 	important = models.BooleanField(default = False)
@@ -187,11 +236,72 @@ class Event(models.Model):
 	timeEnd = models.TimeField(auto_now = False, auto_now_add = False, null = True)
 	complete = models.BooleanField(default = False)
 
-	#objects = EventManager()
+	objects = EventManager()
 
 	def __unicode__(self):
 		return self.name
 
 	def __str__(self):
 		return self.name
+
+	def get_event_id(self):
+		return self.id
+
+	def set_day(self, day):
+		self.day = day
+		self.save()
+
+	def get_day(self):
+		return self.day
+
+	def set_name(self, name):
+		self.name = name
+		self.save()
+
+	def get_name(self):
+		return self.name
+
+	def set_description(self, description):
+		self.description = description
+		self.save()
+
+	def get_description(self):
+		return self.description
+
+	def set_important(self, important):
+		self.important = important
+		self.save()
+
+	def get_important(self):
+		return self.important
+
+	def set_timeEstimate(self, timeEstimate):
+		self.timeEstimate = timeEstimate
+		self.save()
+
+	def get_timeEstimate(self):
+		return self.timeEstimate
+
+	def set_timeStart(self, timeStart):
+		self.timeStart = timeStart
+		self.save()
+
+	def get_timeStart(self):
+		return self.timeStart
+
+	def set_timeEnd(self, timeEnd):
+		self.timeEnd = timeEnd
+		self.save()
+
+	def get_timeEnd(self):
+		return self.timeEnd
+
+	def set_complete(self, complete):
+		self.complete = complete
+		self.save()
+
+	def get_complete(self):
+		return self.complete
+
+
 
