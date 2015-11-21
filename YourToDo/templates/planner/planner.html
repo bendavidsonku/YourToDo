@@ -93,9 +93,10 @@
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
 
-                <tr class="planner-week-row">
-                    <td class="planner-week-category-container btn-primary">
-                        EECS 448
+                {% for category in categoriesInPlanner %}
+                    <tr class="planner-week-row">
+                    <td class="planner-week-category-container planner-week-category-color-{{ category.get_color }}">
+                        {{ category.get_name }}
                     </td>
                     <td></td>
                     <td></td>
@@ -105,66 +106,8 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr class="planner-week-row">
-                    <td class="planner-week-category-container btn-success">
-                        EECS 645
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="planner-week-row">
-                    <td class="planner-week-category-container btn-warning">
-                        MATH 526
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="planner-week-row">
-                    <td class="planner-week-category-container btn-danger">
-                        COMS 130
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="planner-week-row">
-                    <td class="planner-week-category-container btn-info">
-                        ECON 142
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="planner-week-row">
-                    <td class="planner-week-category-container btn-success">
-                        GYM
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                {% endfor %}
+                
             </table>
         </div>
         
