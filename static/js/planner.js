@@ -1,7 +1,12 @@
 $(document).ready(function() {
     $('.btn-layout-selector').click(function() {
-        localStorage.layoutType = $(this).html();
-        changeViewLayout();
+        if(localStorage.layoutType = $(this).html()) {
+            // Do nothing
+        }
+        else {
+            localStorage.layoutType = $(this).html();
+            changeViewLayout();
+        }
     });
 
     // Prevent highlighting when clicking date selectors too fast
