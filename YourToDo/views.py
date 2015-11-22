@@ -1,3 +1,6 @@
+import datetime
+from datetime import timedelta
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
@@ -50,12 +53,55 @@ def logout(request):
 #
 # At this point, I'm just making one layout to get started.
 
+#LOGIN REQUIRED?????
 def PlannerView(request):
-    context = {} # potentially get ajax arguements here???
+    context = {}
     context.update(csrf(request))
 
     if request.method == 'POST':
-        pass # for now
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            # Process to get planner content to display
+            context['planner'] = user.planner
+            context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+            #Get startDate and endDate out of the ajax data that was passed in
+            plannerViewStartDate = request.POST.get("view_start_date", "")
+            plannerViewEndDate = request.POST.get("view_end_date", "")
+
+            # Get all dates as datetime objects
+            plannerViewStartDateAsDateTime = datetime.datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
+            secondDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 1)
+            thirdDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 2)
+            fourthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 3)
+            fifthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 4)
+            sixthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 5)
+            plannerViewEndDateAsDateTime = datetime.datetime.strptime(plannerViewEndDate, "%Y-%m-%d")
+
+
+            allEventsInPlanner = Event.objects.get_all_events(user)
+
+            context['eventsInViewStartDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewStartDateAsDateTime)
+            context['eventsInViewSecondDate'] = allEventsInPlanner.filter(dateOfEvent = secondDayInViewAsDateTime)
+            context['eventsInViewThirdDate'] = allEventsInPlanner.filter(dateOfEvent = thirdDayInViewAsDateTime)
+            context['eventsInViewFourthDate'] = allEventsInPlanner.filter(dateOfEvent = fourthDayInViewAsDateTime)
+            context['eventsInViewFifthDate'] = allEventsInPlanner.filter(dateOfEvent = fifthDayInViewAsDateTime)
+            context['eventsInViewSixthDate'] = allEventsInPlanner.filter(dateOfEvent = sixthDayInViewAsDateTime)
+            context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
+
+            print(context['eventsInViewStartDate'])
+            print(context['eventsInViewSecondDate'])
+            print(context['eventsInViewThirdDate'])
+            print(context['eventsInViewFourthDate'])
+            print(context['eventsInViewFifthDate'])
+            print(context['eventsInViewSixthDate'])
+            print(context['eventsInViewEndDate'])
+
+            return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
 
     else:
         username = None

@@ -3,7 +3,6 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
-{% csrf_token %}
     <div class="container">
 
         <!-- Table containing top content (could potentially be used for all views) -->
@@ -93,21 +92,63 @@
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
                 <col class="planner-week-days-day">
-
+                {% csrf_token %}
                 {% for category in categoriesInPlanner %}
                     <tr class="planner-week-row">
                     <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
                         {{ category.get_name }}
                     </td>
-                    <td>
-                        
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <span id="events-in-categories">
+                        <td>
+                            {% for event in eventsInViewStartDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for event in eventsInViewSecondDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for event in eventsInViewThirdDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for event in eventsInViewFourthDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for event in eventsInViewFifthDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for event in eventsInViewSixthDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for event in eventsInViewEndDate %}
+                                {% if event.get_parentCategory == category %}
+                                    {{ event.get_name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </span>
                 </tr>
                 {% endfor %}
                 

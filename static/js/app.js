@@ -116,15 +116,10 @@ function changeViewDate(size, amount) {
             view_start_date: start_date,
             view_end_date: end_date
         },
-        success: function(data) {
+        success: function(data, textStatus, jqXHR) {
             console.log(data);
             console.log(".ajax working properly");
         },
-        error: function(data) {
-            console.log(data);
-            console.log("Something went wrong in .ajax");
-        },
-
     });
 
     // Update all fields in case they changed
