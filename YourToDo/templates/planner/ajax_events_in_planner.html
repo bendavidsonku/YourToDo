@@ -1,0 +1,69 @@
+<div class="planner-week-content">
+            <table class="planner-container">
+                <!-- Column Specification: Left sidebar, 7 days -->
+                <col class="planner-week-left-sidebar">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+                <col class="planner-week-days-day">
+{% for category in categoriesInPlanner %}
+<tr class="planner-week-row">
+    <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
+        {{ category.get_name }}
+    </td>
+    <td>
+        {% for event in eventsInViewStartDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for event in eventsInViewSecondDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for event in eventsInViewThirdDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for event in eventsInViewFourthDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for event in eventsInViewFifthDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for event in eventsInViewSixthDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for event in eventsInViewEndDate %}
+            {% if event.get_parentCategory == category %}
+                {{ event.get_name }}
+            {% endif %}
+        {% endfor %}
+    </td>     
+</tr>
+{% endfor %}
+</table>
+</div>

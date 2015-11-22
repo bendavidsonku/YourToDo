@@ -10,6 +10,8 @@ from django.contrib import auth
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.http import HttpResponse
 
 from YourToDo.forms import ContactForm
 from planner.models import Planner, Category, Event
@@ -58,15 +60,31 @@ def PlannerView(request):
     context = {}
     context.update(csrf(request))
 
+    username = None
+    if request.user.is_authenticated():
+        username = request.user.username
+
+    user = User.objects.get(username = username)
+    # Get the necessary context to display
+    context['planner'] = user.planner
+    context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+    context['eventsInPlanner'] = Event.objects.get_all_events(user)
+
+    return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
+
+
+def loadPlannerEvents(request):
     if request.method == 'POST':
+        print("first")
         username = None
         if request.user.is_authenticated():
             username = request.user.username
 
             user = User.objects.get(username = username)
-
+            
             # Process to get planner content to display
-            context['planner'] = user.planner
+            context = {}
+            context['planner'] = Planner.objects.get_planner(user)
             context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
 
             #Get startDate and endDate out of the ajax data that was passed in
@@ -93,25 +111,4 @@ def PlannerView(request):
             context['eventsInViewSixthDate'] = allEventsInPlanner.filter(dateOfEvent = sixthDayInViewAsDateTime)
             context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
 
-            print(context['eventsInViewStartDate'])
-            print(context['eventsInViewSecondDate'])
-            print(context['eventsInViewThirdDate'])
-            print(context['eventsInViewFourthDate'])
-            print(context['eventsInViewFifthDate'])
-            print(context['eventsInViewSixthDate'])
-            print(context['eventsInViewEndDate'])
-
-            return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
-
-    else:
-        username = None
-        if request.user.is_authenticated():
-            username = request.user.username
-
-        user = User.objects.get(username = username)
-        # Get the necessary context to display
-        context['planner'] = user.planner
-        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
-        context['eventsInPlanner'] = Event.objects.get_all_events(user)
-
-    return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
+            return render_to_response('planner/ajax_events_in_planner.html', context)

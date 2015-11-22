@@ -28,7 +28,7 @@
                 </td>
                 <!-- Planner Title #TODO Let users name their own titles -->
                 <td class="planner-title" colspan="7">
-                    My Planner
+                    {{ planner.get_name }}'s Planner
                     <!-- {{ user.planner.title }} (possibly) -->
                 </td>
             </tr><!-- End Top Row -->
@@ -80,81 +80,10 @@
         </table>
 
         <!-- TODO: Add custom scrollbars that don't look awful -->
-
-        <div class="planner-week-content">
-            <table class="planner-container">
-                <!-- Column Specification: Left sidebar, 7 days -->
-                <col class="planner-week-left-sidebar">
-                <col class="planner-week-days-day">
-                <col class="planner-week-days-day">
-                <col class="planner-week-days-day">
-                <col class="planner-week-days-day">
-                <col class="planner-week-days-day">
-                <col class="planner-week-days-day">
-                <col class="planner-week-days-day">
-                {% csrf_token %}
-                {% for category in categoriesInPlanner %}
-                    <tr class="planner-week-row">
-                    <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
-                        {{ category.get_name }}
-                    </td>
-                    <span id="events-in-categories">
-                        <td>
-                            {% for event in eventsInViewStartDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for event in eventsInViewSecondDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for event in eventsInViewThirdDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for event in eventsInViewFourthDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for event in eventsInViewFifthDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for event in eventsInViewSixthDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for event in eventsInViewEndDate %}
-                                {% if event.get_parentCategory == category %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </span>
-                </tr>
-                {% endfor %}
+        {% csrf_token %}
+        <span id="events-in-categories">
                 
-            </table>
-        </div>
-        
+        </span>
         <!-- Bottom Content -->
         <table class="planner-container planner-week-bottom">
             <!-- Column Specification: Left sidebar, large middle, medium side -->
@@ -182,12 +111,7 @@
                     Notes
                 </td>
                 <td class="planner-week-bottom-content">
-                    You can write about anything in here that you need to keep track of. Here are some ideas:
-                    <ul>
-                        <li>Grocery List</li>
-                        <li>Go to the Bank</li>
-                        <li>Wash the Dog</li>
-                    </ul>
+                    {{ planner.get_miscellaneousNotes }}
                 </td>
             </tr>
         </table>

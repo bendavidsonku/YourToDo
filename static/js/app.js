@@ -107,9 +107,9 @@ function changeViewDate(size, amount) {
 
     // Update events based on the new view
     $.ajax({
-        url: "/planner/",
-        async: true,
+        url: "/load-events/",
         type: "POST",
+        dataType: 'html',
         data: 
         {
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
@@ -117,8 +117,8 @@ function changeViewDate(size, amount) {
             view_end_date: end_date
         },
         success: function(data, textStatus, jqXHR) {
+            $('#events-in-categories').html(data);
             console.log(data);
-            console.log(".ajax working properly");
         },
     });
 

@@ -8,11 +8,18 @@ from planner.category_color_choices import *
 from planner.event_time_estimate_choices import *
 from planner.planner_view_choices import *
 
+class PlannerManager(models.Manager):
+	def get_planner(self, request):
+		return super(PlannerManager, self).filter(user = request)	
+
+
 class Planner(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length = 30, null = True)
 	view = models.IntegerField(choices = VIEW_CHOICES, default = 2)
 	miscellaneousNotes = models.TextField(verbose_name = "Miscellaneous", null = True)
+
+	objects = PlannerManager()
 
 	def __unicode__(self):
 		return self.name
