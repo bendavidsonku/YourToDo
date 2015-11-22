@@ -39,23 +39,41 @@
                     <!-- #TODO get the fucking chevrons to stay in the same spot -->
                     <!-- Monthly dates (i.e. "< Nov. >") -->
                     <div class="planner-date-month-selector">
-                        <span class="glyphicon glyphicon-chevron-left planner-date-selectors-button" onclick="changeViewDate('MONTH', -1)"></span>
+                        <div class="btn-group planner-date-selectors-btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('MONTH', -1)">
+                                <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('MONTH', 1)">
+                                <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                            </button>
+                        </div>
                         <span id="planner-date-month-selector"></span>
-                        <span class="glyphicon glyphicon-chevron-right planner-date-selectors-button" onclick="changeViewDate('MONTH', 1)"></span>
                     </div>
 
                     <!-- Weekly dates (i.e. "< 11/15 - 11/22 >") -->
                     <div class="planner-date-week-selector">
-                        <span class="glyphicon glyphicon-chevron-left planner-date-selectors-button" onclick="changeViewDate('WEEK', -1)"></span>
+                        <div class="btn-group planner-date-selectors-btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('WEEK', -1)">
+                                <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('WEEK', 1)">
+                                <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                            </button>
+                        </div>
                         <span id="planner-date-week-selector"></span>
-                        <span class="glyphicon glyphicon-chevron-right planner-date-selectors-button" onclick="changeViewDate('WEEK', 1)"></span>
                     </div>
 
                     <!-- Years (i.e. "< 2015 >" ) -->
                     <div class="planner-date-year-selector">
-                        <span class="glyphicon glyphicon-chevron-left planner-date-selectors-button" onclick="changeViewDate('YEAR', -1)"></span>
+                        <div class="btn-group planner-date-selectors-btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('YEAR', -1)">
+                                <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('YEAR', 1)">
+                                <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                            </button>
+                        </div>
                         <span id="planner-date-year-selector"></span>
-                        <span class="glyphicon glyphicon-chevron-right planner-date-selectors-button" onclick="changeViewDate('YEAR', 1)"></span>
                     </div>
                 </td>
                 <td class="planner-layout-selectors" colspan="2">
