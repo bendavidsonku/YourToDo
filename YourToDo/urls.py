@@ -43,7 +43,8 @@ urlpatterns += patterns('',
     url(r'^accounts/',          include('registration.backends.default.urls')),
 
     # Application Urls
-    url(r'^planner/',           'YourToDo.views.planner'),
+    url(r'^planner/', 'YourToDo.views.PlannerView', name = "planner_view"),
+    url(r'^load-events/', 'YourToDo.views.loadPlannerEvents', name="planner_load_events"),
 
     # Include All Mezzanine Urls
     ("^", include("mezzanine.urls")),

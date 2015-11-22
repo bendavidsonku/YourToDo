@@ -8,17 +8,31 @@ from planner.category_color_choices import *
 from planner.event_time_estimate_choices import *
 from planner.planner_view_choices import *
 
+class PlannerManager(models.Manager):
+	def get_planner(self, request):
+		return super(PlannerManager, self).filter(user = request)	
+
+
 class Planner(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length = 30, null = True)
 	view = models.IntegerField(choices = VIEW_CHOICES, default = 2)
 	miscellaneousNotes = models.TextField(verbose_name = "Miscellaneous", null = True)
 
+	objects = PlannerManager()
+
 	def __unicode__(self):
 		return self.name
 
 	def __str__(self):
 		return self.name + "'s planner"
+
+	def set_name(self, name):
+		self.name = name
+		self.save()
+
+	def get_name(self):
+		return self.name
 
 	def set_view(self, view):
 		self.view = view
@@ -211,6 +225,10 @@ class EventManager(models.Manager):
 		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
 		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId)
 
+	def get_all_events(self, request):
+		plannerId = request.planner.id
+		return super(EventManager, self).filter(parentPlanner = plannerId)
+
 	def update_event_dateOfEvent(self, request, categoryName, name, currentDateOfEvent, newDateOfEvent):
 		eventToUpdate = Event.objects.get_single_event(request, categoryName, name, currentDateOfEvent)
 		existingEventsInGivenCategory = Event.objects.get_event_list(request, categoryName)
@@ -247,6 +265,9 @@ class Event(models.Model):
 
 	def get_event_id(self):
 		return self.id
+
+	def get_parentCategory(self):
+		return self.parentCategory
 
 	def set_dateOfEvent(self, dateOfEvent):
 		self.dateOfEvent = dateOfEvent

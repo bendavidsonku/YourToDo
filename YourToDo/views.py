@@ -1,3 +1,8 @@
+import datetime
+from datetime import timedelta
+
+from django.db import models
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -5,8 +10,11 @@ from django.contrib import auth
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.http import HttpResponse
 
 from YourToDo.forms import ContactForm
+from planner.models import Planner, Category, Event
 
 # Static Page Views
 def about(request):
@@ -46,5 +54,61 @@ def logout(request):
 # We're either going to need to send a different html layout here, or something.
 #
 # At this point, I'm just making one layout to get started.
-def planner(request):
-    return render_to_response('planner/planner.html', context_instance = RequestContext(request))
+
+#LOGIN REQUIRED?????
+def PlannerView(request):
+    context = {}
+    context.update(csrf(request))
+
+    username = None
+    if request.user.is_authenticated():
+        username = request.user.username
+
+    user = User.objects.get(username = username)
+    # Get the necessary context to display
+    context['planner'] = user.planner
+    context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+    context['eventsInPlanner'] = Event.objects.get_all_events(user)
+
+    return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
+
+
+def loadPlannerEvents(request):
+    if request.method == 'POST':
+        print("first")
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+            
+            # Process to get planner content to display
+            context = {}
+            context['planner'] = Planner.objects.get_planner(user)
+            context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+            #Get startDate and endDate out of the ajax data that was passed in
+            plannerViewStartDate = request.POST.get("view_start_date", "")
+            plannerViewEndDate = request.POST.get("view_end_date", "")
+
+            # Get all dates as datetime objects
+            plannerViewStartDateAsDateTime = datetime.datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
+            secondDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 1)
+            thirdDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 2)
+            fourthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 3)
+            fifthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 4)
+            sixthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 5)
+            plannerViewEndDateAsDateTime = datetime.datetime.strptime(plannerViewEndDate, "%Y-%m-%d")
+
+
+            allEventsInPlanner = Event.objects.get_all_events(user)
+
+            context['eventsInViewStartDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewStartDateAsDateTime)
+            context['eventsInViewSecondDate'] = allEventsInPlanner.filter(dateOfEvent = secondDayInViewAsDateTime)
+            context['eventsInViewThirdDate'] = allEventsInPlanner.filter(dateOfEvent = thirdDayInViewAsDateTime)
+            context['eventsInViewFourthDate'] = allEventsInPlanner.filter(dateOfEvent = fourthDayInViewAsDateTime)
+            context['eventsInViewFifthDate'] = allEventsInPlanner.filter(dateOfEvent = fifthDayInViewAsDateTime)
+            context['eventsInViewSixthDate'] = allEventsInPlanner.filter(dateOfEvent = sixthDayInViewAsDateTime)
+            context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
+
+            return render_to_response('planner/ajax_events_in_planner.html', context)
