@@ -102,6 +102,25 @@ function changeViewDate(size, amount) {
     }
 
     sessionStorage.viewDate = viewDate;
+    var start_date = getDateOfDay(0),
+        end_date   = getDateOfDay(6);
+
+    // Update events based on the new view
+    $.ajax({
+        url: "/load-events/",
+        type: "POST",
+        dataType: 'html',
+        data: 
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            view_start_date: start_date,
+            view_end_date: end_date
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#events-in-categories').html(data);
+            console.log(data);
+        },
+    });
 
     // Update all fields in case they changed
     document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
@@ -267,3 +286,18 @@ this.miniCal = function(year, month, day) {
         document.getElementById("planner-mini-calendar").innerHTML = this.getHTML();
     }
 } 
+
+// Returns the date of the specified day in the week
+getDateOfDay = function(day) {
+    date = getViewDate();
+    date.setDate(date.getDate() - date.getDay() + day);
+
+    monthPadding = "";
+
+    if(date.getMonth() + 1 <= 9) {
+        monthPadding = "0";
+    }
+
+    // Return the date string ("2015-11-21" for example)
+    return date.getFullYear() + "-" + monthPadding + (date.getMonth() + 1) + "-" + date.getDate();
+}
