@@ -3,6 +3,9 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
+    {% load staticfiles %}
+    <!-- Include Planner javascript -->
+    <script src="{% static 'js/planner.js' %}"></script>
     <div class="container">
 
         <!-- Table containing top content (could potentially be used for all views) -->
@@ -29,7 +32,6 @@
                 <!-- Planner Title #TODO Let users name their own titles -->
                 <td class="planner-title" colspan="7">
                     {{ planner.get_name }}'s Planner
-                    <!-- {{ user.planner.title }} (possibly) -->
                 </td>
             </tr><!-- End Top Row -->
 
