@@ -3,6 +3,7 @@
 {% block pageTitle %}Planner{% endblock %}
 
 {% block content %}
+{% csrf_token %}
     <div class="container">
 
         <!-- Table containing top content (could potentially be used for all views) -->
@@ -99,13 +100,7 @@
                         {{ category.get_name }}
                     </td>
                     <td>
-                        <!--{% for event in eventsInPlanner %}
-                            {% if event.get_parentCategory == category %}
-                                {% if event.get_dateOfEvent == getDateOfDay() %}
-                                    {{ event.get_name }}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}-->
+                        
                     </td>
                     <td></td>
                     <td></td>

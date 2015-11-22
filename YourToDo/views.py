@@ -7,7 +7,6 @@ from django.contrib import auth
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.core.mail import send_mail
-from django.views.generic.base import TemplateView
 
 from YourToDo.forms import ContactForm
 from planner.models import Planner, Category, Event
@@ -50,21 +49,23 @@ def logout(request):
 # We're either going to need to send a different html layout here, or something.
 #
 # At this point, I'm just making one layout to get started.
-class PlannerView(TemplateView):
 
-    template_name = "planner/planner.html"
+def PlannerView(request):
+    context = {} # potentially get ajax arguements here???
+    context.update(csrf(request))
 
-    def get_context_data(self, **kwargs):
-        context = super(PlannerView, self).get_context_data(**kwargs)
+    if request.method == 'POST':
+        pass # for now
 
+    else:
         username = None
-        if self.request.user.is_authenticated():
-            username = self.request.user.username
+        if request.user.is_authenticated():
+            username = request.user.username
 
         user = User.objects.get(username = username)
+        # Get the necessary context to display
         context['planner'] = user.planner
-
         context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
-
         context['eventsInPlanner'] = Event.objects.get_all_events(user)
-        return context
+
+    return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))

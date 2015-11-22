@@ -8,7 +8,6 @@ from django.contrib.auth.views import logout_then_login
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
 
-from YourToDo.views import PlannerView
 from YourToDo.views import logout
 
 admin.autodiscover()
@@ -44,7 +43,7 @@ urlpatterns += patterns('',
     url(r'^accounts/',          include('registration.backends.default.urls')),
 
     # Application Urls
-    url(r'^planner/', PlannerView.as_view(), name = "planner"),
+    url(r'^planner/', 'YourToDo.views.PlannerView', name = "planner_view"),
 
     # Include All Mezzanine Urls
     ("^", include("mezzanine.urls")),

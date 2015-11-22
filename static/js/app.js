@@ -102,6 +102,30 @@ function changeViewDate(size, amount) {
     }
 
     sessionStorage.viewDate = viewDate;
+    var start_date = getDateOfDay(0),
+        end_date   = getDateOfDay(6);
+
+    // Update events based on the new view
+    $.ajax({
+        url: "/planner/",
+        async: true,
+        type: "POST",
+        data: 
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            view_start_date: start_date,
+            view_end_date: end_date
+        },
+        success: function(data) {
+            console.log(data);
+            console.log(".ajax working properly");
+        },
+        error: function(data) {
+            console.log(data);
+            console.log("Something went wrong in .ajax");
+        },
+
+    });
 
     // Update all fields in case they changed
     document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
