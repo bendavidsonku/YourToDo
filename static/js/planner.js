@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('.btn-layout-selector').click(function() {
-        if(localStorage.layoutType = $(this).html()) {
+        if(localStorage.layoutType == $(this).html()) {
             // Do nothing
         }
         else {
@@ -57,9 +57,9 @@ function changeViewLayout() {
     default:
         console.log("Invalid layoutType: " + localStorage.layoutType);
         break;
-
-    // #TODO --> Link to different view or something.
     }
+
+
 }
 
 
@@ -117,8 +117,7 @@ function changeViewDate(size, amount) {
             view_end_date: end_date
         },
         success: function(data, textStatus, jqXHR) {
-            $('#events-in-categories').html(data);
-            console.log(data);
+            $('#events-in-categories').empty().append(data);
         },
     });
 
@@ -128,8 +127,7 @@ function changeViewDate(size, amount) {
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
 
     // If the mini calendar is on the page (day & week views), update it
-    // Don't update it if this is the first time running this function
-    if(localStorage.layoutType != "Month" && size != "FIRST") {
+    if(localStorage.layoutType != "Month") {
         this.miniCal.handleDateChange();
     }
 }
@@ -300,4 +298,39 @@ getDateOfDay = function(day) {
 
     // Return the date string ("2015-11-21" for example)
     return date.getFullYear() + "-" + monthPadding + (date.getMonth() + 1) + "-" + date.getDate();
+}
+
+// Checks every category/date combination & hides events that are overflow (more than 4 events in one block)
+hideOverflowEvents = function() {
+    var category = $(".planner-week-event-container");
+
+    // For every event block, check if it's over capacity and fix those that are.
+    for(var i = 0; i < category.length; i++) {
+        var events = category[i].getElementsByTagName('td');
+
+        if(events.length > 4) {
+            var eventNames = {},
+                numEvents = 0,
+                color = events[0].className;
+
+            // Loop through the extra blocks & get their names
+            for(var j = 3; j < events.length; j) {
+                // Store the event
+                eventNames[numEvents] = $.trim(events[j].innerHTML);
+                events[j].parentNode.remove();
+
+                numEvents++;
+            }
+
+            // Append the box to say how many events are hidden
+            var moreBox =   "<tr>" +
+                                "<td class='" + color + "'>+ " + numEvents + " more</td>" +
+                            "</tr>"
+
+            $(moreBox).insertAfter(events[2].parentNode);
+
+            // Modify the above <tr><td> to link to a pop-up box that holds the contents of eventNames
+
+        }
+    }
 }

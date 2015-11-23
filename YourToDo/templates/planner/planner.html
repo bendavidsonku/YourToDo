@@ -23,10 +23,9 @@
             <!-- Top Row: Mini Calendar/Title -->
             <tr>
                 <!-- Mini Calendar -->
-                <td rowspan="3" id="planner-mini-calendar">
+                <td rowspan="3" id="planner-mini-calendar" class="planner-mini-cal-container">
                     <script type="text/javascript">
                         var miniCal = new miniCal();
-                        miniCal.handleDateChange();
                     </script>
                 </td>
                 <!-- Planner Title #TODO Let users name their own titles -->
@@ -80,9 +79,9 @@
                 </td>
                 <td class="planner-layout-selectors" colspan="2">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-day">Day</button>
-                        <button type="button" class="btn btn-default btn-layout-selector active" id="btn-layout-week">Week</button>
-                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-month">Month</button>
+                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-day" onclick="changeViewLayout()">Day</button>
+                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-week" onclick="changeViewLayout()">Week</button>
+                        <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-month" onclick="changeViewLayout()">Month</button>
                     </div>
                 </td>
             </tr>
