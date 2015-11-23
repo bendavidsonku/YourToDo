@@ -57,25 +57,37 @@ def logout(request):
 
 #LOGIN REQUIRED?????
 def PlannerView(request):
+    plannerLayoutSelection = request.POST.get("planner_layout", "")
     context = {}
-    context.update(csrf(request))
+    print(plannerLayoutSelection)
 
-    username = None
-    if request.user.is_authenticated():
-        username = request.user.username
+    if plannerLayoutSelection == "Day":
+        return render_to_response('planner/planner_day_view.html', context, context_instance = RequestContext(request))
 
-    user = User.objects.get(username = username)
-    # Get the necessary context to display
-    context['planner'] = user.planner
-    context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
-    context['eventsInPlanner'] = Event.objects.get_all_events(user)
+    elif plannerLayoutSelection == "Week":
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
 
-    return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
+        user = User.objects.get(username = username)
+        # Get the necessary context to display
+        context['planner'] = user.planner
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+        context['eventsInPlanner'] = Event.objects.get_all_events(user)
+        
+        return render_to_response('planner/planner_week_view.html', context, context_instance = RequestContext(request))
+
+    elif plannerLayoutSelection == "Month":
+        return render_to_response('planner/planner_month_view.html', context, context_instance = RequestContext(request))
+
+    else:
+        pass
+
+    return render_to_response('planner/planner_base.html', context, context_instance = RequestContext(request))
 
 
 def loadPlannerEvents(request):
     if request.method == 'POST':
-        print("first")
         username = None
         if request.user.is_authenticated():
             username = request.user.username
@@ -84,7 +96,6 @@ def loadPlannerEvents(request):
             
             # Process to get planner content to display
             context = {}
-            context['planner'] = Planner.objects.get_planner(user)
             context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
 
             #Get startDate and endDate out of the ajax data that was passed in
@@ -111,4 +122,4 @@ def loadPlannerEvents(request):
             context['eventsInViewSixthDate'] = allEventsInPlanner.filter(dateOfEvent = sixthDayInViewAsDateTime)
             context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
 
-            return render_to_response('planner/ajax_events_in_planner.html', context)
+            return render_to_response('planner/ajax_events_in_planner_week_view.html', context)

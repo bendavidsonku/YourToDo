@@ -1,13 +1,4 @@
 $(document).ready(function() {
-    $('.btn-layout-selector').click(function() {
-        if(localStorage.layoutType = $(this).html()) {
-            // Do nothing
-        }
-        else {
-            localStorage.layoutType = $(this).html();
-            changeViewLayout();
-        }
-    });
 
     // Prevent highlighting when clicking date selectors too fast
     $('.planner-date-selectors-button').mousedown(function(e) {
@@ -21,13 +12,15 @@ $(document).ready(function() {
         sessionStorage.viewDate = now;
     }
 
+    // Use this for debugging to reset localStorage
+    //localStorage.clear();
+
     // Local Storage
     if (!(localStorage.layoutType)) {
         localStorage.layoutType = "Week";
     }
 
-    changeViewDate("FIRST", 0);
-    changeViewLayout();
+    changeViewLayout(localStorage.layoutType);
 });
 
 /*
@@ -35,8 +28,15 @@ $(document).ready(function() {
 
     #TODO Actually make this work with different layouts
 */
-function changeViewLayout() {
+function changeViewLayout(viewType) {
     var btns = $(".btn-layout-selector");
+
+    if(localStorage.layoutType == viewType) {
+            // Do nothing
+    }
+    else {
+        localStorage.layoutType = viewType;
+    }
 
     // Remove active from all buttons
     for(var index = 0; index < btns.length; index++) {
@@ -58,8 +58,24 @@ function changeViewLayout() {
         console.log("Invalid layoutType: " + localStorage.layoutType);
         break;
 
-    // #TODO --> Link to different view or something.
     }
+
+    // Update view based on currently selected layout
+    $.ajax({
+        url: "/planner/",
+        type: "POST",
+        dataType: 'html',
+        data: 
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            planner_layout: localStorage.layoutType
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#planner-day-week-month-render-area').html(data);
+            changeViewDate("", 0);
+
+        },
+    });
 }
 
 
@@ -117,8 +133,7 @@ function changeViewDate(size, amount) {
             view_end_date: end_date
         },
         success: function(data, textStatus, jqXHR) {
-            $('#events-in-categories').html(data);
-            console.log(data);
+            $('#events-in-week-view').html(data);
         },
     });
 
@@ -129,8 +144,9 @@ function changeViewDate(size, amount) {
 
     // If the mini calendar is on the page (day & week views), update it
     // Don't update it if this is the first time running this function
-    if(localStorage.layoutType != "Month" && size != "FIRST") {
-        this.miniCal.handleDateChange();
+    if(localStorage.layoutType != "Month") {
+        var cal = new this.miniCal();
+        cal.handleDateChange();
     }
 }
 
