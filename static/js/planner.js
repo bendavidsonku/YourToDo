@@ -49,8 +49,7 @@ function changeViewLayout() {
         $('#btn-layout-month').addClass('active');
         break;
     default:
-        console.log("Invalid layoutType: " + localStorage.layoutType);
-        break;
+        throw "Invalid layoutType exception: \"" + localStorage.layoutType + "\" is not a valid layout type";
     }
 }
 
@@ -101,10 +100,10 @@ function changeViewDate(size, amount) {
         viewDate.setFullYear(viewDate.getFullYear() + amount);
     }
     else if(size === "NONE") {
-        // Do nothing, just running first time set up.
+        // Do nothing, running first time setup or updating the page without changing the view date.
     }
     else {
-        throw "changeViewDate() unknown parameter: \"" + size + "\" -- If no size desired, use \"NONE\"";
+        throw "changeViewDate() unknown parameter: \"" + size + "\" -- If no change desired, use \"NONE\"";
     }
 
     sessionStorage.viewDate = viewDate;
@@ -344,6 +343,9 @@ getPopoverContent = function(title, events) {
         var html = "";
 
         for(var i = 0; i < events.length; i++) {
+            // Change the "/about/" section to a descriptive link to edit the event
+            // Should connect with a modal trigger, but we're going to have to pull 
+            // category data, date data, and probably some other fields.
             html += "<a href=\"/about/\" class=\"event-popover-event\">" + events[i] + "</a><br>";
         }
 
