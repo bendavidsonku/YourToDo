@@ -20,7 +20,7 @@ $(document).ready(function() {
         localStorage.layoutType = "Week";
     }
 
-    changeViewDate("FIRST", 0);
+    changeViewDate("NONE");
     changeViewLayout();
 });
 
@@ -68,7 +68,7 @@ function setViewDate(year, month, day) {
 // Changes the date to the specified date & updates necessary fields
 function selectDate(year, month, day) {
     setViewDate(year, month, day);
-    changeViewDate("FIRST", 0);
+    changeViewDate("NONE");
     console.log(sessionStorage.viewDate);
 }
 
@@ -93,16 +93,18 @@ function changeViewDate(size, amount) {
         viewDate.setDate(viewDate.getDate() + 7 * amount);
     }
     else if(size === "MONTH") {
+        // #TODO Edge case: If date is 31 and previous month has less than 31 
+        //                  days, month doesn't change even though date does.
         viewDate.setMonth(viewDate.getMonth() + amount);
     }
     else if(size === "YEAR") {
         viewDate.setFullYear(viewDate.getFullYear() + amount);
     }
-    else if(size === "FIRST") {
+    else if(size === "NONE") {
         // Do nothing, just running first time set up.
     }
     else {
-        console.log("changeViewDate() unknown parameter: " + size);
+        throw "changeViewDate() unknown parameter: \"" + size + "\" -- If no size desired, use \"NONE\"";
     }
 
     sessionStorage.viewDate = viewDate;
@@ -132,7 +134,11 @@ function changeViewDate(size, amount) {
 
     // If the mini calendar is on the page (day & week views), update it
     if(localStorage.layoutType != "Month") {
-        this.miniCal.handleDateChange();
+        try{
+            this.miniCal.handleDateChange();   
+        } catch(err) {
+            throw "The miniCalendar had an update attempted on i, but it doesn't exist."
+        }
     }
 }
 
@@ -145,27 +151,16 @@ var month_length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 
 // Do not ask me to explain this function because I don't want to spend an hour re-learning it.
 this.getWeekString = function() {
-    var viewDate = getViewDate(),
-        month = viewDate.getMonth() + 1;
-        // Start weekSunday at the current day - today's week index
-        weekSunday = viewDate.getDate() - viewDate.getDay(),
-        // Logically, weekSaturday is 6 days away from weekSunday
-        weekSaturday = weekSunday + 6,
-        // Assume the same month
-        monthNum1 = monthNum2 = month;
+    var viewDate = getViewDate();
+        viewDate.setDate(viewDate.getDate() - viewDate.getDay()),
+        weekSunday = viewDate.getDate(),
+        monthNum1 = viewDate.getMonth() + 1;
         
-    // If weekSunday is negative, it goes into the previous month
-    if(weekSunday <= 0) {
-        monthNum1 = month == 1 ? 12 : month - 1;
-        // weekSunday still holds the overflow, so use it to get the sunday date from previous month
-        weekSunday = month_length[monthNum1 - 1] + weekSunday;
-    }
+        // Add 6 days to get the following Saturday
+        viewDate.setDate(viewDate.getDate() + 6);
 
-    // If weekSaturday is > the month length of this month, it extends into following month
-    if(weekSaturday > month_length[month - 1]) {
-        weekSaturday -= month_length[month - 1];
-        monthNum2 = month == 12 ? 1 : month + 1;
-    }
+    var weekSaturday = viewDate.getDate(),
+        monthNum2 = viewDate.getMonth() + 1;
 
     // Return a string in the followin format: "7/1 - 7/7"
     return monthNum1 + "/" + weekSunday + " - " + monthNum2 + "/" + weekSaturday;
@@ -230,10 +225,17 @@ this.miniCal = function() {
             preMonth = month == 0 ? 11 : month - 1,
             preYear = preMonth == 11 ? year - 1 : year,
             preCurrentDay = month_length[preMonth] - prevDays + 1,
-            postDays = lastDayInt == 6 ? 7: 6 - lastDayInt,
+            postDays = lastDayInt == 6 ? 7: 6 - lastDayInt;
 
-            // Create a variable to progress through the calendar
-            dayTracker = new Date(preYear, preMonth, preCurrentDay);
+        // Check previous month for leap days 
+        if(month == 2) {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                preCurrentDay = 29 - prevDays + 1;
+            }
+        }
+
+        // Create a variable to progress through the calendar
+        var dayTracker = new Date(preYear, preMonth, preCurrentDay);
         
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
