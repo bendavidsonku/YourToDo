@@ -414,7 +414,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-row {
-	height: 75px;
+	height: 100px;
 }
 
 .planner-week-category-container {
@@ -662,8 +662,8 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 }
 
 .planner-month-bottom-settings .glyphicon-cog {
-	margin-left: 30%;
-	margin-top: 10%;
+	margin-left: 36%;
+	margin-top: 7%;
 }
 
 .planner-month-bottom-settings button, 
@@ -678,7 +678,7 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 
 .planner-month-bottom-settings-settings {
 	font-size: 20px;
-	margin-left: 5%;
+	margin-left: 2%;
 }
 
 /* Extra Large Devices */
@@ -704,15 +704,15 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 	}
 	
 	.planner-month-days-day {
-		width: 60px;
+		width: 45px;
 	}
 
 	.planner-month-bottom-content {
-		width: 726px;
+		width: 669px;
 	}
 
 	.planner-month-bottom-settings {
-		width: 290px;
+		width: 357px;
 	}
 }
 
@@ -748,6 +748,11 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 
 	.planner-month-bottom-settings {
 		width: 273px;
+	}
+
+	.planner-month-bottom-settings .glyphicon-cog {
+		margin-left: 32%;
+		margin-top: 12%;
 	}
 }
 
@@ -795,7 +800,7 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 	}
 
 	.planner-month-bottom-settings .glyphicon-cog {
-		margin-left: 20%;
+		margin-left: 22%;
 		margin-top: 15%;
 	}
 }
