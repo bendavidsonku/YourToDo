@@ -60,6 +60,18 @@ function getViewDate() {
     return new Date(Date.parse(sessionStorage.viewDate));
 }
 
+// Sets the sessionStorage viewDate to the specified date (limited to year, month, day)
+function setViewDate(year, month, day) {
+    sessionStorage.viewDate = new Date(year, month, day);
+}
+
+// Changes the date to the specified date & updates necessary fields
+function selectDate(year, month, day) {
+    setViewDate(year, month, day);
+    changeViewDate("FIRST", 0);
+    console.log(sessionStorage.viewDate);
+}
+
 /*
     Changes the current viewDate in sessionStorage based on input:
 
@@ -214,10 +226,14 @@ this.miniCal = function(year, month, day) {
 
         // Store how many days to the left of day 1, and the last number we need from those.
         var prevDays = firstDayInt == 0 ? 7 : firstDayInt,
-            postDays = lastDayInt == 6 ? 7: 6 - lastDayInt;
+            postDays = lastDayInt == 6 ? 7: 6 - lastDayInt,
+            postMonth = this.month == 11 ? 0 : this.month + 1;
+            postYear = postMonth == 0 ? this.year + 1 : this.year;
 
         // Find the integer value of the day in the previous month we need to start counting at
-        var preCurrentDay = month_length[this.month == 0 ? 11 : this.month - 1] - prevDays + 1;
+        var preMonth = this.month == 0 ? 11 : this.month - 1,
+            preYear = preMonth == 11 ? this.year - 1 : this.year,
+            preCurrentDay = month_length[preMonth] - prevDays + 1;
         
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
@@ -235,7 +251,7 @@ this.miniCal = function(year, month, day) {
                 // Previous month filler days
                 if(calWeek == 0 && prevDays > 0) {
                     // Append the correct styles to these inactive cells
-                    html += '<td class="planner-mini-calendar-inactive';
+                    html += '<td onclick="selectDate(' + preYear + ', ' + preMonth + ', ' + preCurrentDay + ')" class="planner-mini-calendar-inactive';
 
                     // If we're at the last child, use a custom style to fix bordering issues
                     if(prevDays == 1) {
@@ -247,12 +263,13 @@ this.miniCal = function(year, month, day) {
                 }
                 // Post month filler days
                 else if(postDays > 0 && currentDay > monthLength) {
-                    html += '<td class="planner-mini-calendar-inactive">' + (currentDay - monthLength) + '</td>';
+                    var dayNum = currentDay - monthLength;
+                    html += '<td onclick="selectDate(' + postYear + ', ' + postMonth + ', ' + dayNum + ')" class="planner-mini-calendar-inactive">' + dayNum + '</td>';
                     currentDay++;
                 }
                 // If we're not filling pre or post days, that means we're still filling current month days
                 else {
-                    html += '<td>' + currentDay + '</td>';
+                    html += '<td onclick="selectDate(' + this.year + ', ' + this.month + ', ' + currentDay + ')" >' + currentDay + '</td>';
                     currentDay++;
                 }
             }

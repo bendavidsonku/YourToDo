@@ -379,10 +379,23 @@ ul.navbar-nav>li {
 	border: 1px solid #fff;
 }
 
+.planner-mini-calendar td:hover {
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #424875;
+	cursor: pointer;
+}
+
 .planner-mini-calendar-active td {
 	background-color: #fff;
 	color: #000 !important;
 	border: 1px solid #424875 !important;
+}
+
+.planner-mini-calendar-active td:hover {
+	background-color: inherit;
+	color: #fff !important;
+	border: 1px solid #fff !important;
 }
 
 .planner-mini-calendar-inactive {
