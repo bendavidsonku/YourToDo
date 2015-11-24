@@ -498,8 +498,22 @@ ul.navbar-nav>li {
     border-radius: 5px;
 }
 
+.planner-week-event-container div {
+	text-decoration: none;
+	cursor: pointer;
+	outline: none !important;
+}
+
+.planner-week-event-container td:hover {
+    border: 2px solid rgba(0,0,0,0);
+}
+
 .planner-week-content:hover {
 	overflow-y: auto;
+}
+
+.popover-content, .popover-title {
+	color: #000;
 }
 
 .planner-week-bottom {

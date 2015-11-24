@@ -9,12 +9,6 @@ $(document).ready(function() {
         }
     });
 
-    // Prevent highlighting when clicking date selectors too fast
-    $('.planner-date-selectors-button').mousedown(function(e) {
-        e.preventDefault();
-    });
-
-
     // Session Storage
     if (!(sessionStorage.viewDate)) {
         var now = new Date();
@@ -58,8 +52,6 @@ function changeViewLayout() {
         console.log("Invalid layoutType: " + localStorage.layoutType);
         break;
     }
-
-
 }
 
 
@@ -309,7 +301,7 @@ hideOverflowEvents = function() {
         var events = category[i].getElementsByTagName('td');
 
         if(events.length > 4) {
-            var eventNames = {},
+            var eventNames = [],
                 numEvents = 0,
                 color = events[0].className;
 
@@ -323,14 +315,35 @@ hideOverflowEvents = function() {
             }
 
             // Append the box to say how many events are hidden
-            var moreBox =   "<tr>" +
-                                "<td class='" + color + "'>+ " + numEvents + " more</td>" +
-                            "</tr>"
+            var moreBox = "" +
+                "<tr>" +
+                    "<td class=\"" + color + "\">" +
+                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames) + ">" +
+                            "+ " + numEvents + " more" +
+                        "</div>" +
+                    "</td>" +
+                "</tr>"
 
             $(moreBox).insertAfter(events[2].parentNode);
-
-            // Modify the above <tr><td> to link to a pop-up box that holds the contents of eventNames
-
         }
+    }
+
+    $(function () {
+        $('[data-toggle="popover"]').popover({ html: true });
+    })
+}
+
+getPopoverContent = function(title, events) {
+    if(events.length < 1) {
+        throw "No events to populate popover content."
+    }
+    else {
+        var html = "";
+
+        for(var i = 0; i < events.length; i++) {
+            html += "<a href=\"/about/\" class=\"event-popover-event\">" + events[i] + "</a><br>";
+        }
+
+        return "data-title='" + title + "' data-content='" + html + "'";
     }
 }

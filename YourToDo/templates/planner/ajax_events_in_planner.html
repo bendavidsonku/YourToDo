@@ -20,29 +20,46 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <div>
+                                    {{ event.get_name }}
+                                </div>
                             </td>
                         </tr>
                         {% endif %}
                     {% endfor %}
                     <tr>
                         <td class="planner-category-color-{{ category.get_color }}">
-                            1
+                            Event 1
                         </td>
                     </tr>
                     <tr>
                         <td class="planner-category-color-{{ category.get_color }}">
-                            2
+                            Event 2
                         </td>
                     </tr>
                     <tr>
                         <td class="planner-category-color-{{ category.get_color }}">
-                            3
+                            Extra Event
                         </td>
                     </tr>
                     <tr>
                         <td class="planner-category-color-{{ category.get_color }}">
-                            4
+                            Fight Ben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="planner-category-color-{{ category.get_color }}">
+                            Fight Kinnersbag
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="planner-category-color-{{ category.get_color }}">
+                            Fight some random dude
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="planner-category-color-{{ category.get_color }}">
+                            Go to Lab
                         </td>
                     </tr>
                 </table>
