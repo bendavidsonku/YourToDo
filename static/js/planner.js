@@ -186,13 +186,7 @@ this.getWeekString = function() {
 
     #TODO --> Be able to click on days and then update the cal/viewDate to that day.
 */
-this.miniCal = function(year, month, day) {
-    viewDate = getViewDate();
-
-    // Initialize our time variable with the input if it's valid.
-    this.day = (isNaN(day) || day == null) ? viewDate.getDate() : day;
-    this.month = (isNaN(month) || month == null) ? viewDate.getMonth() : month;
-    this.year = (isNaN(year) || year == null) ? viewDate.getFullYear() : year;
+this.miniCal = function() {
     this.html = "";
 
     // Returns the html (assuming it has been previously generated)
@@ -200,46 +194,52 @@ this.miniCal = function(year, month, day) {
         return this.html;
     }
 
+    // Updates the calendar to the current view date
+    this.handleDateChange = function() {
+        this.generateHTML();
+        document.getElementById("planner-mini-calendar").innerHTML = this.getHTML();
+    }
+
     // Creates the html of the calendar.
     this.generateHTML = function() {
-        var monthLength = month_length[this.month];
+        var now = getViewDate(),
+            day = now.getDate(),
+            month = now.getMonth(),
+            year = now.getFullYear();
+
+        var monthLength = month_length[month];
 
         // Quick check to compensate for leap years
-        if (this.month == 1) {
-            if ((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0) {
+        if(month == 1) {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
                 monthLength = 29;
             }
         }
 
-        var firstDay = new Date(this.year, this.month, 1), 
-            lastDay = new Date(this.year, this.month, monthLength),
-            currentDay = new Date(this.year, this.month, this.day),
+        var firstDay = new Date(year, month, 1), 
             firstDayInt = firstDay.getDay(),
-            currentDayInt = currentDay.getDay(),
-            currentDay = 1; // Use this to track where we are in the month
-            lastDayInt = lastDay.getDay();
+            lastDay = new Date(year, month, monthLength),
+            lastDayInt = lastDay.getDay(),
 
-        // Variable to store the html that we'll write to the document
-        var html = '<table class="planner-mini-calendar">' +
-                        '<!--  7 equally spaced columns  -->' +
-                        '<col><col><col><col><col><col><col>';
+            // Variable to store the html that we'll write to the document
+            html = '<table class="planner-mini-calendar">' +
+                        '<col><col><col><col><col><col><col>',
 
-        // Store how many days to the left of day 1, and the last number we need from those.
-        var prevDays = firstDayInt == 0 ? 7 : firstDayInt,
+            // Store information about pre & post months & how many days we need to fill
+            prevDays = firstDayInt == 0 ? 7 : firstDayInt,
+            preMonth = month == 0 ? 11 : month - 1,
+            preYear = preMonth == 11 ? year - 1 : year,
+            preCurrentDay = month_length[preMonth] - prevDays + 1,
             postDays = lastDayInt == 6 ? 7: 6 - lastDayInt,
-            postMonth = this.month == 11 ? 0 : this.month + 1;
-            postYear = postMonth == 0 ? this.year + 1 : this.year;
 
-        // Find the integer value of the day in the previous month we need to start counting at
-        var preMonth = this.month == 0 ? 11 : this.month - 1,
-            preYear = preMonth == 11 ? this.year - 1 : this.year,
-            preCurrentDay = month_length[preMonth] - prevDays + 1;
+            // Create a variable to progress through the calendar
+            dayTracker = new Date(preYear, preMonth, preCurrentDay);
         
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
             // If we're in the current week, highlight it.
-            if((this.day - currentDayInt == currentDay && prevDays != 7) ||
-               (calWeek == 0 && this.day - currentDayInt < 1)) {
+            if((day - now.getDay() == dayTracker.getDate() && prevDays != 7) ||
+               (calWeek == 0 && day - now.getDay() < 1)) {
                 html += '<tr class="planner-mini-calendar-active">';
             }
             else {
@@ -248,58 +248,42 @@ this.miniCal = function(year, month, day) {
 
             // Loop for 7 days (7 days per week)
             for(var calDay = 0; calDay < 7; calDay++) {
+                // Make each date clickable to change the date
+                html += '<td onclick="selectDate(' + 
+                            dayTracker.getFullYear() + ', ' + 
+                            dayTracker.getMonth() + ', ' + 
+                            dayTracker.getDate() + ')"';
+
                 // Previous month filler days
                 if(calWeek == 0 && prevDays > 0) {
-                    // Append the correct styles to these inactive cells
-                    html += '<td onclick="selectDate(' + preYear + ', ' + preMonth + ', ' + preCurrentDay + ')" class="planner-mini-calendar-inactive';
-
-                    // If we're at the last child, use a custom style to fix bordering issues
-                    if(prevDays == 1) {
-                        html += '-last';
-                    }
-                    html += '">' + preCurrentDay + '</td>';
-                    preCurrentDay++;
+                    // Custom borders if it's the last preDay
+                    var style = prevDays == 1 ? 'class="planner-mini-calendar-inactive-last"' :
+                                                'class="planner-mini-calendar-inactive"';
+                    html += style;
                     prevDays--;
                 }
                 // Post month filler days
-                else if(postDays > 0 && currentDay > monthLength) {
-                    var dayNum = currentDay - monthLength;
-                    html += '<td onclick="selectDate(' + postYear + ', ' + postMonth + ', ' + dayNum + ')" class="planner-mini-calendar-inactive">' + dayNum + '</td>';
-                    currentDay++;
+                else if(postDays > 0 && dayTracker.getMonth() != month) {
+                    html += 'class="planner-mini-calendar-inactive"';
                 }
-                // If we're not filling pre or post days, that means we're still filling current month days
-                else {
-                    html += '<td onclick="selectDate(' + this.year + ', ' + this.month + ', ' + currentDay + ')" >' + currentDay + '</td>';
-                    currentDay++;
-                }
+                
+                // Close the td bracket & put the date in, & update the date
+                html += '>' + dayTracker.getDate() + '</td>';
+                dayTracker.setDate(dayTracker.getDate() + 1);
             }
             html += '</tr>';
         }
-        html += '</table>';
-
         // Store the generated html in our variable defined at class level
-        this.html = html;
-    }
-
-    // Updates the calendar to the current view date
-    this.handleDateChange = function() {
-        viewDate = getViewDate();
-
-        this.day = viewDate.getDate();
-        this.month = viewDate.getMonth();
-        this.year = viewDate.getFullYear();
-
-        this.generateHTML();
-        document.getElementById("planner-mini-calendar").innerHTML = this.getHTML();
+        this.html = html + '</table>';
     }
 } 
 
 // Returns the date of the specified day in the week
 getDateOfDay = function(day) {
-    date = getViewDate();
-    date.setDate(date.getDate() - date.getDay() + day);
+    var date = getViewDate(),
+        monthPadding = "";
 
-    monthPadding = "";
+    date.setDate(date.getDate() - date.getDay() + day);
 
     if(date.getMonth() + 1 <= 9) {
         monthPadding = "0";
