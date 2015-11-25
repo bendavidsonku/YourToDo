@@ -184,6 +184,11 @@
                             </ul>
                         </div>
                     </p>
+                    <p>
+                        <div id="create-category-error-message">
+
+                        </div>
+                    </p>
                  </div><!-- /modal body -->
                  
                  <div class = "modal-footer">
@@ -216,6 +221,24 @@
 
             });
 
+        });
+
+        $('#create-category-submit').click(function(){
+            var categoryName = $(".category-creation-name-input").val();
+            var categoryColor = $(".category-color-dropdown-button").val();
+            var categoryOrder = $(".category-order-dropdown-button").val();
+
+            if (categoryColor == "" || categoryOrder == "")
+            {
+                $("#category-creation-error").remove();
+                $("#create-category-error-message").append("<span id='category-creation-error'>Invalid color and/or order selection</span>");  
+            }
+
+            if (categoryColor != "" && categoryOrder != "")
+            {
+                $("#category-creation-error").remove();
+            }
+            
         });
 
     </script>
