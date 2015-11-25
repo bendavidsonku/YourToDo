@@ -12,10 +12,10 @@
         <col class="planner-week-days-day">
         <col class="planner-week-days-day">
 
-        <!-- Top Row: Mini Calendar/Title -->
+         <!-- Top Row: Mini Calendar/Title -->
         <tr>
             <!-- Mini Calendar -->
-            <td rowspan="3" id="planner-mini-calendar">
+            <td rowspan="3" id="planner-mini-calendar" class="planner-mini-cal-container">
             </td>
             <!-- Planner Title #TODO Let users name their own titles -->
             <td class="planner-title" colspan="7">
@@ -89,8 +89,7 @@
 
     <!-- TODO: Add custom scrollbars that don't look awful -->
     {% csrf_token %}
-    <span id="events-in-week-view"> 
-    </span>
+    <span id="events-in-week-view"></span>
     <!-- Bottom Content -->
     <table class="planner-container planner-week-bottom">
         <!-- Column Specification: Left sidebar, large middle, medium side -->

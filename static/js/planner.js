@@ -7,15 +7,16 @@ $(document).ready(function() {
     }
 
     // Use this for debugging to reset localStorage
-    //localStorage.clear();
+    localStorage.clear();
 
     // Local Storage
     if (!(localStorage.layoutType)) {
         localStorage.layoutType = "Week";
     }
 
-    changeViewDate("NONE");
     changeViewLayout(localStorage.layoutType);
+    //changeViewDate("NONE");
+    
 });
 
 /*
@@ -64,8 +65,8 @@ function changeViewLayout(viewType) {
             planner_layout: localStorage.layoutType
         },
         success: function(data, textStatus, jqXHR) {
-            $('#planner-day-week-month-render-area').html(data);
-            changeViewDate("", 0);
+            $('#planner-day-week-month-render-area').empty().append(data);
+            changeViewDate("NONE");
 
         },
     });
@@ -152,9 +153,10 @@ function changeViewDate(size, amount) {
     // If the mini calendar is on the page (day & week views), update it
     if(localStorage.layoutType != "Month") {
         try{
-            this.miniCal.handleDateChange();
+            var cal = new miniCal();
+            cal.handleDateChange();
         } catch(err) {
-            throw "The miniCalendar had an update attempted on i, but it doesn't exist."
+            throw "The miniCalendar had an update attempted on it, but it doesn't exist."
         }
     }
 }
