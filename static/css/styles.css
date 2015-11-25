@@ -659,3 +659,37 @@ ul.navbar-nav>li {
 .planner-category-color-15 {
 	background-color: #1C2335;
 }
+
+.category-creation-name-input {
+	width: 150px;
+}
+
+.category-color-dropdown-button {
+	width: 150px;
+}
+
+.category-order-dropdown-button {
+	width: 150px;
+}
+
+.dropdown-menu-category-color {
+	width: 150px;
+}
+
+.dropdown-menu-category-order {
+	width: 150px;
+}
+
+.attribute-label {
+	padding-right: 5px;
+}
+
+#ajax-create-category-modal {
+	top: 25%;
+	left: 44.25%;
+	outline: none;
+}
+
+#ajax-create-category-modal .modal-dialog{
+	width: 275px;
+}

@@ -123,3 +123,8 @@ def loadPlannerEvents(request):
             context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
 
             return render_to_response('planner/ajax_events_in_planner_week_view.html', context)
+
+
+def createNewCategory(request):
+    return
+

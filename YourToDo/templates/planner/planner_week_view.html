@@ -107,7 +107,7 @@
             </td>
             <td class="planner-week-bottom-settings" rowspan="2">
                 <button type="button" class="btn btn-default">New Event</button>
-                <button type="button" class="btn btn-default planner-week-bottom-settings-spacing">New Category</button><br><br>
+                <button type="button" class="btn btn-default planner-week-bottom-settings-spacing" data-toggle="modal" data-target="#ajax-create-category-modal">New Category</button><br><br>
 
                 <span class="glyphicon glyphicon-cog"></span><span class="planner-week-bottom-settings-settings">Settings</span>
             </td>
@@ -122,5 +122,103 @@
             </td>
         </tr>
     </table>
+
+    <!-- Category Creation Modal -->
+    <div id="ajax-create-category-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-create-category-modal-label">
+        <div class = "modal-dialog">
+            <div class = "modal-content">
+             
+                 <div class = "modal-header">
+                    <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
+                    
+                    <h4 class = "modal-title" id = "ajax-create-category-modal-label">
+                       Create New Category
+                    </h4>
+                 </div><!-- /modal header -->
+                 
+                 <div class = "modal-body">
+                    <h4>New Category Information:</h4>
+                    <p>
+                        <label for="category-name">Name:</label><input class="form-control category-creation-name-input" type="text">
+                    </p>
+                    <p>
+                        
+                        <label for="category-color">Color:</label>
+                        <div id="category-color-dropdown" class="dropdown">
+                            
+                            <button href="#category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-color-dropdown-button "><span class="attribute-label">Choose Color</span><span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-category-color">
+                                <li><a href="#">Red</a></li>
+                                <li><a href="#">Dark Red</a></li>
+                                <li><a href="#">Light Red</a></li>
+                                <li><a href="#">Blue</a></li>
+                                <li><a href="#">Dark Blue</a></li>
+                                <li><a href="#">Light Blue</a></li>
+                                <li><a href="#">Green</a></li>
+                                <li><a href="#">Dark Green</a></li>
+                                <li><a href="#">Light Green</a></li>
+                                <li><a href="#">Yellow</a></li>
+                                <li><a href="#">Gold</a></li>
+                                <li><a href="#">Orange</a></li>
+                                <li><a href="#">Pink</a></li>
+                                <li><a href="#">Turquoise</a></li>
+                                <li><a href="#">Navy</a></li>
+                            </ul>
+                        </div>
+                    </p>
+                    <p>
+                        <label for="category-order">Order:</label>
+                        <div id="category-order-dropdown" class="dropdown">
+                            <button href="#category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-order-dropdown-button"><span class="attribute-label">Choose Order</span><span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-category-order">
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">6</a></li>
+                                <li><a href="#">7</a></li>
+                                <li><a href="#">8</a></li>
+                                <li><a href="#">9</a></li>
+                                <li><a href="#">10</a></li>
+                            </ul>
+                        </div>
+                    </p>
+                 </div><!-- /modal body -->
+                 
+                 <div class = "modal-footer">
+                    <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                       Cancel
+                    </button>
+                    <button type ="button" class ="btn btn-success" id="create-category-submit">
+                       Create
+                    </button>
+                 </div><!-- /modal footer -->
+             
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+
+    <script>
+        $(function(){
+
+            $(".dropdown-menu-category-color li a").click(function(){
+
+              $(".category-color-dropdown-button:first-child").text($(this).text());
+              $(".category-color-dropdown-button:first-child").val($(this).text());
+
+            });
+
+            $(".dropdown-menu-category-order li a").click(function(){
+
+              $(".category-order-dropdown-button:first-child").text($(this).text());
+              $(".category-order-dropdown-button:first-child").val($(this).text());
+
+            });
+
+        });
+
+    </script>
+
 </div>
 
