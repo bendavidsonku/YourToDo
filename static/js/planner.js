@@ -1,11 +1,5 @@
 $(document).ready(function() {
 
-    // Prevent highlighting when clicking date selectors too fast
-    $('.planner-date-selectors-button').mousedown(function(e) {
-        e.preventDefault();
-    });
-
-
     // Session Storage
     if (!(sessionStorage.viewDate)) {
         var now = new Date();
@@ -20,6 +14,7 @@ $(document).ready(function() {
         localStorage.layoutType = "Week";
     }
 
+    changeViewDate("NONE");
     changeViewLayout(localStorage.layoutType);
 });
 
@@ -55,9 +50,7 @@ function changeViewLayout(viewType) {
         $('#btn-layout-month').addClass('active');
         break;
     default:
-        console.log("Invalid layoutType: " + localStorage.layoutType);
-        break;
-
+        throw "Invalid layoutType exception: \"" + localStorage.layoutType + "\" is not a valid layout type";
     }
 
     // Update view based on currently selected layout
@@ -84,6 +77,18 @@ function getViewDate() {
     return new Date(Date.parse(sessionStorage.viewDate));
 }
 
+// Sets the sessionStorage viewDate to the specified date (limited to year, month, day)
+function setViewDate(year, month, day) {
+    sessionStorage.viewDate = new Date(year, month, day);
+}
+
+// Changes the date to the specified date & updates necessary fields
+function selectDate(year, month, day) {
+    setViewDate(year, month, day);
+    changeViewDate("NONE");
+    console.log(sessionStorage.viewDate);
+}
+
 /*
     Changes the current viewDate in sessionStorage based on input:
 
@@ -105,16 +110,18 @@ function changeViewDate(size, amount) {
         viewDate.setDate(viewDate.getDate() + 7 * amount);
     }
     else if(size === "MONTH") {
+        // #TODO Edge case: If date is 31 and previous month has less than 31 
+        //                  days, month doesn't change even though date does.
         viewDate.setMonth(viewDate.getMonth() + amount);
     }
     else if(size === "YEAR") {
         viewDate.setFullYear(viewDate.getFullYear() + amount);
     }
-    else if(size === "FIRST") {
-        // Do nothing, just running first time set up.
+    else if(size === "NONE") {
+        // Do nothing, running first time setup or updating the page without changing the view date.
     }
     else {
-        console.log("changeViewDate() unknown parameter: " + size);
+        throw "changeViewDate() unknown parameter: \"" + size + "\" -- If no change desired, use \"NONE\"";
     }
 
     sessionStorage.viewDate = viewDate;
@@ -133,7 +140,7 @@ function changeViewDate(size, amount) {
             view_end_date: end_date
         },
         success: function(data, textStatus, jqXHR) {
-            $('#events-in-week-view').html(data);
+            $('#events-in-week-view').empty().append(data);
         },
     });
 
@@ -143,10 +150,12 @@ function changeViewDate(size, amount) {
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
 
     // If the mini calendar is on the page (day & week views), update it
-    // Don't update it if this is the first time running this function
     if(localStorage.layoutType != "Month") {
-        var cal = new this.miniCal();
-        cal.handleDateChange();
+        try{
+            this.miniCal.handleDateChange();
+        } catch(err) {
+            throw "The miniCalendar had an update attempted on i, but it doesn't exist."
+        }
     }
 }
 
@@ -159,27 +168,16 @@ var month_length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 
 // Do not ask me to explain this function because I don't want to spend an hour re-learning it.
 this.getWeekString = function() {
-    var viewDate = getViewDate(),
-        month = viewDate.getMonth() + 1;
-        // Start weekSunday at the current day - today's week index
-        weekSunday = viewDate.getDate() - viewDate.getDay(),
-        // Logically, weekSaturday is 6 days away from weekSunday
-        weekSaturday = weekSunday + 6,
-        // Assume the same month
-        monthNum1 = monthNum2 = month;
+    var viewDate = getViewDate();
+        viewDate.setDate(viewDate.getDate() - viewDate.getDay()),
+        weekSunday = viewDate.getDate(),
+        monthNum1 = viewDate.getMonth() + 1;
         
-    // If weekSunday is negative, it goes into the previous month
-    if(weekSunday <= 0) {
-        monthNum1 = month == 1 ? 12 : month - 1;
-        // weekSunday still holds the overflow, so use it to get the sunday date from previous month
-        weekSunday = month_length[monthNum1 - 1] + weekSunday;
-    }
+        // Add 6 days to get the following Saturday
+        viewDate.setDate(viewDate.getDate() + 6);
 
-    // If weekSaturday is > the month length of this month, it extends into following month
-    if(weekSaturday > month_length[month - 1]) {
-        weekSaturday -= month_length[month - 1];
-        monthNum2 = month == 12 ? 1 : month + 1;
-    }
+    var weekSaturday = viewDate.getDate(),
+        monthNum2 = viewDate.getMonth() + 1;
 
     // Return a string in the followin format: "7/1 - 7/7"
     return monthNum1 + "/" + weekSunday + " - " + monthNum2 + "/" + weekSaturday;
@@ -200,13 +198,7 @@ this.getWeekString = function() {
 
     #TODO --> Be able to click on days and then update the cal/viewDate to that day.
 */
-this.miniCal = function(year, month, day) {
-    viewDate = getViewDate();
-
-    // Initialize our time variable with the input if it's valid.
-    this.day = (isNaN(day) || day == null) ? viewDate.getDate() : day;
-    this.month = (isNaN(month) || month == null) ? viewDate.getMonth() : month;
-    this.year = (isNaN(year) || year == null) ? viewDate.getFullYear() : year;
+this.miniCal = function() {
     this.html = "";
 
     // Returns the html (assuming it has been previously generated)
@@ -214,42 +206,59 @@ this.miniCal = function(year, month, day) {
         return this.html;
     }
 
+    // Updates the calendar to the current view date
+    this.handleDateChange = function() {
+        this.generateHTML();
+        document.getElementById("planner-mini-calendar").innerHTML = this.getHTML();
+    }
+
     // Creates the html of the calendar.
     this.generateHTML = function() {
-        var monthLength = month_length[this.month];
+        var now = getViewDate(),
+            day = now.getDate(),
+            month = now.getMonth(),
+            year = now.getFullYear();
+
+        var monthLength = month_length[month];
 
         // Quick check to compensate for leap years
-        if (this.month == 1) {
-            if ((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0) {
+        if(month == 1) {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
                 monthLength = 29;
             }
         }
 
-        var firstDay = new Date(this.year, this.month, 1), 
-            lastDay = new Date(this.year, this.month, monthLength),
-            currentDay = new Date(this.year, this.month, this.day),
+        var firstDay = new Date(year, month, 1), 
             firstDayInt = firstDay.getDay(),
-            currentDayInt = currentDay.getDay(),
-            currentDay = 1; // Use this to track where we are in the month
-            lastDayInt = lastDay.getDay();
+            lastDay = new Date(year, month, monthLength),
+            lastDayInt = lastDay.getDay(),
 
-        // Variable to store the html that we'll write to the document
-        var html = '<table class="planner-mini-calendar">' +
-                        '<!--  7 equally spaced columns  -->' +
-                        '<col><col><col><col><col><col><col>';
+            // Variable to store the html that we'll write to the document
+            html = '<table class="planner-mini-calendar">' +
+                        '<col><col><col><col><col><col><col>',
 
-        // Store how many days to the left of day 1, and the last number we need from those.
-        var prevDays = firstDayInt == 0 ? 7 : firstDayInt,
+            // Store information about pre & post months & how many days we need to fill
+            prevDays = firstDayInt == 0 ? 7 : firstDayInt,
+            preMonth = month == 0 ? 11 : month - 1,
+            preYear = preMonth == 11 ? year - 1 : year,
+            preCurrentDay = month_length[preMonth] - prevDays + 1,
             postDays = lastDayInt == 6 ? 7: 6 - lastDayInt;
 
-        // Find the integer value of the day in the previous month we need to start counting at
-        var preCurrentDay = month_length[this.month == 0 ? 11 : this.month - 1] - prevDays + 1;
+        // Check previous month for leap days 
+        if(month == 2) {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                preCurrentDay = 29 - prevDays + 1;
+            }
+        }
+
+        // Create a variable to progress through the calendar
+        var dayTracker = new Date(preYear, preMonth, preCurrentDay);
         
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
             // If we're in the current week, highlight it.
-            if((this.day - currentDayInt == currentDay && prevDays != 7) ||
-               (calWeek == 0 && this.day - currentDayInt < 1)) {
+            if((day - now.getDay() == dayTracker.getDate() && prevDays != 7) ||
+               (calWeek == 0 && day - now.getDay() < 1)) {
                 html += '<tr class="planner-mini-calendar-active">';
             }
             else {
@@ -258,57 +267,42 @@ this.miniCal = function(year, month, day) {
 
             // Loop for 7 days (7 days per week)
             for(var calDay = 0; calDay < 7; calDay++) {
+                // Make each date clickable to change the date
+                html += '<td onclick="selectDate(' + 
+                            dayTracker.getFullYear() + ', ' + 
+                            dayTracker.getMonth() + ', ' + 
+                            dayTracker.getDate() + ')"';
+
                 // Previous month filler days
                 if(calWeek == 0 && prevDays > 0) {
-                    // Append the correct styles to these inactive cells
-                    html += '<td class="planner-mini-calendar-inactive';
-
-                    // If we're at the last child, use a custom style to fix bordering issues
-                    if(prevDays == 1) {
-                        html += '-last';
-                    }
-                    html += '">' + preCurrentDay + '</td>';
-                    preCurrentDay++;
+                    // Custom borders if it's the last preDay
+                    var style = prevDays == 1 ? 'class="planner-mini-calendar-inactive-last"' :
+                                                'class="planner-mini-calendar-inactive"';
+                    html += style;
                     prevDays--;
                 }
                 // Post month filler days
-                else if(postDays > 0 && currentDay > monthLength) {
-                    html += '<td class="planner-mini-calendar-inactive">' + (currentDay - monthLength) + '</td>';
-                    currentDay++;
+                else if(postDays > 0 && dayTracker.getMonth() != month) {
+                    html += 'class="planner-mini-calendar-inactive"';
                 }
-                // If we're not filling pre or post days, that means we're still filling current month days
-                else {
-                    html += '<td>' + currentDay + '</td>';
-                    currentDay++;
-                }
+                
+                // Close the td bracket & put the date in, & update the date
+                html += '>' + dayTracker.getDate() + '</td>';
+                dayTracker.setDate(dayTracker.getDate() + 1);
             }
             html += '</tr>';
         }
-        html += '</table>';
-
         // Store the generated html in our variable defined at class level
-        this.html = html;
-    }
-
-    // Updates the calendar to the current view date
-    this.handleDateChange = function() {
-        viewDate = getViewDate();
-
-        this.day = viewDate.getDate();
-        this.month = viewDate.getMonth();
-        this.year = viewDate.getFullYear();
-
-        this.generateHTML();
-        document.getElementById("planner-mini-calendar").innerHTML = this.getHTML();
+        this.html = html + '</table>';
     }
 } 
 
 // Returns the date of the specified day in the week
 getDateOfDay = function(day) {
-    date = getViewDate();
-    date.setDate(date.getDate() - date.getDay() + day);
+    var date = getViewDate(),
+        monthPadding = "";
 
-    monthPadding = "";
+    date.setDate(date.getDate() - date.getDay() + day);
 
     if(date.getMonth() + 1 <= 9) {
         monthPadding = "0";
@@ -316,4 +310,63 @@ getDateOfDay = function(day) {
 
     // Return the date string ("2015-11-21" for example)
     return date.getFullYear() + "-" + monthPadding + (date.getMonth() + 1) + "-" + date.getDate();
+}
+
+// Checks every category/date combination & hides events that are overflow (more than 4 events in one block)
+hideOverflowEvents = function() {
+    var category = $(".planner-week-event-container");
+
+    // For every event block, check if it's over capacity and fix those that are.
+    for(var i = 0; i < category.length; i++) {
+        var events = category[i].getElementsByTagName('td');
+
+        if(events.length > 4) {
+            var eventNames = [],
+                numEvents = 0,
+                color = events[0].className;
+
+            // Loop through the extra blocks & get their names
+            for(var j = 3; j < events.length; j) {
+                // Store the event
+                eventNames[numEvents] = $.trim(events[j].innerHTML);
+                events[j].parentNode.remove();
+
+                numEvents++;
+            }
+
+            // Append the box to say how many events are hidden
+            var moreBox = "" +
+                "<tr>" +
+                    "<td class=\"" + color + "\">" +
+                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames) + ">" +
+                            "+ " + numEvents + " more" +
+                        "</div>" +
+                    "</td>" +
+                "</tr>"
+
+            $(moreBox).insertAfter(events[2].parentNode);
+        }
+    }
+
+    $(function () {
+        $('[data-toggle="popover"]').popover({ html: true });
+    })
+}
+
+getPopoverContent = function(title, events) {
+    if(events.length < 1) {
+        throw "No events to populate popover content."
+    }
+    else {
+        var html = "";
+
+        for(var i = 0; i < events.length; i++) {
+            // Change the "/about/" section to a descriptive link to edit the event
+            // Should connect with a modal trigger, but we're going to have to pull 
+            // category data, date data, and probably some other fields.
+            html += "<a href=\"/about/\" class=\"event-popover-event\">" + events[i] + "</a><br>";
+        }
+
+        return "data-title='" + title + "' data-content='" + html + "'";
+    }
 }
