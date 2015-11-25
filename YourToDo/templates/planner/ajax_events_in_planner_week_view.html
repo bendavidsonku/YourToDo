@@ -20,91 +20,90 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                <div>
-                                    {{ event.get_name }}
-                                </div>
+                                {{ event.get_name }}
                             </td>
                         </tr>
                         {% endif %}
                     {% endfor %}
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Event 1
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Event 2
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Extra Event
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Fight Ben
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Fight Kinnersbag
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Fight some random dude
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="planner-category-color-{{ category.get_color }}">
-                            Go to Lab
-                        </td>
-                    </tr>
                 </table>
             </td>
             <td class="planner-week-event-block">
-                {% for event in eventsInViewSecondDate %}
-                    {% if event.get_parentCategory == category %}
-                        {{ event.get_name }}
-                    {% endif %}
-                {% endfor %}
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewSecondDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                {{ event.get_name }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>
             <td class="planner-week-event-block">
-                {% for event in eventsInViewThirdDate %}
-                    {% if event.get_parentCategory == category %}
-                        {{ event.get_name }}
-                    {% endif %}
-                {% endfor %}
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewThirdDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                {{ event.get_name }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>
             <td class="planner-week-event-block">
-                {% for event in eventsInViewFourthDate %}
-                    {% if event.get_parentCategory == category %}
-                        {{ event.get_name }}
-                    {% endif %}
-                {% endfor %}
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewFourthDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                {{ event.get_name }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>
             <td class="planner-week-event-block">
-                {% for event in eventsInViewFifthDate %}
-                    {% if event.get_parentCategory == category %}
-                        {{ event.get_name }}
-                    {% endif %}
-                {% endfor %}
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewFifthDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                {{ event.get_name }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>
             <td class="planner-week-event-block">
-                {% for event in eventsInViewSixthDate %}
-                    {% if event.get_parentCategory == category %}
-                        {{ event.get_name }}
-                    {% endif %}
-                {% endfor %}
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewSixthDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                {{ event.get_name }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>
             <td class="planner-week-event-block">
-                {% for event in eventsInViewEndDate %}
-                    {% if event.get_parentCategory == category %}
-                        {{ event.get_name }}
-                    {% endif %}
-                {% endfor %}
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewEndDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                {{ event.get_name }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>     
         </tr>
         {% endfor %}
