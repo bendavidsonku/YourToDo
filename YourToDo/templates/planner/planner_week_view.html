@@ -26,7 +26,13 @@
         <!-- Top content -->
         <tr class="planner-week-top-content">
             <td class="planner-date-selectors" colspan="5">
-                <!-- #TODO get the fucking chevrons to stay in the same spot -->
+                <!-- Today Button -->
+                <div class="planner-date-today-selector">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('TODAY')">Today</button>
+                    </div>
+                </div>
+
                 <!-- Monthly dates (i.e. "< Nov. >") -->
                 <div class="planner-date-month-selector">
                     <div class="btn-group planner-date-selectors-btn-group" role="group">

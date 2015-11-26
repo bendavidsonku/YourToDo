@@ -424,7 +424,7 @@ ul.navbar-nav>li {
 .planner-date-selectors {
 	border-left: 1px solid #fff;
 	padding: 0px 10px 0px 10px;
-	line-height: 24px;
+	line-height: 26px;
 }
 
 .planner-date-selectors div {
@@ -441,7 +441,8 @@ ul.navbar-nav>li {
 }
 
 .btn-date-selector span {
-	margin-bottom: 2px;
+	margin-bottom: 3px;
+	margin-top: 3px;
 }
 
 .planner-week-row td {
@@ -589,8 +590,12 @@ ul.navbar-nav>li {
 		width: 284px;
 	}
 
+	.planner-date-today-selector {
+		width: 13%;
+	}
+
 	.planner-date-month-selector {
-		width: 37%;
+		width: 32%;
 	}
 
 	.planner-date-year-selector {
@@ -598,7 +603,7 @@ ul.navbar-nav>li {
 	}
 
 	.planner-date-week-selector {
-		width: 50%
+		width: 42%
 	}
 }
 
@@ -620,16 +625,20 @@ ul.navbar-nav>li {
 		width: 226px;
 	}
 
+	.planner-date-today-selector {
+		width: 15.5%;
+	}
+
 	.planner-date-month-selector {
-		width: 35%;
+		width: 25%;
 	}
 
 	.planner-date-year-selector {
-		width: 17%;
+		width: 16.5%;
 	}
 
 	.planner-date-week-selector {
-		width: 48%
+		width: 43%
 	}
 }
 
@@ -651,8 +660,12 @@ ul.navbar-nav>li {
 		width: 164px;
 	}
 
+	.planner-date-today-selector {
+		width: 13%;
+	}
+
 	.planner-date-month-selector {
-		width: 34%;
+		width: 23%;
 	}
 
 	.planner-date-year-selector {
@@ -660,7 +673,7 @@ ul.navbar-nav>li {
 	}
 
 	.planner-date-week-selector {
-		width: 43%
+		width: 41%
 	}
 }
 

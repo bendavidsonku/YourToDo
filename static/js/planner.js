@@ -118,6 +118,10 @@ function changeViewDate(size, amount) {
     else if(size === "YEAR") {
         viewDate.setFullYear(viewDate.getFullYear() + amount);
     }
+    else if(size === "TODAY") {
+        var now = new Date();
+        viewDate = now;
+    }
     else if(size === "NONE") {
         // Do nothing, running first time setup or updating the page without changing the view date.
     }
