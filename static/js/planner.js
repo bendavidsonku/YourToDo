@@ -111,8 +111,8 @@ function changeViewDate(size, amount) {
         viewDate.setDate(viewDate.getDate() + 7 * amount);
     }
     else if(size === "MONTH") {
-        // #TODO Edge case: If date is 31 and previous month has less than 31 
-        //                  days, month doesn't change even though date does.
+        // When a user changes month, always take them to the 1st of that month.
+        viewDate.setDate(1);
         viewDate.setMonth(viewDate.getMonth() + amount);
     }
     else if(size === "YEAR") {
