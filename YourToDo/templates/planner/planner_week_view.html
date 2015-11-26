@@ -1,6 +1,4 @@
 <div class="container">
-
-    <!-- Table containing top content (could potentially be used for all views) -->
     <table class="planner-container">
         <!-- Column Specification: Left sidebar, 7 days -->
         <col class="planner-week-left-sidebar">
@@ -23,7 +21,7 @@
             </td>
         </tr><!-- End Top Row -->
 
-        <!-- Top content -->
+        <!-- Top content: Date Selectors, layout selectors -->
         <tr class="planner-week-top-content">
             <td class="planner-date-selectors" colspan="5">
                 <!-- Today Button -->
@@ -75,7 +73,7 @@
             <td class="planner-layout-selectors" colspan="2">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-day" onclick="changeViewLayout('Day')">Day</button>
-                    <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-week" onclick="changeViewLayout('Week')">Week</button>
+                    <button type="button" class="btn btn-default btn-layout-selector active" id="btn-layout-week" onclick="changeViewLayout('Week')">Week</button>
                     <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-month" onclick="changeViewLayout('Month')">Month</button>
                 </div>
             </td>
@@ -93,9 +91,8 @@
         </tr><!-- End Top Content -->
     </table>
 
-    <!-- TODO: Add custom scrollbars that don't look awful -->
-    {% csrf_token %}
     <span id="events-in-week-view"></span>
+
     <!-- Bottom Content -->
     <table class="planner-container planner-week-bottom">
         <!-- Column Specification: Left sidebar, large middle, medium side -->

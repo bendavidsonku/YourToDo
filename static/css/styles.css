@@ -777,34 +777,36 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 		width: 284px;
 	}
 
-	.planner-date-today-selector {
+	.planner-date-year-selector {
 		width: 13%;
-	.planner-month-right-sidebar {
-		width: 144px;
 	}
 
 	.planner-date-month-selector {
 		width: 32%;
+	}
+
+	.planner-date-week-selector {
+		width: 42%
+	}
+
+	.planner-date-today-selector {
+		width: 13%;
+	}	
+
+	.planner-month-right-sidebar {
+		width: 144px;
+	}	
 	
 	.planner-month-days-day {
 		width: 45px;
 	}
 
-	}
-
-	.planner-date-year-selector {
-		width: 13%;
 	.planner-month-bottom-content {
 		width: 669px;
-	}
+	}	
 
-	}
-
-	.planner-date-week-selector {
-		width: 42%
 	.planner-month-bottom-settings {
 		width: 357px;
-	}
 	}
 }
 
@@ -826,35 +828,36 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 		width: 226px;
 	}
 
-	.planner-date-today-selector {
-		width: 15.5%;
-	.planner-month-right-sidebar {
-		width: 144px;
-	}
+	.planner-date-year-selector {
+		width: 16.5%;
 	}
 
 	.planner-date-month-selector {
 		width: 25%;
+	}
+
+	.planner-date-week-selector {
+		width: 43%
+	}
+
+	.planner-date-today-selector {
+		width: 15.5%;
+	}
+
+	.planner-month-right-sidebar {
+		width: 144px;
+	}
 	
 	.planner-month-days-day {
 		width: 50px;
 	}
 
-	}
-
-	.planner-date-year-selector {
-		width: 16.5%;
 	.planner-month-bottom-content {
 		width: 570px;
 	}
-
-	}
-
-	.planner-date-week-selector {
-		width: 43%
+	
 	.planner-month-bottom-settings {
 		width: 273px;
-	}
 	}
 
 	.planner-month-bottom-settings .glyphicon-cog {
@@ -911,20 +914,20 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 		margin-top: 15%;
 	}
 
-	.planner-date-today-selector {
-		width: 13%;
+	.planner-date-year-selector {
+		width: 23%;
 	}
 
 	.planner-date-month-selector {
 		width: 23%;
 	}
 
-	.planner-date-year-selector {
-		width: 23%;
-	}
-
 	.planner-date-week-selector {
 		width: 41%
+	}
+
+	.planner-date-today-selector {
+		width: 13%;
 	}
 }
 

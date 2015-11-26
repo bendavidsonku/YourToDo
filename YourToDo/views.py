@@ -78,6 +78,16 @@ def PlannerView(request):
         return render_to_response('planner/planner_week_view.html', context, context_instance = RequestContext(request))
 
     elif plannerLayoutSelection == "Month":
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+        # Get the necessary context to display
+        context['planner'] = user.planner
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+        context['eventsInPlanner'] = Event.objects.get_all_events(user)
+        
         return render_to_response('planner/planner_month_view.html', context, context_instance = RequestContext(request))
 
     else:
