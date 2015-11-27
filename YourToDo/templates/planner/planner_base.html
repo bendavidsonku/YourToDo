@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}Planner{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+    <!-- Include Planner javascript -->
+    <script src="{% static 'js/planner.js' %}"></script>
+    
+    {% csrf_token %}
+	<span id="planner-day-week-month-render-area">
+	</span>
+
+{% endblock %}

@@ -334,7 +334,8 @@ ul.navbar-nav>li {
 }
 
 
-/* Planner Styles */
+/****************************************** Week Planner Styles ******************************************/
+
 .planner-container {
 	width: 100%;
 	border-left: 2px solid #424875;
@@ -342,6 +343,11 @@ ul.navbar-nav>li {
 	color: #fff;
 	table-layout: fixed;
 	font-family: 'Titillium Web', sans-serif;
+}
+
+.planner-container-content {
+	border-top: hidden;
+	border-bottom: hidden;
 }
 
 .planner-title {
@@ -359,20 +365,38 @@ ul.navbar-nav>li {
 	border-collapse: collapse;
 	border-style: hidden;
 	font-size: 14px;
+	width: 100%;
+}
+
+.planner-mini-cal-container {
+	border-bottom: 1px solid #fff;
 }
 
 .planner-mini-calendar col {
-	width: 22px;
+	width: 14.2875%;
 }
 
 .planner-mini-calendar td {
 	border: 1px solid #fff;
 }
 
+.planner-mini-calendar td:hover {
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #424875;
+	cursor: pointer;
+}
+
 .planner-mini-calendar-active td {
 	background-color: #fff;
 	color: #000 !important;
 	border: 1px solid #424875 !important;
+}
+
+.planner-mini-calendar-active td:hover {
+	background-color: inherit;
+	color: #fff !important;
+	border: 1px solid #fff !important;
 }
 
 .planner-mini-calendar-inactive {
@@ -401,7 +425,7 @@ ul.navbar-nav>li {
 .planner-date-selectors {
 	border-left: 1px solid #fff;
 	padding: 0px 10px 0px 10px;
-	line-height: 24px;
+	line-height: 26px;
 }
 
 .planner-date-selectors div {
@@ -418,7 +442,8 @@ ul.navbar-nav>li {
 }
 
 .btn-date-selector span {
-	margin-bottom: 2px;
+	margin-bottom: 3px;
+	margin-top: 3px;
 }
 
 .planner-week-row td {
@@ -426,7 +451,8 @@ ul.navbar-nav>li {
 }
 
 .planner-week-row {
-	height: 100px;
+	height: 103px;
+	width: 100%;
 }
 
 .planner-week-category-container {
@@ -441,28 +467,70 @@ ul.navbar-nav>li {
 	height: 40px;
 	vertical-align: center;
 	text-align: center;
-	border-bottom: 0px solid transparent !important;
 }
 
 .planner-week-top-content td {
 	font-size: 16px;
 	height: 40px;
+	border-bottom: 1px solid #fff;
 }
 
 .planner-week-days td {
 	border: 1px solid #fff;
-	border-bottom: 0px;
 }
 
 .planner-week-content {
 	display: block;
 	overflow-y: hidden;
 	overflow-x: hidden;
-	max-height: 501px;
+	max-height: 515px;
+}
+
+.planner-week-row > td:not(:first-child) {
+	vertical-align: top;
+	text-align: left;
+}
+
+.planner-week-event-container {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse:separate; 
+	border-spacing: 2px;
+}
+
+.planner-week-event-container > tr {
+	height: 25%;
+}
+
+.planner-week-event-container td {
+	border-style: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 2px;
+    line-height: 15px;
+    width: 100%;
+    border: 2px solid rgba(0,0,0,.3);
+    border-radius: 5px;
+}
+
+.planner-week-event-container div {
+	text-decoration: none;
+	cursor: pointer;
+	outline: none !important;
+}
+
+.planner-week-event-container td:hover {
+    border: 2px solid rgba(255, 255, 255, .7);
+    cursor: pointer;
 }
 
 .planner-week-content:hover {
 	overflow-y: auto;
+}
+
+.popover-content, .popover-title {
+	color: #000;
 }
 
 .planner-week-bottom {
@@ -471,7 +539,6 @@ ul.navbar-nav>li {
 
 .planner-week-bottom td {
 	border: 1px solid #fff;
-	border-top: 0px;
 	padding: 10px;
 }
 
@@ -507,12 +574,197 @@ ul.navbar-nav>li {
 	margin-left: 10px;
 }
 
+/******************************************* Month Planner Styles *********************************************/
+
+.planner-month-layout-selectors {
+	font-size: 16px;
+}
+
+.planner-month-layout-selectors label {
+	font-weight: normal;
+	padding: 0px 10px 0px 10px;
+}
+
+.planner-month-layout-selectors div {
+	width: 33.333333333%;
+	float: left;
+	text-align: center;
+}
+
+.planner-month-date-selectors {
+	border-left: 1px solid #fff;
+	padding: 0px 10px 0px 10px;
+	text-align: center;
+}
+
+.planner-month-top-content td {
+	font-size: 16px;
+	height: 40px;
+}
+
+.planner-month-row td {
+	border: 1px solid #fff;
+	margin-left: 30px;
+}
+
+.planner-month-row {
+	height: 75px;
+}
+
+.planner-month-row-last td {
+	border: 1px solid #fff;
+}
+
+.planner-month-row-last {
+	height: 125px;
+}
+
+.planner-container .planner-month-row .date h1 {
+	position: relative;
+	margin: -35px 0px 0px 5px;
+	font-size: 14px;
+}
+
+.planner-container .planner-month-row-last .date h1 {
+	position: relative;
+	margin: -60px 0px 0px 5px;
+	font-size: 14px;
+}
+
+.planner-month-right-category h1 {
+	color: #fff;
+	font-size: 20px;
+	position: relative;
+	text-align: center;
+	margin-top: -6px;
+	padding: 5px 0px 5px 0px;
+	border-bottom: 1px solid #fff;
+}
+
+.planner-month-right-category .checkbox-field {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 240px;
+	margin-top: -10px;
+}
+
+.planner-month-right-category p {
+	position: relative;
+	text-align: justify;
+	overflow: hidden;
+}
+
+/* the first method: Using 2 tags with predefined bootstrap checkbox icons */
+input[type='checkbox'].tags-checkbox:checked + label > i:first-of-type,
+input[type='checkbox'].tags-checkbox + label > i:last-of-type{
+    display: none;
+    
+}
+input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
+    display: inline-block;
+    
+}
+
+.planner-month-right-category .divider {
+	border-bottom: 1px solid #fff;
+	margin-top: -1px;
+}
+
+.planner-month-right-category h2 {
+	color: #fff;
+	font-size: 20px;
+	position: relative;
+	text-align: center;
+	margin-top: -13px;
+	padding: 5px 0px 5px 0px;
+	border-bottom: 1px solid #fff;
+}
+
+.planner-month-right-category .checkbox-field-2 {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 120px;
+	margin-top: -10px;
+}
+
+.planner-month-topright-content {
+	padding: 10px;
+	font-size: 16px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.planner-month-topright-content label {
+	display: block;
+}
+
+.planner-month-bottomright-content {
+	padding: 10px;
+	font-size: 16px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.planner-month-bottomright-content label {
+	display: block;
+}
+
+/* Beginning of planner bottom styles */
+
+.planner-month-bottom {
+	border-bottom: 2px solid #424875;
+}
+
+.planner-month-bottom td {
+	border: 1px solid #fff;
+	border-top: 0px;
+	border-bottom: 2px solid #424875;
+	padding: 10px;
+}
+
+.planner-month-bottom-content {
+	font-size: 16px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.planner-month-bottom-category {
+	color: #fff;
+	font-size: 20px;
+	text-align: center;
+	vertical-align: center;
+}
+
+.planner-month-bottom-settings {
+	vertical-align: top;
+}
+
+.planner-month-bottom-settings .glyphicon-cog {
+	margin-left: 36%;
+	margin-top: 7%;
+}
+
+.planner-month-bottom-settings button, 
+.planner-month-bottom-settings-settings {
+	width: 100%;
+	font-size: 16px;
+}
+
+.planner-month-bottom-settings-spacing {
+	margin-top: 10px;
+}
+
+.planner-month-bottom-settings-settings {
+	font-size: 20px;
+	margin-left: 2%;
+}
+
 /* Extra Large Devices */
 @media screen and (min-width: 1200px) {
 	.planner-week-left-sidebar {
 		width: 144px;
 	}
-
+	
 	.planner-week-days-day {
 		width: 142px;
 	}
@@ -525,16 +777,36 @@ ul.navbar-nav>li {
 		width: 284px;
 	}
 
-	.planner-date-month-selector {
-		width: 37%;
-	}
-
 	.planner-date-year-selector {
 		width: 13%;
 	}
 
+	.planner-date-month-selector {
+		width: 32%;
+	}
+
 	.planner-date-week-selector {
-		width: 50%
+		width: 42%
+	}
+
+	.planner-date-today-selector {
+		width: 13%;
+	}	
+
+	.planner-month-right-sidebar {
+		width: 144px;
+	}	
+	
+	.planner-month-days-day {
+		width: 45px;
+	}
+
+	.planner-month-bottom-content {
+		width: 669px;
+	}	
+
+	.planner-month-bottom-settings {
+		width: 357px;
 	}
 }
 
@@ -543,7 +815,7 @@ ul.navbar-nav>li {
 	.planner-week-left-sidebar {
 		width: 147px;
 	}
-
+	
 	.planner-week-days-day {
 		width: 113px;
 	}
@@ -556,16 +828,41 @@ ul.navbar-nav>li {
 		width: 226px;
 	}
 
-	.planner-date-month-selector {
-		width: 35%;
+	.planner-date-year-selector {
+		width: 16.5%;
 	}
 
-	.planner-date-year-selector {
-		width: 17%;
+	.planner-date-month-selector {
+		width: 25%;
 	}
 
 	.planner-date-week-selector {
-		width: 48%
+		width: 43%
+	}
+
+	.planner-date-today-selector {
+		width: 15.5%;
+	}
+
+	.planner-month-right-sidebar {
+		width: 144px;
+	}
+	
+	.planner-month-days-day {
+		width: 50px;
+	}
+
+	.planner-month-bottom-content {
+		width: 570px;
+	}
+	
+	.planner-month-bottom-settings {
+		width: 273px;
+	}
+
+	.planner-month-bottom-settings .glyphicon-cog {
+		margin-left: 32%;
+		margin-top: 12%;
 	}
 }
 
@@ -587,16 +884,50 @@ ul.navbar-nav>li {
 		width: 164px;
 	}
 
-	.planner-date-month-selector {
-		width: 34%;
+	.planner-month-right-sidebar {
+		width: 144px;
+	}
+
+	.planner-month-right-category .divider {
+		border-bottom: 1px solid #fff;
+		margin-top: -22px;
+	}
+
+	.planner-month-right-category h2 {
+		margin-top: -14px;
+	}
+	
+	.planner-month-days-day {
+		width: 60px;
+	}
+
+	.planner-month-bottom-content {
+		width: 458px;
+	}
+
+	.planner-month-bottom-settings {
+		width: 183px;
+	}
+
+	.planner-month-bottom-settings .glyphicon-cog {
+		margin-left: 22%;
+		margin-top: 15%;
 	}
 
 	.planner-date-year-selector {
 		width: 23%;
 	}
 
+	.planner-date-month-selector {
+		width: 23%;
+	}
+
 	.planner-date-week-selector {
-		width: 43%
+		width: 41%
+	}
+
+	.planner-date-today-selector {
+		width: 13%;
 	}
 }
 
@@ -659,3 +990,146 @@ ul.navbar-nav>li {
 .planner-category-color-15 {
 	background-color: #1C2335;
 }
+
+.category-creation-name-input {
+	width: 150px;
+}
+
+.category-color-dropdown-button {
+	width: 150px;
+}
+
+.category-order-dropdown-button {
+	width: 150px;
+}
+
+.dropdown-menu-category-color {
+	width: 150px;
+}
+
+.dropdown-menu-category-order {
+	width: 150px;
+}
+
+.attribute-label {
+	padding-right: 5px;
+}
+
+#ajax-create-category-modal {
+	top: 25%;
+	left: 44.25%;
+	outline: none;
+}
+
+#ajax-create-category-modal .modal-dialog {
+	width: 275px;
+}
+
+#create-category-error-message-container {
+	margin-top: 10px;
+}
+
+#create-category-error-message-1 {
+	display: inline;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#create-category-error-message-2 {
+	display: inline;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#create-category-error-message-3 {
+	display: inline;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#ajax-create-event-modal {
+	top: 2%;
+	left: 44.25%;
+	outline: none;
+}
+
+#ajax-create-event-modal .modal-dialog {
+	width: 290px;
+}
+
+.event-creation-name-input {
+	width: 242px;
+}
+
+#event-creation-description-input {
+	height: 86px;
+	width: 242px;
+	resize: none;
+}
+
+.event-parentCategory-dropdown-button {
+	width: 242px;
+}
+
+.dropdown-menu-event-parentCategory {
+	width: 242px;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+}
+
+.event-creation-important-input {
+	width: 35px;
+}
+
+.event-creation-completed-input {
+	width: 25px;
+}
+
+.event-timeEstimate-dropdown-button {
+	width: 140px;
+}
+
+.dropdown-menu-event-timeEstimate {
+	width: 140px;
+}
+
+#create-event-error-message-1 {
+	display: inline;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#create-event-error-message-2 {
+	display: inline-block;
+	background-color: #c43131;
+	border: 5px solid;
+	border-color: #c43131;
+	border-radius: 5px;
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+

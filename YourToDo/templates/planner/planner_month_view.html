@@ -1,0 +1,215 @@
+<div class="container">
+    <table class="planner-container">
+        <!-- Column Specification: 7 days, right sidebar -->
+        <col class="planner-month-days-day">
+        <col class="planner-month-days-day">
+        <col class="planner-month-days-day">
+        <col class="planner-month-days-day">
+        <col class="planner-month-days-day">
+        <col class="planner-month-days-day">
+        <col class="planner-month-days-day">
+        <col class="planner-month-right-sidebar">
+
+        <!-- Top Row: Title -->
+        <tr>
+            <!-- Planner Title -->
+            <td class="planner-title" colspan="8">
+                {{ planner.get_name }}'s Planner
+            </td>
+        </tr><!-- End Top Row -->
+
+        <!-- Top content: Date Selectors, layout selectors -->
+        <tr class="planner-month-top-content"><!-- **/ possible duplicate style -->
+            <td class="planner-date-selectors" colspan="6">
+                <!-- Today Button -->
+                <div class="planner-date-today-selector">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('TODAY')">Today</button>
+                    </div>
+                </div>
+
+                <!-- Monthly dates (i.e. "< Nov. >") -->
+                <div class="planner-date-month-selector">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('MONTH', -1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('MONTH', 1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                        </button>
+                    </div>
+                    <span id="planner-date-month-selector"></span>
+                </div>
+
+                <!-- Years (i.e. "< 2015 >" ) -->
+                <div class="planner-date-year-selector">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('YEAR', -1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('YEAR', 1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                        </button>
+                    </div>
+                    <span id="planner-date-year-selector"></span>
+                </div>
+            </td>
+            <td class="planner-layout-selectors" colspan="2">
+		        <div class="btn-group" role="group">
+		            <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-day" onclick="changeViewLayout('Day')">Day</button>
+		            <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-week" onclick="changeViewLayout('Week')">Week</button>
+		            <button type="button" class="btn btn-default btn-layout-selector active" id="btn-layout-month" onclick="changeViewLayout('Month')">Month</button>
+		        </div>
+		    </td>
+        </tr>
+    </table>
+
+    <!-- TODO: Move this html to ajax_events_in_month_view or something -->
+	<span id="events-in-month-view"></span>
+	<!-- ^^ Unused right now ^^ -->
+
+    <div class="planner-month-content">
+        <table class="planner-container">
+            <!-- Column Specification: 7 days, right sidebar -->
+            <col class="planner-month-days-day">
+            <col class="planner-month-days-day">
+            <col class="planner-month-days-day">
+            <col class="planner-month-days-day">
+            <col class="planner-month-days-day">
+            <col class="planner-month-days-day">
+            <col class="planner-month-days-day">
+            <col class="planner-month-right-sidebar">
+
+            <tr class="planner-month-row">
+                <td class="date"><h1>1</h1></td>
+                <td class="date"><h1>2</h1></td>
+                <td class="date"><h1>3</h1></td>
+                <td class="date"><h1>4</h1></td>
+                <td class="date"><h1>5</h1></td>
+                <td class="date"><h1>6</h1></td>
+                <td class="date"><h1>7</h1></td>
+                <td class="planner-month-right-category" rowspan="5">
+                        <h1>Important &amp; Upcoming</h1>
+                        <!-- Uncompleted Checkboxes -->
+                        <div class="checkbox-field">
+                            <p class="planner-month-topright-content">
+                                <input type='checkbox' id='checkbox-icon' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">EECS 448</span>
+                                </label>
+                                <input type='checkbox' id='checkbox-icon2' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon2'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">EECS 645</span>
+                                </label>
+                                <input type='checkbox' id='checkbox-icon3' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon3'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">EECS 999</span>
+                                </label>
+                                <input type='checkbox' id='checkbox-icon4' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon4'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">EECS 420</span>
+                                </label>
+                                <input type='checkbox' id='checkbox-icon5' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon5'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">EECS 669</span>
+                                </label>
+                            </p>
+                        </div> 
+                        <p class="divider"></p>
+                        <h2>Recently Completed</h2>
+                        <!-- Completed Checkboxes -->
+                        <div class="checkbox-field-2">
+                            <p class="planner-month-bottomright-content">
+                                <input type='checkbox' id='checkbox-icon6' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon6'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">MATH 526</span>
+                                </label>
+                                <input type='checkbox' id='checkbox-icon7' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon7'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">EECS 210</span>
+                                </label>
+                                <input type='checkbox' id='checkbox-icon8' class='tags-checkbox sr-only'/>
+                                <label for='checkbox-icon8'>
+                                    <i class='glyphicon glyphicon-unchecked'></i>
+                                    <i class='glyphicon glyphicon-check'></i>
+                                    <span class="label-content">GRAM 101</span>
+                                </label>
+                            </p>
+                        </div>
+                </td>
+            </tr>
+            <tr class="planner-month-row">
+                <td class="date"><h1>8</h1></td>
+                <td class="date"><h1>9</h1></td>
+                <td class="date"><h1>10</h1></td>
+                <td class="date"><h1>11</h1></td>
+                <td class="date"><h1>12</h1></td>
+                <td class="date"><h1>13</h1></td>
+                <td class="date"><h1>14</h1></td>
+            </tr>
+            <tr class="planner-month-row">
+                <td class="date"><h1>15</h1></td>
+                <td class="date"><h1>16</h1></td>
+                <td class="date"><h1>17</h1></td>
+                <td class="date"><h1>18</h1></td>
+                <td class="date"><h1>19</h1></td>
+                <td class="date"><h1>20</h1></td>
+                <td class="date"><h1>21</h1></td>
+            </tr>
+            <tr class="planner-month-row">
+                <td class="date"><h1>22</h1></td>
+                <td class="date"><h1>23</h1></td>
+                <td class="date"><h1>24</h1></td>
+                <td class="date"><h1>25</h1></td>
+                <td class="date"><h1>26</h1></td>
+                <td class="date"><h1>27</h1></td>
+                <td class="date"><h1>28</h1></td>
+            </tr>
+            <tr class="planner-month-row-last">
+                <td class="date"><h1>29</h1></td>
+                <td class="date"><h1>30</h1></td>
+                <td class="date"><h1>1</h1></td>
+                <td class="date"><h1>2</h1></td>
+                <td class="date"><h1>3</h1></td>
+                <td class="date"><h1>4</h1></td>
+                <td class="date"><h1>5</h1></td>
+            </tr>
+
+        </table>
+    </div>
+    <!-- Bottom Content -->
+    <table class="planner-container planner-month-bottom">
+        <tr>
+            <td class="planner-month-bottom-category">
+                Notes
+            </td>
+            <td class="planner-month-bottom-content">
+                You can write about anything in here that you need to keep track of. Here are some ideas:
+                <ul>
+                    <li>Grocery List</li>
+                    <li>Go to the Bank</li>
+                    <li>Wash the Dog</li>
+                </ul>
+            </td>
+            <td class="planner-month-bottom-settings" rowspan="2">
+                <button type="button" class="btn btn-default">New Event</button>
+
+                <span class="glyphicon glyphicon-cog"></span><span class="planner-month-bottom-settings-settings">Settings</span>
+            </td>
+        </tr>
+    </table>
+</div>

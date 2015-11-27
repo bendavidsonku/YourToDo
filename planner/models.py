@@ -1,4 +1,5 @@
 from datetime import datetime
+import string
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -10,13 +11,12 @@ from planner.planner_view_choices import *
 
 class PlannerManager(models.Manager):
 	def get_planner(self, request):
-		return super(PlannerManager, self).filter(user = request)	
+		return super(PlannerManager, self).filter(user = request)
 
 
 class Planner(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length = 30, null = True)
-	view = models.IntegerField(choices = VIEW_CHOICES, default = 2)
 	miscellaneousNotes = models.TextField(verbose_name = "Miscellaneous", null = True)
 
 	objects = PlannerManager()
@@ -34,13 +34,6 @@ class Planner(models.Model):
 	def get_name(self):
 		return self.name
 
-	def set_view(self, view):
-		self.view = view
-		self.save()
-
-	def get_view(self):
-		return self.view
-
 	def set_miscellaneousNotes(self, miscellaneousNotes):
 		self.miscellaneousNotes = miscellaneousNotes
 		self.save()
@@ -50,7 +43,7 @@ class Planner(models.Model):
 
 
 # If a user doesn't have a planner, generate it, if a user already has a planner, get it
-User.planner = property(lambda u: Planner.objects.get_or_create(user = u, name = u.get_username())[0])
+User.planner = property(lambda u: Planner.objects.get_or_create(user = u, name = u.get_username().capitalize())[0])
 
 
 class CategoryManager(models.Manager):
@@ -59,6 +52,9 @@ class CategoryManager(models.Manager):
 		existingCategoryList = Category.objects.get_categories_in_order(request)
 		temp = False
 		orderAlreadyTakenIndex = 0
+
+		if len(existingCategoryList) == 10:
+			raise ValidationError("A planner can only hold 10 categories")
 
 		if existingCategoryList.filter(name = name).exists():
 			raise ValidationError("Categories cannot have duplicate names")

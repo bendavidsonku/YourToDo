@@ -57,25 +57,46 @@ def logout(request):
 
 #LOGIN REQUIRED?????
 def PlannerView(request):
+    plannerLayoutSelection = request.POST.get("planner_layout", "")
     context = {}
-    context.update(csrf(request))
 
-    username = None
-    if request.user.is_authenticated():
-        username = request.user.username
+    if plannerLayoutSelection == "Day":
+        return render_to_response('planner/planner_day_view.html', context, context_instance = RequestContext(request))
 
-    user = User.objects.get(username = username)
-    # Get the necessary context to display
-    context['planner'] = user.planner
-    context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
-    context['eventsInPlanner'] = Event.objects.get_all_events(user)
+    elif plannerLayoutSelection == "Week":
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
 
-    return render_to_response('planner/planner.html', context, context_instance = RequestContext(request))
+        user = User.objects.get(username = username)
+        # Get the necessary context to display
+        context['planner'] = user.planner
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+        context['eventsInPlanner'] = Event.objects.get_all_events(user)
+        
+        return render_to_response('planner/planner_week_view.html', context, context_instance = RequestContext(request))
+
+    elif plannerLayoutSelection == "Month":
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+        # Get the necessary context to display
+        context['planner'] = user.planner
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+        context['eventsInPlanner'] = Event.objects.get_all_events(user)
+        
+        return render_to_response('planner/planner_month_view.html', context, context_instance = RequestContext(request))
+
+    else:
+        pass
+
+    return render_to_response('planner/planner_base.html', context, context_instance = RequestContext(request))
 
 
-def loadPlannerEvents(request):
+def loadPlannerWeekEvents(request):
     if request.method == 'POST':
-        print("first")
         username = None
         if request.user.is_authenticated():
             username = request.user.username
@@ -84,7 +105,6 @@ def loadPlannerEvents(request):
             
             # Process to get planner content to display
             context = {}
-            context['planner'] = Planner.objects.get_planner(user)
             context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
 
             #Get startDate and endDate out of the ajax data that was passed in
@@ -111,4 +131,116 @@ def loadPlannerEvents(request):
             context['eventsInViewSixthDate'] = allEventsInPlanner.filter(dateOfEvent = sixthDayInViewAsDateTime)
             context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
 
-            return render_to_response('planner/ajax_events_in_planner.html', context)
+            return render_to_response('planner/ajax_events_in_planner_week_view.html', context)
+
+
+def createNewCategory(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            newCategoryName = request.POST.get("ajax_category_name", "")
+            newCategoryColor = request.POST.get("ajax_category_color", "")
+            newCategoryOrder = request.POST.get("ajax_category_order", "")
+
+            # Fix the category color to be persisted to the back end
+            if newCategoryColor == "Red":
+                newCategoryColor = 1
+            elif newCategoryColor == "Dark Red":
+                newCategoryColor = 2
+            elif newCategoryColor == "Light Red":
+                newCategoryColor = 3
+            elif newCategoryColor == "Blue":
+                newCategoryColor = 4
+            elif newCategoryColor == "Dark Blue":
+                newCategoryColor = 5
+            elif newCategoryColor == "Light Blue":
+                newCategoryColor = 6
+            elif newCategoryColor == "Green":
+                newCategoryColor = 7
+            elif newCategoryColor == "Dark Green":
+                newCategoryColor = 8
+            elif newCategoryColor == "Light Green":
+                newCategoryColor = 9
+            elif newCategoryColor == "Yellow":
+                newCategoryColor = 10
+            elif newCategoryColor == "Gold":
+                newCategoryColor = 11
+            elif newCategoryColor == "Orange":
+                newCategoryColor = 12
+            elif newCategoryColor == "Pink":
+                newCategoryColor = 13
+            elif newCategoryColor == "Turquoise":
+                newCategoryColor = 14
+            elif newCategoryColor == "Navy":
+                newCategoryColor = 15
+            else:
+                pass
+
+            # Fix the category order to be persisted to the back end
+            newCategoryOrder = int(newCategoryOrder) - 1
+
+            # Call method to create new category in DB
+            Category.objects.create_category(user, newCategoryName, newCategoryColor, newCategoryOrder)
+
+    return HttpResponse('')
+
+
+def createNewEvent(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            newEventName = request.POST.get("ajax_event_name", "")
+            newEventParentCategory = request.POST.get("ajax_event_parentCategory", "")
+            newEventDescription = request.POST.get("ajax_event_description", "")
+            newEventDate = request.POST.get("ajax_event_date", "")
+            newEventTimeEstimate = request.POST.get("ajax_event_timeEstimate", "")
+            newEventStartTime = request.POST.get("ajax_event_startTime", "")
+            newEventEndTime = request.POST.get("ajax_event_endTime", "")
+            newEventImportant = request.POST.get("ajax_event_important", "")
+
+            # Fix the Event Time Estimate Field
+            if newEventTimeEstimate == "":
+                newEventTimeEstimate = 1
+            elif newEventTimeEstimate == "15 minutes":
+                newEventTimeEstimate = 2
+            elif newEventTimeEstimate == "30 minutes":
+                newEventTimeEstimate = 3
+            elif newEventTimeEstimate == "45 minutes":
+                newEventTimeEstimate = 4
+            elif newEventTimeEstimate == "1 hour":
+                newEventTimeEstimate = 5
+            elif newEventTimeEstimate == "2 hours":
+                newEventTimeEstimate = 6
+            elif newEventTimeEstimate == "3 hours":
+                newEventTimeEstimate = 7
+            elif newEventTimeEstimate == "4 hours":
+                newEventTimeEstimate = 8
+            elif newEventTimeEstimate == "5 hours":
+                newEventTimeEstimate = 9
+            elif newEventTimeEstimate == "6 hours":
+                newEventTimeEstimate = 10
+            elif newEventTimeEstimate == "7 hours":
+                newEventTimeEstimate = 11
+            elif newEventTimeEstimate == "8 hours":
+                newEventTimeEstimate = 12
+            elif newEventTimeEstimate == "More than 8 hours":
+                newEventTimeEstimate = 13
+            else:
+                pass
+
+            # Check to see if user assigned timeStart AND timeEnd to event
+            if newEventStartTime == "" or newEventEndTime == "":
+                Event.objects.create_event_no_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate)
+            else:
+                # else user has given time frame for event so create with timeBox
+                Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
+
+    return HttpResponse('')
