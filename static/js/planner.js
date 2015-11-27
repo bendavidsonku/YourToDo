@@ -15,7 +15,6 @@ $(document).ready(function() {
     }
 
     changeViewLayout(localStorage.layoutType);
-    //changeViewDate("NONE");
     
 });
 

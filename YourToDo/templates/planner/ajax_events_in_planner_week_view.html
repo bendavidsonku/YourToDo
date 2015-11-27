@@ -12,7 +12,7 @@
         {% for category in categoriesInPlanner %}
         <tr class="planner-week-row">
             <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
-                {{ category.get_name }}
+                <span id="week-planner-category-names">{{ category.get_name }}</span>
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">

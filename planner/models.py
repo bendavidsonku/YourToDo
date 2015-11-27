@@ -53,6 +53,9 @@ class CategoryManager(models.Manager):
 		temp = False
 		orderAlreadyTakenIndex = 0
 
+		if len(existingCategoryList) == 10:
+			raise ValidationError("A planner can only hold 10 categories")
+
 		if existingCategoryList.filter(name = name).exists():
 			raise ValidationError("Categories cannot have duplicate names")
 			
