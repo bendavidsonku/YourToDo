@@ -1,0 +1,177 @@
+<!-- Event Creation Modal -->
+<div id="ajax-create-event-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-create-event-modal-label">
+    <div class = "modal-dialog">
+        <div class = "modal-content">
+             <div class = "modal-header">
+                <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
+                <h4 class = "modal-title" id = "ajax-create-event-modal-label">
+                   Create New Event
+                </h4>
+             </div>
+             <div class = "modal-body">
+                <h4>New Event Information:</h4>
+                <p>
+                    <label for="event-name">Name: (required)</label><input class="form-control event-creation-name-input" type="text">
+                </p>
+                <p>
+                    <label for="event-parentCategory">To which category does this event belong? (required)</label>
+                    <div id="event-parentCategory-dropdown" class="dropdown">
+                        <button href="#event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-event-parentCategory">
+                            {% for category in categoriesInPlanner %}
+                                <li><a href="#">{{ category.get_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </p>
+                <p> 
+                    <label for="event-description">Description (optional):</label>
+                    <p>
+                    <textarea name="event-description" id="event-creation-description-input"></textarea>
+                    <p>
+                </p>
+                <p>
+                    <label for=".event-creation-date-input">Date of Event: (required)<input class="form-control event-creation-date-input" type="date"></label>
+                </p>
+                <p>
+                    <label for="event-timeEstimate">Time Estimate (optional):</label>
+                    <div id="event-timeEstimate-dropdown" class="dropdown">
+                        <button href="#event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-event-timeEstimate">
+                            <li><a href="#">15 minutes</a></li>
+                            <li><a href="#">30 minutes</a></li>
+                            <li><a href="#">45 minutes</a></li>
+                            <li><a href="#">1 hour</a></li>
+                            <li><a href="#">2 hours</a></li>
+                            <li><a href="#">3 hours</a></li>
+                            <li><a href="#">4 hours</a></li>
+                            <li><a href="#">5 hours</a></li>
+                            <li><a href="#">6 hours</a></li>
+                            <li><a href="#">7 hours</a></li>
+                            <li><a href="#">8 hours</a></li>
+                            <li><a href="#">More than 8 hours</a></li>
+                        </ul>
+                    </div>
+                </p>
+                <p>
+                    <label for=".event-creation-startTime-input">Start Time (optional):<input class="form-control event-creation-startTime-input" type="time"></label>
+                </p>
+                <p>
+                    <label for=".event-creation-endTime-input">End Time (optional):<input class="form-control event-creation-endTime-input" type="time"></label>
+                </p>
+                <p>
+                    <label for=".event-creation-important-input">Important:<input class="form control event-creation-important-input" type="checkbox"></label> 
+                </p>
+                <div>
+                    <br>
+                    <p id="create-event-error-message-1" style="display:none">
+                        <span id='event-creation-error'>Invalid new event information</span>
+                    </p>
+                    <p id="create-event-error-message-2" style="display:none">
+                        <span id='event-creation-error'>New event contains the same name as an existing event in the specified for the specified day</span>
+                    </p>
+                </div>
+             </div>
+             <div class = "modal-footer">
+                <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                   Cancel
+                </button>
+                <button type ="button" class ="btn btn-success" id="create-event-submit">
+                   Create
+                </button>
+             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // Event Creation Drop Down Menu Function - replaces default value with user-specified value
+    $(function(){
+
+        $(".dropdown-menu-event-parentCategory li a").click(function(){
+
+          $(".event-parentCategory-dropdown-button:first-child").text($(this).text());
+          $(".event-parentCategory-dropdown-button:first-child").val($(this).text());
+
+        });
+
+        $(".dropdown-menu-event-timeEstimate li a").click(function(){
+
+            $(".event-timeEstimate-dropdown-button:first-child").text($(this).text());
+            $(".event-timeEstimate-dropdown-button:first-child").val($(this).text());
+        });
+
+    });
+
+    // Handles event creation AJAX form submission and validates form before .ajax call
+    $('#create-event-submit').click(function(){
+        var eventName = $('.event-creation-name-input').val();
+        var eventParentCategory = $('.event-parentCategory-dropdown-button').val();
+        var eventDescription = $('#event-creation-description-input').val();
+        var eventDate = $('.event-creation-date-input').val();
+        var eventTimeEstimate = $('.event-timeEstimate-dropdown-button').val();
+        var eventStartTime = $('.event-creation-startTime-input').val();
+        var eventEndTime = $('.event-creation-endTime-input').val();
+        var eventImportant = $('.event-creation-important-input').is(":checked");
+
+        var validForm = true;
+
+        if (eventName.length == 0 || eventParentCategory == "" || eventDate == "")
+        {
+            $('#create-event-error-message-1').show();
+            validForm = false;
+        }
+
+        if (eventName.length != 0 && eventParentCategory != "" && eventDate != "")
+        {
+            $('#create-event-error-message-1').hide();
+            validForm = true;
+        }
+
+        if (validForm == true)
+        {
+            $.ajax({
+                url: "/create-event/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    ajax_event_name: eventName,
+                    ajax_event_parentCategory: eventParentCategory,
+                    ajax_event_description: eventDescription,
+                    ajax_event_date: eventDate,
+                    ajax_event_timeEstimate: eventTimeEstimate,
+                    ajax_event_startTime: eventStartTime,
+                    ajax_event_endTime: eventEndTime,
+                    ajax_event_important: eventImportant,
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#ajax-create-event-modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    changeViewDate("NONE");
+                },
+                error: function() {
+                    $('#create-event-error-message-2').show();
+                },
+
+            });
+        }
+    });
+
+    // Handles reseting the event creation modal on close or create
+    $('#ajax-create-event-modal').on('hidden.bs.modal', function(){
+        $('.event-creation-name-input').val("");
+        $('.event-parentCategory-dropdown-button').html("<span class='attribute-label'>Event's Category</span><span class='caret'></span>");
+        $('#event-creation-description-input').val("");
+        $('.event-creation-date-input').val("");
+        $('.event-timeEstimate-dropdown-button').html("<span class='attribute-label'>Time Estimate</span><span class='caret'></span>");
+        $('.event-creation-startTime-input').val("");
+        $('.event-creation-endTime-input').val("");
+        $('.event-creation-important-input').prop("checked", false);
+        $('#create-event-error-message-1').hide();
+        $('#create-event-error-message-2').hide();
+    });
+
+</script>

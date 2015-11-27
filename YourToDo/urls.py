@@ -48,6 +48,8 @@ urlpatterns += patterns('',
     url(r'^create-category/', 'YourToDo.views.createNewCategory', name ="create_category"),
     url(r'^create-event/', 'YourToDo.views.createNewEvent', name="create_event"),
     url(r'^load-important-and-upcoming/', 'YourToDo.views.loadImportantAndUpcoming', name="load-important-and-upcoming"),
+    url(r'^load-category-creation-modal/', 'YourToDo.views.loadCategoryCreationModal', name="load-category-creation-modal"),
+    url(r'^load-event-creation-modal/', 'YourToDo.views.loadEventCreationModal', name='load-event-creation-modal'),
 
     # Include All Mezzanine Urls
     ("^", include("mezzanine.urls")),

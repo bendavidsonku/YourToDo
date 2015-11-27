@@ -69,10 +69,9 @@ def PlannerView(request):
             username = request.user.username
 
         user = User.objects.get(username = username)
+
         # Get the necessary context to display
         context['planner'] = user.planner
-        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
-        context['eventsInPlanner'] = Event.objects.get_all_events(user)
         
         return render_to_response('planner/planner_week_view.html', context, context_instance = RequestContext(request))
 
@@ -135,7 +134,7 @@ def loadPlannerWeekEvents(request):
 
 def loadImportantAndUpcoming(request):
     context = {}
-    
+
     if request.method == 'GET':
         username = None
         if request.user.is_authenticated():
@@ -170,6 +169,35 @@ def loadImportantAndUpcoming(request):
         context['importantAndUpcoming'] = importantAndUpcomingList
 
         return render_to_response('planner/ajax_important_and_upcoming.html', context)
+
+def loadCategoryCreationModal(request):
+    if request.method == 'GET':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+        return render_to_response('planner/ajax_load_new_category_modal.html', context)
+
+def loadEventCreationModal(request):
+    if request.method == 'GET':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+        return render_to_response('planner/ajax_load_new_event_modal.html', context)
+
 
 def createNewCategory(request):
     if request.method == 'POST':

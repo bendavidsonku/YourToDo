@@ -123,6 +123,8 @@ function changeViewDate(size, amount) {
         success: function(data, textStatus, jqXHR) {
             $('#events-in-week-view').empty().append(data);
             loadImportantAndUpcoming();
+            loadCategoryCreationModal()
+            loadEventCreationModal();
         },
     });
 
@@ -140,6 +142,36 @@ function changeViewDate(size, amount) {
             throw "The miniCalendar had an update attempted on it, but it doesn't exist."
         }
     }
+}
+
+function loadCategoryCreationModal() {
+    $.ajax({
+        url: "/load-category-creation-modal/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-category-creation-modal').empty().append(data);
+        },
+    });
+}
+
+function loadEventCreationModal() {
+    $.ajax({
+        url: "/load-event-creation-modal/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-event-creation-modal').empty().append(data);
+        },
+    });
 }
 
 function loadImportantAndUpcoming() {
