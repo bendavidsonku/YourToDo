@@ -122,6 +122,7 @@ function changeViewDate(size, amount) {
         },
         success: function(data, textStatus, jqXHR) {
             $('#events-in-week-view').empty().append(data);
+            loadImportantAndUpcoming();
         },
     });
 
@@ -139,6 +140,23 @@ function changeViewDate(size, amount) {
             throw "The miniCalendar had an update attempted on it, but it doesn't exist."
         }
     }
+}
+
+function loadImportantAndUpcoming() {
+
+    $.ajax({
+        url: "/load-important-and-upcoming/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#important-and-upcoming-list').empty().append(data);
+        },
+
+    });
 }
 
 // Store the month lengths & names

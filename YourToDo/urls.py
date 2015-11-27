@@ -47,6 +47,7 @@ urlpatterns += patterns('',
     url(r'^load-week-events/', 'YourToDo.views.loadPlannerWeekEvents', name="planner_load_events"),
     url(r'^create-category/', 'YourToDo.views.createNewCategory', name ="create_category"),
     url(r'^create-event/', 'YourToDo.views.createNewEvent', name="create_event"),
+    url(r'^load-important-and-upcoming/', 'YourToDo.views.loadImportantAndUpcoming', name="load-important-and-upcoming"),
 
     # Include All Mezzanine Urls
     ("^", include("mezzanine.urls")),
