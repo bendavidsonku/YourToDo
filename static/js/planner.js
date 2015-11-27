@@ -7,7 +7,7 @@ $(document).ready(function() {
     }
 
     // Use this for debugging to reset localStorage
-    localStorage.clear();
+    //localStorage.clear();
 
     // Local Storage
     if (!(localStorage.layoutType)) {
@@ -111,7 +111,7 @@ function changeViewDate(size, amount) {
 
     // Update events based on the new view
     $.ajax({
-        url: "/load-events/",
+        url: "/load-week-events/",
         type: "POST",
         dataType: 'html',
         data: 

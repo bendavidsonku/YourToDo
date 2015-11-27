@@ -95,7 +95,7 @@ def PlannerView(request):
     return render_to_response('planner/planner_base.html', context, context_instance = RequestContext(request))
 
 
-def loadPlannerEvents(request):
+def loadPlannerWeekEvents(request):
     if request.method == 'POST':
         username = None
         if request.user.is_authenticated():
