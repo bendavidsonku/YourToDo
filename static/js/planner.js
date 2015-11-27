@@ -15,7 +15,6 @@ $(document).ready(function() {
     }
 
     changeViewLayout(localStorage.layoutType);
-    
 });
 
 /*
@@ -33,26 +32,6 @@ function changeViewLayout(viewType) {
         localStorage.layoutType = viewType;
     }
 
-    // Remove active from all buttons
-    for(var index = 0; index < btns.length; index++) {
-         $(btns[index]).removeClass('active');
-    }
-
-    // 'Activate' the button that was clicked
-    switch(localStorage.layoutType) {
-    case 'Day':
-        $('#btn-layout-day').addClass('active');
-        break;
-    case 'Week':
-        $('#btn-layout-week').addClass('active');
-        break;
-    case 'Month':
-        $('#btn-layout-month').addClass('active');
-        break;
-    default:
-        throw "Invalid layoutType exception: \"" + localStorage.layoutType + "\" is not a valid layout type";
-    }
-
     // Update view based on currently selected layout
     $.ajax({
         url: "/planner/",
@@ -66,7 +45,6 @@ function changeViewLayout(viewType) {
         success: function(data, textStatus, jqXHR) {
             $('#planner-day-week-month-render-area').empty().append(data);
             changeViewDate("NONE");
-
         },
     });
 }
@@ -86,7 +64,6 @@ function setViewDate(year, month, day) {
 function selectDate(year, month, day) {
     setViewDate(year, month, day);
     changeViewDate("NONE");
-    console.log(sessionStorage.viewDate);
 }
 
 /*
@@ -110,12 +87,16 @@ function changeViewDate(size, amount) {
         viewDate.setDate(viewDate.getDate() + 7 * amount);
     }
     else if(size === "MONTH") {
-        // #TODO Edge case: If date is 31 and previous month has less than 31 
-        //                  days, month doesn't change even though date does.
+        // When a user changes month, always take them to the 1st of that month.
+        viewDate.setDate(1);
         viewDate.setMonth(viewDate.getMonth() + amount);
     }
     else if(size === "YEAR") {
         viewDate.setFullYear(viewDate.getFullYear() + amount);
+    }
+    else if(size === "TODAY") {
+        var now = new Date();
+        viewDate = now;
     }
     else if(size === "NONE") {
         // Do nothing, running first time setup or updating the page without changing the view date.
