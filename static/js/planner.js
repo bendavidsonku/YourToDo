@@ -401,12 +401,17 @@ hideOverflowEvents = function(layoutType) {
         if(events.length > spillSize) {
             var eventNames = [],
                 numEvents = 0,
-                color = events[0].className;
+                color = [];
+
+            // Get the original style for the "+ X more" box
+            color[0] = events[0].className;
 
             // Loop through the extra blocks & get their names
             for(var j = spillSize - 1; j < events.length; j) {
                 // Store the event
                 eventNames[numEvents] = $.trim(events[j].innerHTML);
+                // Store the event's color
+                color[numEvents + 1] = events[j].className;
                 events[j].parentNode.remove();
 
                 numEvents++;
@@ -415,8 +420,8 @@ hideOverflowEvents = function(layoutType) {
             // Append the box to say how many events are hidden
             var moreBox = "" +
                 "<tr>" +
-                    "<td class=\"" + color + "\">" +
-                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames) + ">" +
+                    "<td class=\"" + color[0] + "\">" +
+                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames, color) + ">" +
                             "+ " + numEvents + " more" +
                         "</div>" +
                     "</td>" +
@@ -431,7 +436,7 @@ hideOverflowEvents = function(layoutType) {
     })
 }
 
-getPopoverContent = function(title, events) {
+getPopoverContent = function(title, events, color) {
     if(events.length < 1) {
         throw "No events to populate popover content."
     }
@@ -442,7 +447,7 @@ getPopoverContent = function(title, events) {
             // Change the "/about/" section to a descriptive link to edit the event
             // Should connect with a modal trigger, but we're going to have to pull 
             // category data, date data, and probably some other fields.
-            html += "<a href=\"/about/\" class=\"event-popover-event\">" + events[i] + "</a><br>";
+            html += "<a href=\"/about/\" class=\"event-popover-event " + color[i + 1] + "\"><div><p>" + events[i] + "</p></div></a><br>";
         }
 
         return "data-title='" + title + "' data-content='" + html + "'";

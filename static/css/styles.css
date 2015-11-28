@@ -451,7 +451,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-row {
-	height: 103px;
+	height: 94px;
 	width: 100%;
 }
 
@@ -510,7 +510,7 @@ ul.navbar-nav>li {
     padding: 2px;
     line-height: 15px;
     width: 100%;
-    border: 2px solid rgba(0,0,0,.3);
+    border: 1px solid rgba(0,0,0,.3);
     border-radius: 5px;
 }
 
@@ -521,7 +521,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-event-container td:hover {
-    border: 2px solid rgba(255, 255, 255, .7);
+    border: 1px solid rgba(255,255,255,.7);
     cursor: pointer;
 }
 
@@ -529,8 +529,44 @@ ul.navbar-nav>li {
 	overflow-y: auto;
 }
 
+.popover {
+    background: #5F648D;
+    border: 2px solid rgba(255,255,255,.7);
+}
+
+.popover.bottom .arrow:after {
+    border-bottom-color: #424857;
+}
+
 .popover-content, .popover-title {
-	color: #000;
+	background-color: #5F648D;
+	color: #fff;
+	font-size: 16px;
+}
+
+.event-popover-event {
+	color: #fff;
+	padding: 0px 2px;
+	border: 1px solid rgba(0,0,0,.3);
+	border-radius: 5px;
+}
+
+.event-popover-event:hover {
+	border: 1px solid rgba(255,255,255,.7);
+	color: #fff;
+	text-decoration: none;
+}
+
+.event-popover-event > div {
+	display: inline-block;
+	width: 90%;
+	padding: 2px 0px;
+}
+
+.event-popover-event > div > p {
+	display: inline;
+	font-size: 14px;
+	padding: 2px;
 }
 
 .planner-week-bottom {
