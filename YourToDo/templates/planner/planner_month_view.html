@@ -107,6 +107,20 @@ ___________________________________________
                 Events that you have recently marked as 'completed' will show up here.
             </td>
         </tr>
+        <tr class="planner-month-sidebar-category">
+            <td>
+                Categories
+            </td>
+        </tr>
+        <tr class="planner-month-sidebar-info">
+            <td>
+                {% for category in categoriesInPlanner %}
+                <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
+                    <span id="month-planner-category-names">{{ category.get_name }}</span>
+                </div>
+                {% endfor %}
+            </td>
+        </tr>
     </table>
 
     <!-- Bottom Content -->

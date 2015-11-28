@@ -154,14 +154,23 @@ def loadPlannerMonthEvents(request):
 
             plannerDays = []
             dates = []
+            classes = []
 
             for day in range(0, 42):
                 events = allEventsInPlanner.filter(dateOfEvent = dateTracker)
                 plannerDays.append(events)
                 dates.append(dateTracker.day)
+
+                # Add another context element to decide if the date should be greyed out
+                # #TODO: Ben, can we possibly remove this?
+                if day < 7 and dateTracker.day > 7 or day > 28 and dateTracker.day < 7:
+                    classes.append("planner-month-outside-day")
+                else:
+                    classes.append("")
+
                 dateTracker += timedelta(days = 1)
 
-            context['information'] = zip(plannerDays, dates)
+            context['information'] = zip(plannerDays, dates, classes)
 
             return render_to_response('planner/ajax_events_in_planner_month_view.html', context)
 

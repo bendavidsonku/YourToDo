@@ -589,7 +589,7 @@ ul.navbar-nav>li {
 	border: 1px solid rgba(255, 255, 255, .3);
 	text-align: left;
 	vertical-align: top;
-	padding: 0px 0px 0px 3px;
+	padding-top: 0px;
 	color: #fff;
 }
 
@@ -602,7 +602,7 @@ ul.navbar-nav>li {
 	border-right: 2px solid #424875;
 	border-left: 1px solid #fff;
 	float: left;
-	height: 600px;
+	height: 620px;
 }
 
 .planner-month-sidebar td {
@@ -623,6 +623,90 @@ ul.navbar-nav>li {
 	text-align: left;
 	vertical-align: top;
 	padding: 5px;
+}
+.planner-month-category-legend {
+	border-style: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 5px;
+    line-height: 18px;
+    width: 100%;
+    border: 2px solid rgba(0,0,0,.3);
+    border-radius: 5px;
+    text-decoration: none;
+	cursor: pointer;
+	outline: none !important;
+	margin-bottom: 5px;
+	font-size: 18px;
+}
+
+.planner-month-category-legend:hover {
+    border: 2px solid rgba(255, 255, 255, .7);
+    cursor: pointer;
+}
+
+.planner-month-outside-day {
+	color: #ABABAB;
+}
+
+.planner-month-date {
+	font-size: 13px;
+	line-height: 13px;
+	padding: 2px;
+	width: 100%;
+	display: block;
+}
+
+.planner-month-content-days {
+	color: #fff;
+	height: 20px;
+	text-align: center;
+}
+
+.planner-month-content-days td {
+	border: 1px solid #fff;
+	border-right: none;
+}
+
+.planner-month-event-container {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse:separate; 
+	border-spacing: 2px;
+}
+
+.planner-month-event-container > tr {
+	height: 20%;
+}
+
+.planner-month-event-container td.event {
+	border-style: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 1px 2px;
+    line-height: 14px;
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.3);
+    border-radius: 5px;
+}
+
+.planner-month-event-container td.event:hover {
+    border: 1px solid rgba(255, 255, 255, .7);
+    cursor: pointer;
+}
+
+.planner-month-event-container td.event,
+.planner-month-event-container td > div {
+	text-decoration: none;
+	cursor: pointer;
+	outline: none !important;
+	width: 100%;
+}
+
+.planner-month-event-container td > div:hover {
+	text-decoration: underline;
 }
 
 /* Beginning of planner bottom styles */
@@ -719,11 +803,11 @@ ul.navbar-nav>li {
 	/* If we decide the miniCal is on all three pages, get
 	rid of these and use the ones above. */
 	.planner-date-today-selector.planner-month {
-		width: 45%;
+		width: 42.5%;
 	}
 
 	.planner-date-month-selector.planner-month {
-		width: 44%;
+		width: 46.5%;
 	}
 
 	.planner-date-year-selector.planner-month {
@@ -795,11 +879,11 @@ ul.navbar-nav>li {
 	/* If we decide the miniCal is on all three pages, get
 	rid of these and use the ones above. */
 	.planner-date-today-selector.planner-month {
-		width: 44%;
+		width: 41%;
 	}
 
 	.planner-date-month-selector.planner-month {
-		width: 43%;
+		width: 46%;
 	}
 
 	.planner-date-year-selector.planner-month {
@@ -871,11 +955,11 @@ ul.navbar-nav>li {
 	/* If we decide the miniCal is on all three pages, get
 	rid of these and use the ones above. */
 	.planner-date-today-selector.planner-month {
-		width: 42%;
+		width: 39%;
 	}
 
 	.planner-date-month-selector.planner-month {
-		width: 41.5%;
+		width: 44.5%;
 	}
 
 	.planner-date-year-selector.planner-month {

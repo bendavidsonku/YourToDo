@@ -130,6 +130,7 @@ function changeViewDate(size, amount) {
             } catch(err) {
                 throw "The miniCalendar had an update attempted on it, but it doesn't exist."
             }*/
+            document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
             // #TODO: Show the current date as MM/DD formate (11/27)
             break;
         case "Week":
@@ -157,6 +158,7 @@ function changeViewDate(size, amount) {
                 throw "The miniCalendar had an update attempted on it, but it doesn't exist."
             }
             document.getElementById("planner-date-week-selector").innerHTML = getWeekString();
+            document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
             break;
         case "Month":
             var temp = getCalFirstDay(),
@@ -175,14 +177,15 @@ function changeViewDate(size, amount) {
                     $('#events-in-month-view').empty().append(data);
                 },
             });
-            // Nothing special here, yet.
+
+            // Put the long month name in this view
+            document.getElementById("planner-date-month-selector").innerHTML = month_names_long[viewDate.getMonth()];
             break;
         default:
             throw "Invalid layout type in changeViewDate(), please use a valid layout type.";
     }
 
     // Update all fields in case they changed
-    document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
 }
 
@@ -368,20 +371,40 @@ getDateOfDay = function(day) {
 }
 
 // Checks every category/date combination & hides events that are overflow (more than 4 events in one block)
-hideOverflowEvents = function() {
-    var category = $(".planner-week-event-container");
+hideOverflowEvents = function(layoutType) {
+    var contentBlocks,
+        spillSize,
+        monthPadder;
+
+    switch(layoutType) {
+        case "DAY":
+            throw "Day view shouldn't use this method...check please.";
+            break;
+        case "WEEK":
+            contentBlocks = $(".planner-week-event-container");
+            spillSize = 4;
+            monthPadder = 0;
+            break;
+        case "MONTH":
+            contentBlocks = $(".planner-month-event-container");
+            spillSize = 5;
+            monthPadder = 1;
+            break;
+        default:
+            throw "Invalid parameter in hideOverflowEvents().";
+    }
 
     // For every event block, check if it's over capacity and fix those that are.
-    for(var i = 0; i < category.length; i++) {
-        var events = category[i].getElementsByTagName('td');
+    for(var i = 0; i < contentBlocks.length; i++) {
+        var events = contentBlocks[i].getElementsByTagName('td');
 
-        if(events.length > 4) {
+        if(events.length > spillSize) {
             var eventNames = [],
                 numEvents = 0,
                 color = events[0].className;
 
             // Loop through the extra blocks & get their names
-            for(var j = 3; j < events.length; j) {
+            for(var j = spillSize - 1; j < events.length; j) {
                 // Store the event
                 eventNames[numEvents] = $.trim(events[j].innerHTML);
                 events[j].parentNode.remove();
@@ -399,7 +422,7 @@ hideOverflowEvents = function() {
                     "</td>" +
                 "</tr>"
 
-            $(moreBox).insertAfter(events[2].parentNode);
+            $(moreBox).insertAfter(events[2 + monthPadder].parentNode);
         }
     }
 

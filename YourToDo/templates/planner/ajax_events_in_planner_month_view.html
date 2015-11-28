@@ -10,20 +10,30 @@
         <col class="planner-month-day">
         <col class="planner-month-right-sidebar">
 
-        {% for day, date in information %}
+        <tr class="planner-month-content-days">
+            <td>Sun</td>
+            <td>Mon</td>
+            <td>Tue</td>
+            <td>Wed</td>
+            <td>Thu</td>
+            <td>Fri</td>
+            <td>Sat</td>
+        </tr>
+
+        {% for day, date, class in information %}
             {% if forloop.counter0|divisibleby:7 %}
             <tr class="planner-month-row">
             {% endif %}
                 <td class="planner-month-day">
-                    <table>
+                    <table class="planner-month-event-container">
                         <tr>
-                            <td>
+                            <td class="{{ class }} planner-month-date">
                                 {{ date }}
                             </td>
                         </tr>
                         {% for event in day %}
                         <tr>
-                            <td>
+                            <td class="planner-category-color-{{ event.get_parentCategory.get_color }} event">
                                 {{ event.get_name }}
                             </td>
                         </tr>
@@ -34,5 +44,9 @@
             </tr>
             {% endif %}
         {% endfor %}
+
+        <script>
+            hideOverflowEvents("MONTH");
+        </script>
     </table>
 </div>
