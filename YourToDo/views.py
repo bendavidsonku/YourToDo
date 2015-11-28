@@ -152,9 +152,16 @@ def loadPlannerMonthEvents(request):
             dateTracker = datetime.datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
             allEventsInPlanner = Event.objects.get_all_events(user)
 
+            plannerDays = []
+            dates = []
+
             for day in range(0, 42):
-                context[day + 1] = allEventsInPlanner.filter(dateOfEvent = dateTracker)
+                events = allEventsInPlanner.filter(dateOfEvent = dateTracker)
+                plannerDays.append(events)
+                dates.append(dateTracker.day)
                 dateTracker += timedelta(days = 1)
+
+            context['information'] = zip(plannerDays, dates)
 
             return render_to_response('planner/ajax_events_in_planner_month_view.html', context)
 
