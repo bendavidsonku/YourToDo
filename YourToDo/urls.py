@@ -44,7 +44,8 @@ urlpatterns += patterns('',
 
     # Application Urls
     url(r'^planner/', 'YourToDo.views.PlannerView', name = "planner_view"),
-    url(r'^load-week-events/', 'YourToDo.views.loadPlannerWeekEvents', name="planner_load_events"),
+    url(r'^load-week-events/', 'YourToDo.views.loadPlannerWeekEvents', name="planner_load_week_events"),
+    url(r'^load-month-events/', 'YourToDo.views.loadPlannerMonthEvents', name="planner_load_month_events"),
     url(r'^create-category/', 'YourToDo.views.createNewCategory', name ="create_category"),
     url(r'^create-event/', 'YourToDo.views.createNewEvent', name="create_event"),
 

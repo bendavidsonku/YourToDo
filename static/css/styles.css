@@ -424,7 +424,7 @@ ul.navbar-nav>li {
 
 .planner-date-selectors {
 	border-left: 1px solid #fff;
-	padding: 0px 10px 0px 10px;
+	padding: 0px 5px 0px 5px;
 	line-height: 26px;
 }
 
@@ -469,7 +469,7 @@ ul.navbar-nav>li {
 	text-align: center;
 }
 
-.planner-week-top-content td {
+.planner-top-content td {
 	font-size: 16px;
 	height: 40px;
 	border-bottom: 1px solid #fff;
@@ -559,7 +559,7 @@ ul.navbar-nav>li {
 	vertical-align: top;
 }
 
-.planner-week-bottom-settings button, 
+.planner-bottom-settings button, 
 .planner-week-bottom-settings-settings {
 	width: 100%;
 	font-size: 16px;
@@ -575,150 +575,64 @@ ul.navbar-nav>li {
 }
 
 /******************************************* Month Planner Styles *********************************************/
-
-.planner-month-layout-selectors {
-	font-size: 16px;
-}
-
-.planner-month-layout-selectors label {
-	font-weight: normal;
-	padding: 0px 10px 0px 10px;
-}
-
-.planner-month-layout-selectors div {
-	width: 33.333333333%;
+.planner-month-content {
+	border-style: hidden;
 	float: left;
-	text-align: center;
 }
 
-.planner-month-date-selectors {
-	border-left: 1px solid #fff;
-	padding: 0px 10px 0px 10px;
-	text-align: center;
+.planner-month-content-container {
+	border-left: 2px solid #424875;
+	border-right: none;
 }
 
-.planner-month-top-content td {
-	font-size: 16px;
-	height: 40px;
-}
-
-.planner-month-row td {
-	border: 1px solid #fff;
-	margin-left: 30px;
+.planner-month-row > td {
+	border: 1px solid rgba(255, 255, 255, .3);
+	text-align: left;
+	vertical-align: top;
+	padding: 0px 0px 0px 3px;
+	color: #fff;
 }
 
 .planner-month-row {
-	height: 75px;
+	height: 100px;
 }
 
-.planner-month-row-last td {
-	border: 1px solid #fff;
+.planner-month-sidebar {
+	border-style: hidden;
+	border-right: 2px solid #424875;
+	border-left: 1px solid #fff;
+	float: left;
+	height: 600px;
 }
 
-.planner-month-row-last {
-	height: 125px;
-}
-
-.planner-container .planner-month-row .date h1 {
-	position: relative;
-	margin: -35px 0px 0px 5px;
-	font-size: 14px;
-}
-
-.planner-container .planner-month-row-last .date h1 {
-	position: relative;
-	margin: -60px 0px 0px 5px;
-	font-size: 14px;
-}
-
-.planner-month-right-category h1 {
+.planner-month-sidebar td {
+	border: 1px solid rgba(255, 255, 255, .3);
+	border-left: none;
 	color: #fff;
-	font-size: 20px;
-	position: relative;
-	text-align: center;
-	margin-top: -6px;
-	padding: 5px 0px 5px 0px;
-	border-bottom: 1px solid #fff;
 }
 
-.planner-month-right-category .checkbox-field {
-	overflow-x: hidden;
-	overflow-y: scroll;
-	height: 240px;
-	margin-top: -10px;
-}
-
-.planner-month-right-category p {
-	position: relative;
-	text-align: justify;
-	overflow: hidden;
-}
-
-/* the first method: Using 2 tags with predefined bootstrap checkbox icons */
-input[type='checkbox'].tags-checkbox:checked + label > i:first-of-type,
-input[type='checkbox'].tags-checkbox + label > i:last-of-type{
-    display: none;
-    
-}
-input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
-    display: inline-block;
-    
-}
-
-.planner-month-right-category .divider {
-	border-bottom: 1px solid #fff;
-	margin-top: -1px;
-}
-
-.planner-month-right-category h2 {
+.planner-month-sidebar-category {
 	color: #fff;
-	font-size: 20px;
-	position: relative;
+	font-size: 18px;
 	text-align: center;
-	margin-top: -13px;
-	padding: 5px 0px 5px 0px;
-	border-bottom: 1px solid #fff;
+	vertical-align: center;
+	height: 35px;
 }
 
-.planner-month-right-category .checkbox-field-2 {
-	overflow-x: hidden;
-	overflow-y: scroll;
-	height: 120px;
-	margin-top: -10px;
-}
-
-.planner-month-topright-content {
-	padding: 10px;
-	font-size: 16px;
-	vertical-align: top;
+.planner-month-sidebar-info td {
 	text-align: left;
-}
-
-.planner-month-topright-content label {
-	display: block;
-}
-
-.planner-month-bottomright-content {
-	padding: 10px;
-	font-size: 16px;
 	vertical-align: top;
-	text-align: left;
-}
-
-.planner-month-bottomright-content label {
-	display: block;
+	padding: 5px;
 }
 
 /* Beginning of planner bottom styles */
-
 .planner-month-bottom {
+	border-top: 1px solid #fff;
 	border-bottom: 2px solid #424875;
 }
 
 .planner-month-bottom td {
 	border: 1px solid #fff;
-	border-top: 0px;
-	border-bottom: 2px solid #424875;
 	padding: 10px;
 }
 
@@ -728,6 +642,12 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 	text-align: left;
 }
 
+.planner-month-bottom-settings {
+	font-size: 18px;
+	text-align: left;
+	padding-left: 10px;
+}
+
 .planner-month-bottom-category {
 	color: #fff;
 	font-size: 20px;
@@ -735,32 +655,9 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 	vertical-align: center;
 }
 
-.planner-month-bottom-settings {
-	vertical-align: top;
-}
-
-.planner-month-bottom-settings .glyphicon-cog {
-	margin-left: 36%;
-	margin-top: 7%;
-}
-
-.planner-month-bottom-settings button, 
-.planner-month-bottom-settings-settings {
-	width: 100%;
-	font-size: 16px;
-}
-
-.planner-month-bottom-settings-spacing {
-	margin-top: 10px;
-}
-
-.planner-month-bottom-settings-settings {
-	font-size: 20px;
-	margin-left: 2%;
-}
-
 /* Extra Large Devices */
 @media screen and (min-width: 1200px) {
+	/* Week variable styles */
 	.planner-week-left-sidebar {
 		width: 144px;
 	}
@@ -775,8 +672,34 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 
 	.planner-week-bottom-settings {
 		width: 284px;
+	}/* End week variable styles */
+
+	/* Month variable styles */
+	.planner-month-day {
+		width: 122px;
 	}
 
+	.planner-month-sidebar {
+		width: 286px;
+	}
+
+	.planner-month-bottom-category {
+		width: 121px;
+	}
+
+	.planner-month-bottom-content {
+		width: 732px;
+	}
+
+	.planner-month-bottom-settings {
+		width: 285px;
+	}	
+	
+	.planner-month-content-container {
+		width: 854px;
+	}/* End month variable styles */
+	
+	/* Date Selectors Widths */
 	.planner-date-year-selector {
 		width: 13%;
 	}
@@ -791,27 +714,27 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 
 	.planner-date-today-selector {
 		width: 13%;
-	}	
-
-	.planner-month-right-sidebar {
-		width: 144px;
-	}	
+	}
 	
-	.planner-month-days-day {
-		width: 45px;
+	/* If we decide the miniCal is on all three pages, get
+	rid of these and use the ones above. */
+	.planner-date-today-selector.planner-month {
+		width: 45%;
 	}
 
-	.planner-month-bottom-content {
-		width: 669px;
-	}	
-
-	.planner-month-bottom-settings {
-		width: 357px;
+	.planner-date-month-selector.planner-month {
+		width: 44%;
 	}
+
+	.planner-date-year-selector.planner-month {
+		width: 11%;
+	}
+	/* End Date Selectors Widths */
 }
 
 /* Large Devices */
 @media screen and (min-width: 992px) and (max-width: 1199px) {
+	/* Week variable styles */
 	.planner-week-left-sidebar {
 		width: 147px;
 	}
@@ -826,8 +749,34 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 
 	.planner-week-bottom-settings {
 		width: 226px;
+	}/* End week variable styles */
+
+	/* Month variable styles */
+	.planner-month-day {
+		width: 102px;
 	}
 
+	.planner-month-sidebar {
+		width: 226px;
+	}
+
+	.planner-month-bottom-category {
+		width: 101px;
+	}
+
+	.planner-month-bottom-content {
+		width: 612px;
+	}
+
+	.planner-month-bottom-settings {
+		width: 225px;
+	}	
+	
+	.planner-month-content-container {
+		width: 714px;
+	}/* End month variable styles */
+
+	/* Date Selectors Widths */
 	.planner-date-year-selector {
 		width: 16.5%;
 	}
@@ -843,31 +792,25 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 	.planner-date-today-selector {
 		width: 15.5%;
 	}
-
-	.planner-month-right-sidebar {
-		width: 144px;
-	}
-	
-	.planner-month-days-day {
-		width: 50px;
+	/* If we decide the miniCal is on all three pages, get
+	rid of these and use the ones above. */
+	.planner-date-today-selector.planner-month {
+		width: 44%;
 	}
 
-	.planner-month-bottom-content {
-		width: 570px;
-	}
-	
-	.planner-month-bottom-settings {
-		width: 273px;
+	.planner-date-month-selector.planner-month {
+		width: 43%;
 	}
 
-	.planner-month-bottom-settings .glyphicon-cog {
-		margin-left: 32%;
-		margin-top: 12%;
+	.planner-date-year-selector.planner-month {
+		width: 13%;
 	}
+	/* End Date Selectors Widths */
 }
 
 /* Medium Devices */
 @media screen and (min-width: 768px) and (max-width: 991px) {
+	/* Week variable styles */
 	.planner-week-left-sidebar {
 		width: 144px;
 	}
@@ -882,38 +825,34 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 
 	.planner-week-bottom-settings {
 		width: 164px;
+	}/* End week variable styles */
+
+	/* Month variable styles */
+	.planner-month-day {
+		width: 79px;
 	}
 
-	.planner-month-right-sidebar {
-		width: 144px;
+	.planner-month-sidebar {
+		width: 167px;
 	}
 
-	.planner-month-right-category .divider {
-		border-bottom: 1px solid #fff;
-		margin-top: -22px;
-	}
-
-	.planner-month-right-category h2 {
-		margin-top: -14px;
-	}
-	
-	.planner-month-days-day {
-		width: 60px;
+	.planner-month-bottom-category {
+		width: 78px;
 	}
 
 	.planner-month-bottom-content {
-		width: 458px;
+		width: 474px;
 	}
 
 	.planner-month-bottom-settings {
-		width: 183px;
+		width: 166px;
 	}
+	
+	.planner-month-content-container {
+		width: 553px;
+	}/* End month variable styles */
 
-	.planner-month-bottom-settings .glyphicon-cog {
-		margin-left: 22%;
-		margin-top: 15%;
-	}
-
+	/* Date Selectors Widths */
 	.planner-date-year-selector {
 		width: 23%;
 	}
@@ -929,6 +868,20 @@ input[type='checkbox'].tags-checkbox:checked + label > i:last-of-type{
 	.planner-date-today-selector {
 		width: 13%;
 	}
+	/* If we decide the miniCal is on all three pages, get
+	rid of these and use the ones above. */
+	.planner-date-today-selector.planner-month {
+		width: 42%;
+	}
+
+	.planner-date-month-selector.planner-month {
+		width: 41.5%;
+	}
+
+	.planner-date-year-selector.planner-month {
+		width: 16.5%;
+	}
+	/* End Date Selectors Widths */
 }
 
 .planner-category-color-1 {

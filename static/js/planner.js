@@ -106,39 +106,84 @@ function changeViewDate(size, amount) {
     }
 
     sessionStorage.viewDate = viewDate;
-    var start_date = getDateOfDay(0),
-        end_date   = getDateOfDay(6);
+    var start_date, end_date;
 
-    // Update events based on the new view
-    $.ajax({
-        url: "/load-week-events/",
-        type: "POST",
-        dataType: 'html',
-        data: 
-        {
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            view_start_date: start_date,
-            view_end_date: end_date
-        },
-        success: function(data, textStatus, jqXHR) {
-            $('#events-in-week-view').empty().append(data);
-        },
-    });
+    switch(localStorage.layoutType) {
+        case "Day":
+            /*$.ajax({
+                url: "/load-day-events/",
+                type: "POST",
+                dataType: 'html',
+                data: 
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    view_start_date: start_date,
+                    view_end_date: end_date
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#events-in-week-view').empty().append(data);
+                },
+            });
+            try{
+                var cal = new miniCal();
+                cal.handleDateChange();
+            } catch(err) {
+                throw "The miniCalendar had an update attempted on it, but it doesn't exist."
+            }*/
+            // #TODO: Show the current date as MM/DD formate (11/27)
+            break;
+        case "Week":
+            start_date = getDateOfDay(0);
+            end_date   = getDateOfDay(6);
+
+            $.ajax({
+                url: "/load-week-events/",
+                type: "POST",
+                dataType: 'html',
+                data: 
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    view_start_date: start_date,
+                    view_end_date: end_date
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#events-in-week-view').empty().append(data);
+                },
+            });
+            try{
+                var cal = new miniCal();
+                cal.handleDateChange();
+            } catch(err) {
+                throw "The miniCalendar had an update attempted on it, but it doesn't exist."
+            }
+            document.getElementById("planner-date-week-selector").innerHTML = getWeekString();
+            break;
+        case "Month":
+            var temp = getCalFirstDay(),
+                start_date = getFullDateString(temp);
+
+            $.ajax({
+                url: "/load-month-events/",
+                type: "POST",
+                dataType: 'html',
+                data: 
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    view_start_date: start_date
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#events-in-month-view').empty().append(data);
+                },
+            });
+            // Nothing special here, yet.
+            break;
+        default:
+            throw "Invalid layout type in changeViewDate(), please use a valid layout type.";
+    }
 
     // Update all fields in case they changed
     document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
-    document.getElementById("planner-date-week-selector").innerHTML = getWeekString();
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
-
-    // If the mini calendar is on the page (day & week views), update it
-    if(localStorage.layoutType != "Month") {
-        try{
-            var cal = new miniCal();
-            cal.handleDateChange();
-        } catch(err) {
-            throw "The miniCalendar had an update attempted on it, but it doesn't exist."
-        }
-    }
 }
 
 // Store the month lengths & names
@@ -163,6 +208,44 @@ this.getWeekString = function() {
 
     // Return a string in the followin format: "7/1 - 7/7"
     return monthNum1 + "/" + weekSunday + " - " + monthNum2 + "/" + weekSaturday;
+}
+
+// Returns the date object holding the date of the calendar day appearing in slot 0 of 42 of this month.
+getCalFirstDay = function() {
+    var now = getViewDate();
+        day = now.getDate();
+        month = now.getMonth();
+        year = now.getFullYear();
+
+    now.setDate(1);
+
+    var firstDayInt = now.getDay(),
+        prevDays = firstDayInt == 0 ? 7 : firstDayInt;
+
+    if(prevDays == 0) {
+        // Return the first of the month
+        return now;
+    }
+
+    var preMonth = month == 0 ? 11 : month - 1,
+        preYear = preMonth == 11 ? year - 1 : year,
+        preCurrentDay = month_length[preMonth] - prevDays + 1;
+
+    // Check previous month for leap days 
+    if(month == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+            preCurrentDay = 29 - prevDays + 1;
+        }
+    }
+
+    return dateTracker = new Date(preYear, preMonth, preCurrentDay);
+}
+
+// Returns the date string in a python friendly format: 2015-11-27, for example
+getFullDateString = function(date) {
+    var monthPadding = date.getMonth() < 9 ? "0" : "";
+
+    return date.getFullYear() + "-" + monthPadding + (date.getMonth() + 1) + "-" + date.getDate();
 }
 
 /*  
@@ -221,20 +304,10 @@ this.miniCal = function() {
 
             // Store information about pre & post months & how many days we need to fill
             prevDays = firstDayInt == 0 ? 7 : firstDayInt,
-            preMonth = month == 0 ? 11 : month - 1,
-            preYear = preMonth == 11 ? year - 1 : year,
-            preCurrentDay = month_length[preMonth] - prevDays + 1,
             postDays = lastDayInt == 6 ? 7: 6 - lastDayInt;
 
-        // Check previous month for leap days 
-        if(month == 2) {
-            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-                preCurrentDay = 29 - prevDays + 1;
-            }
-        }
-
-        // Create a variable to progress through the calendar
-        var dayTracker = new Date(preYear, preMonth, preCurrentDay);
+        // Get the first day to display (it might be in a different month)
+        var dayTracker = getCalFirstDay();        
         
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {

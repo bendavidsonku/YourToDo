@@ -133,6 +133,31 @@ def loadPlannerWeekEvents(request):
 
             return render_to_response('planner/ajax_events_in_planner_week_view.html', context)
 
+def loadPlannerMonthEvents(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+            
+            # Process to get planner content to display
+            context = {}
+            context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+            #Get startDate and endDate out of the ajax data that was passed in
+            plannerViewStartDate = request.POST.get("view_start_date", "")
+
+            # Get all dates as datetime objects
+            dateTracker = datetime.datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
+            allEventsInPlanner = Event.objects.get_all_events(user)
+
+            for day in range(0, 42):
+                context[day + 1] = allEventsInPlanner.filter(dateOfEvent = dateTracker)
+                dateTracker += timedelta(days = 1)
+
+            return render_to_response('planner/ajax_events_in_planner_month_view.html', context)
+
 
 def createNewCategory(request):
     if request.method == 'POST':
