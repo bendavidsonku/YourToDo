@@ -163,7 +163,7 @@ def loadPlannerMonthEvents(request):
 
                 # Add another context element to decide if the date should be greyed out
                 # #TODO: Ben, can we possibly remove this?
-                if day < 7 and dateTracker.day > 7 or day > 28 and dateTracker.day < 7:
+                if day < 7 and dateTracker.day > 7 or day > 28 and dateTracker.day < 15:
                     classes.append("planner-month-outside-day")
                 else:
                     classes.append("")

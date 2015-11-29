@@ -558,15 +558,14 @@ ul.navbar-nav>li {
 }
 
 .event-popover-event > div {
-	display: inline-block;
-	width: 90%;
-	padding: 2px 0px;
+	display: inline;
+	padding: 2px;
+	font-size: 14px;
 }
 
 .event-popover-event > div > p {
 	display: inline;
-	font-size: 14px;
-	padding: 2px;
+	padding: 3px;
 }
 
 .planner-week-bottom {
@@ -630,7 +629,7 @@ ul.navbar-nav>li {
 }
 
 .planner-month-row {
-	height: 100px;
+	height: 102px;
 }
 
 .planner-month-sidebar {
@@ -638,7 +637,7 @@ ul.navbar-nav>li {
 	border-right: 2px solid #424875;
 	border-left: 1px solid #fff;
 	float: left;
-	height: 620px;
+	height: 632px;
 }
 
 .planner-month-sidebar td {
@@ -1204,5 +1203,3 @@ input[type="checkbox"] {
 	font-weight: bold;
 	font-size: 14px;
 }
-
-
