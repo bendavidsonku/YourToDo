@@ -728,7 +728,7 @@ ul.navbar-nav>li {
 	height: 20%;
 }
 
-.planner-month-event-container td.event {
+.planner-month-event-container div {
 	border-style: hidden;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -737,24 +737,21 @@ ul.navbar-nav>li {
     line-height: 14px;
     width: 100%;
     border: 1px solid rgba(0,0,0,.3);
-    border-radius: 5px;
 }
 
-.planner-month-event-container td.event:hover {
+.planner-month-event-container div:hover {
     border: 1px solid rgba(255, 255, 255, .7);
     cursor: pointer;
 }
 
-.planner-month-event-container td.event,
-.planner-month-event-container td > div {
-	text-decoration: none;
-	cursor: pointer;
-	outline: none !important;
-	width: 100%;
+.extra-events-text div {
+	color: #fff;
+	border: none;
 }
 
-.planner-month-event-container td > div:hover {
+.extra-events-text div:hover {
 	text-decoration: underline;
+	border: none;
 }
 
 /* Beginning of planner bottom styles */

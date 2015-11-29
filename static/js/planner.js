@@ -468,13 +468,15 @@ hideOverflowEvents = function(layoutType) {
             contentBlocks = $(".planner-week-event-container");
             spillSize = 4;
             monthPadder = 0;
-            dateTracker = getCalFirstDay();
+            dateTracker = getViewDate();
+            dateTracker.setDate(dateTracker.getDate() - dateTracker.getDay());
+            console.log(dateTracker);
             break;
         case "MONTH":
             contentBlocks = $(".planner-month-event-container");
             spillSize = 5;
             monthPadder = 1;
-            dateTracker = getDateOfDay(0);
+            dateTracker = getCalFirstDay();
             break;
         default:
             throw "Invalid parameter in hideOverflowEvents().";
@@ -505,7 +507,7 @@ hideOverflowEvents = function(layoutType) {
 
             // Append the box to say how many events are hidden
             var moreBox = "" +
-                "<tr><td class=\"" + color[0] + "\">" +
+                "<tr><td class=\"" + color[0] + " extra-events-text\">" +
                     "<div id=\"popOverID-" + popOverID + "\">+ " + numEvents + " more</div>" +
                 "</td></tr>";
                 dateString = month_names[dateTracker.getMonth()] + " " +
