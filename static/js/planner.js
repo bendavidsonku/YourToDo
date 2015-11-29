@@ -151,7 +151,7 @@ function changeViewDate(size, amount) {
                     loadEventUpdateModal();
                     loadCategoryUpdateModal();
                     $('#events-in-week-view').empty().append(data);
-                    loadCategoryCreationModal()
+                    loadCategoryCreationModal();
                     loadEventCreationModal();
                     loadImportantAndUpcoming();
                 },
