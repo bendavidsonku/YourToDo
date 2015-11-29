@@ -31,7 +31,7 @@ function changeViewLayout(viewType) {
     else {
         localStorage.layoutType = viewType;
     }
-
+    
     // Update view based on currently selected layout
     $.ajax({
         url: "/planner/",
@@ -148,12 +148,12 @@ function changeViewDate(size, amount) {
                     view_end_date: end_date
                 },
                 success: function(data, textStatus, jqXHR) {
-            loadEventUpdateModal();
-            loadCategoryUpdateModal();
+                    loadEventUpdateModal();
+                    loadCategoryUpdateModal();
                     $('#events-in-week-view').empty().append(data);
-            loadCategoryCreationModal()
-            loadEventCreationModal();
-            loadImportantAndUpcoming();
+                    loadCategoryCreationModal()
+                    loadEventCreationModal();
+                    loadImportantAndUpcoming();
                 },
             });
             try{
