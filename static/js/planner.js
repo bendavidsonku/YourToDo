@@ -182,6 +182,13 @@ function changeViewDate(size, amount) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-month-view').empty().append(data);
+                    loadEventUpdateModal();
+                    loadCategoryUpdateModal();
+                    loadCategoryCreationModal();
+                    loadEventCreationModal();
+                    loadImportantAndUpcoming();
+                    loadPlannerMiscNotesModal();
+                    loadPlannerMiscNotes();
                 },
             });
 

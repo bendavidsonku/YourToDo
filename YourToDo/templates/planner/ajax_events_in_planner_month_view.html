@@ -52,3 +52,46 @@
         </script>
     </table>
 </div>
+
+<table class="planner-month-sidebar"> 
+    <tr class="planner-month-sidebar-category">
+        <td>
+            Important &amp; Upcoming
+        </td>
+    </tr>
+    <tr class="planner-month-sidebar-info">
+        <td>
+            <div id="important-and-upcoming-list">
+            </div>
+        </td>
+    </tr>
+    <tr class="planner-month-sidebar-category">
+        <td>
+            Recently Completed
+        </td>
+    </tr>
+    <tr class="planner-month-sidebar-info">
+        <td>
+            Events that you have recently marked as 'completed' will show up here.
+        </td>
+    </tr>
+    <tr class="planner-month-sidebar-category">
+        <td>
+            Categories
+        </td>
+    </tr>
+    <tr class="planner-month-sidebar-info">
+        <td>
+            {% for category in categoriesInPlanner %}
+            <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
+                <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
+                    <span id="week-planner-category-names">{{ category.get_name }}</span>
+                </button>
+            </div>
+            {% endfor %}
+        </td>
+    </tr>
+</table>
+
+<span id="inject-event-update-modal"></span>
+<span id="inject-category-update-modal"></span>

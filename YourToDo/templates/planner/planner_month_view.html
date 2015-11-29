@@ -1,28 +1,3 @@
-<!-- NOTES ->
-
-Month view table breakdown:
-
-___________________________________________
-|                                |        |
-|                                |        |
-|                                |  Right |
-|                                |        |
-|             Calendar           |  side  |
-|                                |        |
-|                                |  bar   |
-|                                |        |
-|                                |        |
-|                                |        |
-|                                |        |
-|________________________________|________|
-|                                |        |
-|         Notes Section          | New *  |
-|                                | Settings
-|________________________________|________|
-
-<!- END NOTES -->
-
-
 <div class="container">
     <table class="planner-container">
         <!-- Column Specification: Planner Month Content, Right Sidebar -->
@@ -86,43 +61,6 @@ ___________________________________________
     <!-- TODO: Move this html to ajax_events_in_month_view or something -->
 	<span id="events-in-month-view"></span>
 
-    <table class="planner-month-sidebar"> 
-        <tr class="planner-month-sidebar-category">
-            <td>
-                Important &amp; Upcoming
-            </td>
-        </tr>
-        <tr class="planner-month-sidebar-info">
-            <td>
-                Events that you have designated as important will show up here.
-            </td>
-        </tr>
-        <tr class="planner-month-sidebar-category">
-            <td>
-                Recently Completed
-            </td>
-        </tr>
-        <tr class="planner-month-sidebar-info">
-            <td>
-                Events that you have recently marked as 'completed' will show up here.
-            </td>
-        </tr>
-        <tr class="planner-month-sidebar-category">
-            <td>
-                Categories
-            </td>
-        </tr>
-        <tr class="planner-month-sidebar-info">
-            <td>
-                {% for category in categoriesInPlanner %}
-                <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
-                    <span id="month-planner-category-names">{{ category.get_name }}</span>
-                </div>
-                {% endfor %}
-            </td>
-        </tr>
-    </table>
-
     <!-- Bottom Content -->
     <table class="planner-container planner-month-bottom">
         <col class="planner-month-bottom-category">
@@ -133,8 +71,11 @@ ___________________________________________
             <td class="planner-month-bottom-category">
                 Notes
             </td>
-            <td class="planner-month-bottom-content">
-                {{ planner.get_miscellaneousNotes }}
+            <td class="planner-week-bottom-content-planner-notes">
+                <div id="edit-planner-button-container">
+                <button type="button" class="btn btn-default" id="edit-planner-misc-notes-button">Edit</button>
+                </div>
+                <span id="planner-misc-notes"></span>
             </td>
             <td class="planner-bottom-settings">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ajax-create-event-modal">New Event</button>
@@ -145,3 +86,7 @@ ___________________________________________
         </tr>
     </table>
 </div>
+
+<span id="inject-category-creation-modal"></span>
+<span id="inject-event-creation-modal"></span>
+<span id="inject-planner-notes-update-modal"></span>
