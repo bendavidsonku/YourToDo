@@ -451,7 +451,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-row {
-	height: 94px;
+	height: 102px;
 	width: 100%;
 }
 
@@ -483,7 +483,7 @@ ul.navbar-nav>li {
 	display: block;
 	overflow-y: hidden;
 	overflow-x: hidden;
-	max-height: 515px;
+	max-height: 510px;
 }
 
 .planner-week-row > td:not(:first-child) {
@@ -511,13 +511,19 @@ ul.navbar-nav>li {
     line-height: 15px;
     width: 100%;
     border: 1px solid rgba(0,0,0,.3);
-    border-radius: 5px;
 }
 
 .planner-week-event-container div {
+	border-style: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 	text-decoration: none;
 	cursor: pointer;
 	outline: none !important;
+	display: inline-block;
+	width: 100%;
+	padding: 1px 3px;
 }
 
 .planner-week-event-container td:hover {
@@ -532,6 +538,7 @@ ul.navbar-nav>li {
 .popover {
     background: #5F648D;
     border: 2px solid rgba(255,255,255,.7);
+    max-width: none;
 }
 
 .popover.bottom .arrow:after {
@@ -544,28 +551,29 @@ ul.navbar-nav>li {
 	font-size: 16px;
 }
 
+.event-popover-container {
+	font-size: 14px;
+	text-decoration: none;
+	display: inline-block;
+	margin: -5px -5px 0px -5px;
+	width: auto;
+}
+
 .event-popover-event {
+	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+	text-decoration: none;
+	cursor: pointer;
+	outline: none !important;
 	color: #fff;
 	padding: 0px 2px;
 	border: 1px solid rgba(0,0,0,.3);
-	border-radius: 5px;
+	margin-top: 5px;
 }
 
 .event-popover-event:hover {
-	border: 1px solid rgba(255,255,255,.7);
-	color: #fff;
-	text-decoration: none;
-}
-
-.event-popover-event > div {
-	display: inline;
-	padding: 2px;
-	font-size: 14px;
-}
-
-.event-popover-event > div > p {
-	display: inline;
-	padding: 3px;
+	border: 1px solid rgba(255,255,255,0.7);
 }
 
 .planner-week-bottom {
@@ -581,16 +589,31 @@ ul.navbar-nav>li {
 	font-size: 16px;
 	vertical-align: top;
 	text-align: left;
+	padding: 0px !important;
 }
+
+.padding-10 {
+	padding: 5px;
+}
+
+#important-and-upcoming-list {
+	padding: 0;
+	height: 150px;
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+
 
 .planner-week-bottom-category {
 	color: #fff;
 	font-size: 20px;
+	height: 150px;
 	text-align: center;
 	vertical-align: center;
 }
 
-.planner-week-bottom-settings {
+.planner-bottom-settings {
 	vertical-align: top;
 }
 
@@ -1217,6 +1240,11 @@ input[type="checkbox"] {
 	padding-bottom: 3px;
 }
 
+.important-and-upcoming-list {
+	height: 140px;
+	width: 100%;
+}
+
 .important-and-upcoming-event-span {
 	border-radius: 5px;
 	padding-left: 5px;
@@ -1231,7 +1259,6 @@ input[type="checkbox"] {
 	background-repeat:no-repeat;
 	border: none;
 	outline: none;
-	margin-left: -5px;
 }
 
 .update-category-modal-button {

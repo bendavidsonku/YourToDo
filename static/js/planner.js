@@ -523,14 +523,16 @@ getPopoverContent = function(title, events, color) {
         throw "No events to populate popover content."
     }
     else {
-        var html = "";
+        var html = "<div class=\"event-popover-container\">";
 
         for(var i = 0; i < events.length; i++) {
             // Change the "/about/" section to a descriptive link to edit the event
             // Should connect with a modal trigger, but we're going to have to pull 
             // category data, date data, and probably some other fields.
-            html += "<a href=\"/about/\" class=\"event-popover-event " + color[i + 1] + "\"><div><p>" + events[i] + "</p></div></a><br>";
+            html += "<div class=\"event-popover-event " + color[i + 1] + "\">" + events[i] + "</div>";
         }
+
+        html += "</div>";
 
         return "data-title='" + title + "' data-content='" + html + "'";
     }
