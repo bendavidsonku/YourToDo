@@ -11,16 +11,21 @@
         <col class="planner-week-days-day">
         {% for category in categoriesInPlanner %}
         <tr class="planner-week-row">
-            <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
-                <span id="week-planner-category-names">{{ category.get_name }}</span>
-            </td>
+
+                <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
+                <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
+                    <span id="week-planner-category-names">{{ category.get_name }}</span>
+                </button>
+                </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
                     {% for event in eventsInViewStartDate %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -33,7 +38,9 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -46,7 +53,9 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -59,7 +68,9 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -72,7 +83,9 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -85,7 +98,9 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -98,7 +113,9 @@
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
-                                {{ event.get_name }}
+                                <button type="button" class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </button>
                             </td>
                         </tr>
                         {% endif %}
@@ -113,3 +130,6 @@
         </script>
     </table>
 </div>
+
+<span id="inject-event-update-modal"></span>
+<span id="inject-category-update-modal"></span>

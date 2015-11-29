@@ -15,12 +15,16 @@
                 </p>
                 <p>
                     <label for="event-parentCategory">To which category does this event belong? (required)</label>
-                    <div id="event-parentCategory-dropdown" class="dropdown">
-                        <button href="#event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-event-parentCategory">
-                            {% for category in categoriesInPlanner %}
-                                <li><a href="#">{{ category.get_name }}</a></li>
-                            {% endfor %}
+                    <div id="create-event-parentCategory-dropdown" class="dropdown">
+                        <button href="#create-event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-create-event-parentCategory">
+                            {% if categoriesInPlanner|length == 0 %}
+                                <li><a href="#">Make a new category!</a></li>
+                            {% else %}
+                                {% for category in categoriesInPlanner %}
+                                    <li><a href="#">{{ category.get_name }}</a></li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </div>
                 </p>
@@ -35,9 +39,10 @@
                 </p>
                 <p>
                     <label for="event-timeEstimate">Time Estimate (optional):</label>
-                    <div id="event-timeEstimate-dropdown" class="dropdown">
-                        <button href="#event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-event-timeEstimate">
+                    <div id="create-event-timeEstimate-dropdown" class="dropdown">
+                        <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-create-event-timeEstimate">
+                            <li><a href="#">None</a></li>
                             <li><a href="#">15 minutes</a></li>
                             <li><a href="#">30 minutes</a></li>
                             <li><a href="#">45 minutes</a></li>
@@ -68,7 +73,7 @@
                         <span id='event-creation-error'>Invalid new event information</span>
                     </p>
                     <p id="create-event-error-message-2" style="display:none">
-                        <span id='event-creation-error'>New event contains the same name as an existing event in the specified for the specified day</span>
+                        <span id='event-creation-error'>An event cannot have only a start time/only an end time</span>
                     </p>
                 </div>
              </div>
@@ -86,20 +91,17 @@
 
 <script>
 
-    // Event Creation Drop Down Menu Function - replaces default value with user-specified value
+    // Event Drop Down Menu Function - replaces default value with user-specified value
     $(function(){
 
-        $(".dropdown-menu-event-parentCategory li a").click(function(){
+        $(".dropdown-menu-create-event-parentCategory li a").click(function(){
 
-          $(".event-parentCategory-dropdown-button:first-child").text($(this).text());
-          $(".event-parentCategory-dropdown-button:first-child").val($(this).text());
-
+          $(this).parents('#create-event-parentCategory-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
         });
 
-        $(".dropdown-menu-event-timeEstimate li a").click(function(){
+        $(".dropdown-menu-create-event-timeEstimate li a").click(function(){
 
-            $(".event-timeEstimate-dropdown-button:first-child").text($(this).text());
-            $(".event-timeEstimate-dropdown-button:first-child").val($(this).text());
+            $(this).parents('#create-event-timeEstimate-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
         });
 
     });
@@ -107,26 +109,46 @@
     // Handles event creation AJAX form submission and validates form before .ajax call
     $('#create-event-submit').click(function(){
         var eventName = $('.event-creation-name-input').val();
-        var eventParentCategory = $('.event-parentCategory-dropdown-button').val();
+
+        var eventParentCategory = $('.event-parentCategory-dropdown-button').text();
+        eventParentCategory = eventParentCategory.replace("Event's Category", "");
+
         var eventDescription = $('#event-creation-description-input').val();
         var eventDate = $('.event-creation-date-input').val();
-        var eventTimeEstimate = $('.event-timeEstimate-dropdown-button').val();
+
+        var eventTimeEstimate = $('.event-timeEstimate-dropdown-button').text();
+        eventTimeEstimate = eventTimeEstimate.replace("Time Estimate", "");
+
         var eventStartTime = $('.event-creation-startTime-input').val();
         var eventEndTime = $('.event-creation-endTime-input').val();
         var eventImportant = $('.event-creation-important-input').is(":checked");
 
         var validForm = true;
 
-        if (eventName.length == 0 || eventParentCategory == "" || eventDate == "")
+        if (eventTimeEstimate == "Time Estimate")
         {
+            eventTimeEstimate = "None";
+        }
+
+        if ((eventStartTime != "" && eventEndTime == "") || (eventStartTime == "" && eventEndTime != ""))
+        {
+            console.log("entered");
+            $('#create-event-error-message-1').hide();
+            $('#create-event-error-message-2').show();
+            validForm = false;
+        }
+
+        if (eventName.length == 0 || eventParentCategory == "" || eventDate == "" || eventParentCategory == "Event's Category")
+        {
+            $('create-event-error-message-2').hide();
             $('#create-event-error-message-1').show();
             validForm = false;
         }
 
-        if (eventName.length != 0 && eventParentCategory != "" && eventDate != "")
+        if (eventName.length != 0 && eventParentCategory != "" && eventDate != "" && validForm != false)
         {
+            $('create-event-error-message-2').hide();
             $('#create-event-error-message-1').hide();
-            validForm = true;
         }
 
         if (validForm == true)
@@ -153,7 +175,7 @@
                     changeViewDate("NONE");
                 },
                 error: function() {
-                    $('#create-event-error-message-2').show();
+                    
                 },
 
             });

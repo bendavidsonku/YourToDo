@@ -198,6 +198,150 @@ def loadEventCreationModal(request):
 
         return render_to_response('planner/ajax_load_new_event_modal.html', context)
 
+def loadEventUpdateModal(request):
+    if request.method == 'GET':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+        return render_to_response('planner/ajax_load_update_event_modal.html', context)
+
+    elif request.method == 'POST':
+        context = {}
+
+        desiredEventToUpdateId = request.POST.get("desiredEventToUpdateId", "")
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        desiredEventToUpdate = Event.objects.get_single_event_by_user_and_id(user, desiredEventToUpdateId)
+        context['returnEvent'] = desiredEventToUpdate
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+        return render_to_response('planner/ajax_load_update_event_modal.html', context)
+
+def loadCategoryUpdateModal(request):
+    if request.method == 'GET':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+        return render_to_response('planner/ajax_load_update_category_modal.html', context)
+
+    elif request.method == 'POST':
+        context = {}
+
+        desiredCategoryToUpdateId = request.POST.get("desiredCategoryToUpdateId", "")
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        desiredCategoryToUpdate = Category.objects.get_category_by_user_and_id(user, desiredCategoryToUpdateId)
+
+        context['returnCategory'] = desiredCategoryToUpdate
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+        return render_to_response('planner/ajax_load_update_category_modal.html', context)
+
+def updateCategory(request):
+    if request.method == 'POST':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        updateCategoryName = request.POST.get("ajax_category_name", "")
+        updateCategoryId = request.POST.get("ajax_category_id", "")
+        updateCategoryColor = request.POST.get("ajax_category_color", "")
+        updateCategoryOrder = request.POST.get("ajax_category_order", "")
+
+        # Fix the category color to be updated in the data base
+        if updateCategoryColor == "Red":
+            updateCategoryColor = 1
+        elif updateCategoryColor == "Dark Red":
+            updateCategoryColor = 2
+        elif updateCategoryColor == "Light Red":
+            updateCategoryColor = 3
+        elif updateCategoryColor == "Blue":
+            updateCategoryColor = 4
+        elif updateCategoryColor == "Dark Blue":
+            updateCategoryColor = 5
+        elif updateCategoryColor == "Light Blue":
+            updateCategoryColor = 6
+        elif updateCategoryColor == "Green":
+            updateCategoryColor = 7
+        elif updateCategoryColor == "Dark Green":
+            updateCategoryColor = 8
+        elif updateCategoryColor == "Light Green":
+            updateCategoryColor = 9
+        elif updateCategoryColor == "Yellow":
+            updateCategoryColor = 10
+        elif updateCategoryColor == "Gold":
+            updateCategoryColor = 11
+        elif updateCategoryColor == "Orange":
+            updateCategoryColor = 12
+        elif updateCategoryColor == "Pink":
+            updateCategoryColor = 13
+        elif updateCategoryColor == "Turquoise":
+            updateCategoryColor = 14
+        elif updateCategoryColor == "Navy":
+            updateCategoryColor = 15
+        else:
+            pass
+
+        # Fix order index
+        updateCategoryOrder = int(updateCategoryOrder) - 1
+
+        # Get the actual category from the database
+        oldCategory = Category.objects.get_category_by_user_and_id(user, updateCategoryId)
+
+        # Check to see what fields need to be updated
+
+        if oldCategory.get_color() != updateCategoryColor:
+            oldCategory.set_color(updateCategoryColor)
+
+        if oldCategory.get_name() != updateCategoryName:
+            Category.objects.update_category_name(user, oldCategory.get_name(), updateCategoryName)
+
+        if oldCategory.get_order() != updateCategoryOrder:
+            Category.objects.update_category_order(user, updateCategoryId, updateCategoryOrder)
+
+    return HttpResponse('')
+
+def deleteCategory(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            desiredCategoryToDeleteId = request.POST.get("ajax_desired_category_to_delete", "")
+            Category.objects.delete_category(user, desiredCategoryToDeleteId)
+
+    return HttpResponse('')
+            
 
 def createNewCategory(request):
     if request.method == 'POST':
@@ -272,7 +416,7 @@ def createNewEvent(request):
             newEventImportant = request.POST.get("ajax_event_important", "")
 
             # Fix the Event Time Estimate Field
-            if newEventTimeEstimate == "":
+            if newEventTimeEstimate == "" or newEventTimeEstimate == "None":
                 newEventTimeEstimate = 1
             elif newEventTimeEstimate == "15 minutes":
                 newEventTimeEstimate = 2
@@ -301,11 +445,127 @@ def createNewEvent(request):
             else:
                 pass
 
+            if newEventImportant == "false":
+                newEventImportant = False
+            else:
+                newEventImportant = True
+
             # Check to see if user assigned timeStart AND timeEnd to event
             if newEventStartTime == "" or newEventEndTime == "":
                 Event.objects.create_event_no_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate)
             else:
                 # else user has given time frame for event so create with timeBox
                 Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
+
+    return HttpResponse('')
+
+def updateEvent(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            updateEventName = request.POST.get("ajax_event_name", "")
+            updateEventId = request.POST.get("ajax_event_id", "")
+            updateEventParentCategory = request.POST.get("ajax_event_parentCategory", "")
+            updateEventDescription = request.POST.get("ajax_event_description", "")
+            updateEventDate = request.POST.get("ajax_event_date", "")
+            updateEventTimeEstimate = request.POST.get("ajax_event_timeEstimate", "")
+            updateEventStartTime = request.POST.get("ajax_event_startTime", "")
+            updateEventEndTime = request.POST.get("ajax_event_endTime", "")
+            updateEventImportant = request.POST.get("ajax_event_important", "")
+            updateEventComplete = request.POST.get("ajax_event_complete", "")
+
+            # Get Existing Event as it is currently stored in database
+            oldEvent = Event.objects.get_single_event_by_user_and_id(user, updateEventId)
+
+            # Fix the important and complete values
+            if updateEventImportant == "false":
+                updateEventImportant = False
+            else:
+                updateEventImportant = True
+
+            if updateEventComplete == "false":
+                updateEventComplete = False
+            else: 
+                updateEventComplete = True
+
+            # Fix the Event Time Estimate Field
+            if updateEventTimeEstimate == "" or updateEventTimeEstimate == "None" or updateEventTimeEstimate == "--":
+                updateEventTimeEstimate = 1
+            elif updateEventTimeEstimate == "15 minutes":
+                updateEventTimeEstimate = 2
+            elif updateEventTimeEstimate == "30 minutes":
+                updateEventTimeEstimate = 3
+            elif updateEventTimeEstimate == "45 minutes":
+                updateEventTimeEstimate = 4
+            elif updateEventTimeEstimate == "1 hour":
+                updateEventTimeEstimate = 5
+            elif updateEventTimeEstimate == "2 hours":
+                updateEventTimeEstimate = 6
+            elif updateEventTimeEstimate == "3 hours":
+                updateEventTimeEstimate = 7
+            elif updateEventTimeEstimate == "4 hours":
+                updateEventTimeEstimate = 8
+            elif updateEventTimeEstimate == "5 hours":
+                updateEventTimeEstimate = 9
+            elif updateEventTimeEstimate == "6 hours":
+                updateEventTimeEstimate = 10
+            elif updateEventTimeEstimate == "7 hours":
+                updateEventTimeEstimate = 11
+            elif updateEventTimeEstimate == "8 hours":
+                updateEventTimeEstimate = 12
+            elif updateEventTimeEstimate == "More than 8 hours":
+                updateEventTimeEstimate = 13
+            else:
+                pass
+
+            # Begin Comparison to see what fields need to be updated
+
+            # fix this to disallow duplicate names
+            if oldEvent.get_name() != updateEventName:
+                oldEvent.set_name(updateEventName)
+
+            if oldEvent.get_parentCategory().get_name() != updateEventParentCategory:
+                newParentCategory = Category.objects.get_category_by_name(user, updateEventParentCategory)
+                oldEvent.set_parentCategory(newParentCategory)
+
+            if oldEvent.get_description() != updateEventDescription:
+                oldEvent.set_description(updateEventDescription)
+
+            if oldEvent.get_timeEstimate() != updateEventTimeEstimate:
+                oldEvent.set_timeEstimate(updateEventTimeEstimate)
+            
+            if oldEvent.get_timeStart() != updateEventStartTime:
+                if updateEventStartTime != "":
+                    oldEvent.set_timeStart(updateEventStartTime)
+
+            if oldEvent.get_timeEnd() != updateEventEndTime:
+                if updateEventEndTime != "":
+                    oldEvent.set_timeEnd(updateEventEndTime)
+
+            if oldEvent.get_important() != updateEventImportant:
+                oldEvent.set_important(updateEventImportant)
+
+            if oldEvent.get_complete() != updateEventComplete:
+                oldEvent.set_complete(updateEventComplete)
+
+            if oldEvent.get_dateOfEvent_forHTML() != updateEventDate:
+                oldEvent.set_dateOfEvent(updateEventDate)
+
+    return HttpResponse('')
+
+def deleteEvent(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            desiredEventToDeleteId = request.POST.get("ajax_desired_event_to_delete", "")
+            Event.objects.delete_event(user, desiredEventToDeleteId)
 
     return HttpResponse('')
