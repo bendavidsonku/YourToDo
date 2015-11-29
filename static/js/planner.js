@@ -31,7 +31,7 @@ function changeViewLayout(viewType) {
     else {
         localStorage.layoutType = viewType;
     }
-
+    
     // Update view based on currently selected layout
     $.ajax({
         url: "/planner/",
@@ -106,44 +106,92 @@ function changeViewDate(size, amount) {
     }
 
     sessionStorage.viewDate = viewDate;
-    var start_date = getDateOfDay(0),
-        end_date   = getDateOfDay(6);
+    var start_date, end_date;
 
-    // Update events based on the new view
-    $.ajax({
-        url: "/load-week-events/",
-        type: "POST",
-        dataType: 'html',
-        data: 
-        {
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            view_start_date: start_date,
-            view_end_date: end_date
-        },
-        success: function(data, textStatus, jqXHR) {
-            loadEventUpdateModal();
-            loadCategoryUpdateModal();
-            $('#events-in-week-view').empty().append(data);
-            loadCategoryCreationModal()
-            loadEventCreationModal();
-            loadImportantAndUpcoming();
-        },
-    });
+    switch(localStorage.layoutType) {
+        case "Day":
+            /*$.ajax({
+                url: "/load-day-events/",
+                type: "POST",
+                dataType: 'html',
+                data: 
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    view_start_date: start_date,
+                    view_end_date: end_date
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#events-in-week-view').empty().append(data);
+                },
+            });
+            try{
+                var cal = new miniCal();
+                cal.handleDateChange();
+            } catch(err) {
+                throw "The miniCalendar had an update attempted on it, but it doesn't exist."
+            }*/
+            document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
+            // #TODO: Show the current date as MM/DD formate (11/27)
+            break;
+        case "Week":
+            start_date = getDateOfDay(0);
+            end_date   = getDateOfDay(6);
 
-    // Update all fields in case they changed
-    document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
-    document.getElementById("planner-date-week-selector").innerHTML = getWeekString();
-    document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
+            $.ajax({
+                url: "/load-week-events/",
+                type: "POST",
+                dataType: 'html',
+                data: 
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    view_start_date: start_date,
+                    view_end_date: end_date
+                },
+                success: function(data, textStatus, jqXHR) {
+                    loadEventUpdateModal();
+                    loadCategoryUpdateModal();
+                    $('#events-in-week-view').empty().append(data);
+                    loadCategoryCreationModal()
+                    loadEventCreationModal();
+                    loadImportantAndUpcoming();
+                },
+            });
+            try{
+                var cal = new miniCal();
+                cal.handleDateChange();
+            } catch(err) {
+                throw "The miniCalendar had an update attempted on it, but it doesn't exist."
+            }
+            document.getElementById("planner-date-week-selector").innerHTML = getWeekString();
+            document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
+            break;
+        case "Month":
+            var temp = getCalFirstDay(),
+                start_date = getFullDateString(temp);
 
-    // If the mini calendar is on the page (day & week views), update it
-    if(localStorage.layoutType != "Month") {
-        try{
-            var cal = new miniCal();
-            cal.handleDateChange();
-        } catch(err) {
-            throw "The miniCalendar had an update attempted on it, but it doesn't exist."
-        }
+            $.ajax({
+                url: "/load-month-events/",
+                type: "POST",
+                dataType: 'html',
+                data: 
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    view_start_date: start_date
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#events-in-month-view').empty().append(data);
+                },
+            });
+
+            // Put the long month name in this view
+            document.getElementById("planner-date-month-selector").innerHTML = month_names_long[viewDate.getMonth()];
+            break;
+        default:
+            throw "Invalid layout type in changeViewDate(), please use a valid layout type.";
     }
+    
+    // Update all fields in case they changed
+    document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
 }
 
 function loadCategoryCreationModal() {
@@ -247,6 +295,44 @@ this.getWeekString = function() {
     return monthNum1 + "/" + weekSunday + " - " + monthNum2 + "/" + weekSaturday;
 }
 
+// Returns the date object holding the date of the calendar day appearing in slot 0 of 42 of this month.
+getCalFirstDay = function() {
+    var now = getViewDate();
+        day = now.getDate();
+        month = now.getMonth();
+        year = now.getFullYear();
+
+    now.setDate(1);
+
+    var firstDayInt = now.getDay(),
+        prevDays = firstDayInt == 0 ? 7 : firstDayInt;
+
+    if(prevDays == 0) {
+        // Return the first of the month
+        return now;
+    }
+
+    var preMonth = month == 0 ? 11 : month - 1,
+        preYear = preMonth == 11 ? year - 1 : year,
+        preCurrentDay = month_length[preMonth] - prevDays + 1;
+
+    // Check previous month for leap days 
+    if(month == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+            preCurrentDay = 29 - prevDays + 1;
+        }
+    }
+
+    return dateTracker = new Date(preYear, preMonth, preCurrentDay);
+}
+
+// Returns the date string in a python friendly format: 2015-11-27, for example
+getFullDateString = function(date) {
+    var monthPadding = date.getMonth() < 9 ? "0" : "";
+
+    return date.getFullYear() + "-" + monthPadding + (date.getMonth() + 1) + "-" + date.getDate();
+}
+
 /*  
     Fills in the mini-calendar specified table within the planner layout.
 
@@ -303,20 +389,10 @@ this.miniCal = function() {
 
             // Store information about pre & post months & how many days we need to fill
             prevDays = firstDayInt == 0 ? 7 : firstDayInt,
-            preMonth = month == 0 ? 11 : month - 1,
-            preYear = preMonth == 11 ? year - 1 : year,
-            preCurrentDay = month_length[preMonth] - prevDays + 1,
             postDays = lastDayInt == 6 ? 7: 6 - lastDayInt;
 
-        // Check previous month for leap days 
-        if(month == 2) {
-            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-                preCurrentDay = 29 - prevDays + 1;
-            }
-        }
-
-        // Create a variable to progress through the calendar
-        var dayTracker = new Date(preYear, preMonth, preCurrentDay);
+        // Get the first day to display (it might be in a different month)
+        var dayTracker = getCalFirstDay();        
         
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
@@ -377,22 +453,47 @@ getDateOfDay = function(day) {
 }
 
 // Checks every category/date combination & hides events that are overflow (more than 4 events in one block)
-hideOverflowEvents = function() {
-    var category = $(".planner-week-event-container");
+hideOverflowEvents = function(layoutType) {
+    var contentBlocks,
+        spillSize,
+        monthPadder;
+
+    switch(layoutType) {
+        case "DAY":
+            throw "Day view shouldn't use this method...check please.";
+            break;
+        case "WEEK":
+            contentBlocks = $(".planner-week-event-container");
+            spillSize = 4;
+            monthPadder = 0;
+            break;
+        case "MONTH":
+            contentBlocks = $(".planner-month-event-container");
+            spillSize = 5;
+            monthPadder = 1;
+            break;
+        default:
+            throw "Invalid parameter in hideOverflowEvents().";
+    }
 
     // For every event block, check if it's over capacity and fix those that are.
-    for(var i = 0; i < category.length; i++) {
-        var events = category[i].getElementsByTagName('td');
+    for(var i = 0; i < contentBlocks.length; i++) {
+        var events = contentBlocks[i].getElementsByTagName('td');
 
-        if(events.length > 4) {
+        if(events.length > spillSize) {
             var eventNames = [],
                 numEvents = 0,
-                color = events[0].className;
+                color = [];
+
+            // Get the original style for the "+ X more" box
+            color[0] = events[0].className;
 
             // Loop through the extra blocks & get their names
-            for(var j = 3; j < events.length; j) {
+            for(var j = spillSize - 1; j < events.length; j) {
                 // Store the event
                 eventNames[numEvents] = $.trim(events[j].innerHTML);
+                // Store the event's color
+                color[numEvents + 1] = events[j].className;
                 events[j].parentNode.remove();
 
                 numEvents++;
@@ -401,14 +502,14 @@ hideOverflowEvents = function() {
             // Append the box to say how many events are hidden
             var moreBox = "" +
                 "<tr>" +
-                    "<td class=\"" + color + "\">" +
-                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames) + ">" +
+                    "<td class=\"" + color[0] + "\">" +
+                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames, color) + ">" +
                             "+ " + numEvents + " more" +
                         "</div>" +
                     "</td>" +
                 "</tr>"
 
-            $(moreBox).insertAfter(events[2].parentNode);
+            $(moreBox).insertAfter(events[2 + monthPadder].parentNode);
         }
     }
 
@@ -417,7 +518,7 @@ hideOverflowEvents = function() {
     })
 }
 
-getPopoverContent = function(title, events) {
+getPopoverContent = function(title, events, color) {
     if(events.length < 1) {
         throw "No events to populate popover content."
     }
@@ -428,7 +529,7 @@ getPopoverContent = function(title, events) {
             // Change the "/about/" section to a descriptive link to edit the event
             // Should connect with a modal trigger, but we're going to have to pull 
             // category data, date data, and probably some other fields.
-            html += "<a href=\"/about/\" class=\"event-popover-event\">" + events[i] + "</a><br>";
+            html += "<a href=\"/about/\" class=\"event-popover-event " + color[i + 1] + "\"><div><p>" + events[i] + "</p></div></a><br>";
         }
 
         return "data-title='" + title + "' data-content='" + html + "'";

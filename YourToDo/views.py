@@ -132,6 +132,47 @@ def loadPlannerWeekEvents(request):
 
             return render_to_response('planner/ajax_events_in_planner_week_view.html', context)
 
+def loadPlannerMonthEvents(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+            
+            # Process to get planner content to display
+            context = {}
+            context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+            #Get startDate and endDate out of the ajax data that was passed in
+            plannerViewStartDate = request.POST.get("view_start_date", "")
+
+            # Get all dates as datetime objects
+            dateTracker = datetime.datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
+            allEventsInPlanner = Event.objects.get_all_events(user)
+
+            plannerDays = []
+            dates = []
+            classes = []
+
+            for day in range(0, 42):
+                events = allEventsInPlanner.filter(dateOfEvent = dateTracker)
+                plannerDays.append(events)
+                dates.append(dateTracker.day)
+
+                # Add another context element to decide if the date should be greyed out
+                # #TODO: Ben, can we possibly remove this?
+                if day < 7 and dateTracker.day > 7 or day > 28 and dateTracker.day < 15:
+                    classes.append("planner-month-outside-day")
+                else:
+                    classes.append("")
+
+                dateTracker += timedelta(days = 1)
+
+            context['information'] = zip(plannerDays, dates, classes)
+
+            return render_to_response('planner/ajax_events_in_planner_month_view.html', context)
+
 def loadImportantAndUpcoming(request):
     context = {}
 
@@ -173,7 +214,6 @@ def loadImportantAndUpcoming(request):
 def loadCategoryCreationModal(request):
     if request.method == 'GET':
         context = {}
-
         username = None
         if request.user.is_authenticated():
             username = request.user.username
