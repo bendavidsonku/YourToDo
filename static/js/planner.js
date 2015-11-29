@@ -148,9 +148,9 @@ function changeViewDate(size, amount) {
                     view_end_date: end_date
                 },
                 success: function(data, textStatus, jqXHR) {
+                    $('#events-in-week-view').empty().append(data);
                     loadEventUpdateModal();
                     loadCategoryUpdateModal();
-                    $('#events-in-week-view').empty().append(data);
                     loadCategoryCreationModal();
                     loadEventCreationModal();
                     loadImportantAndUpcoming();
@@ -490,7 +490,9 @@ getDateOfDay = function(day) {
 hideOverflowEvents = function(layoutType) {
     var contentBlocks,
         spillSize,
-        monthPadder;
+        monthPadder,
+        popOverID = 0,
+        dateTracker;
 
     switch(layoutType) {
         case "DAY":
@@ -500,11 +502,15 @@ hideOverflowEvents = function(layoutType) {
             contentBlocks = $(".planner-week-event-container");
             spillSize = 4;
             monthPadder = 0;
+            dateTracker = getViewDate();
+            dateTracker.setDate(dateTracker.getDate() - dateTracker.getDay());
+            console.log(dateTracker);
             break;
         case "MONTH":
             contentBlocks = $(".planner-month-event-container");
             spillSize = 5;
             monthPadder = 1;
+            dateTracker = getCalFirstDay();
             break;
         default:
             throw "Invalid parameter in hideOverflowEvents().";
@@ -535,39 +541,42 @@ hideOverflowEvents = function(layoutType) {
 
             // Append the box to say how many events are hidden
             var moreBox = "" +
-                "<tr>" +
-                    "<td class=\"" + color[0] + "\">" +
-                        "<div tabindex=\"0\" data-container=\"body\" data-trigger=\"focus\" data-toggle=\"popover\" " + getPopoverContent("Extra Events", eventNames, color) + ">" +
-                            "+ " + numEvents + " more" +
-                        "</div>" +
-                    "</td>" +
-                "</tr>"
+                "<tr><td class=\"" + color[0] + " extra-events-text\">" +
+                    "<div id=\"popOverID-" + popOverID + "\">+ " + numEvents + " more</div>" +
+                "</td></tr>";
+                dateString = month_names[dateTracker.getMonth()] + " " +
+                             dateTracker.getDate() + ", " +
+                             dateTracker.getFullYear();
+
+            var html =  "<div class=\"event-popover-container\">" +
+                            "<div class=\"popover-date\">" + dateString + "<div>";
+
+            for(var j = 0; j < numEvents; j++) {
+                html += "<div class=\"event-popover-event " + color[j + 1] + "\">" + eventNames[j] + "</div>";
+            }
 
             $(moreBox).insertAfter(events[2 + monthPadder].parentNode);
-        }
-    }
 
-    $(function () {
-        $('[data-toggle="popover"]').popover({ html: true });
-    })
-}
+            var drop;
 
-getPopoverContent = function(title, events, color) {
-    if(events.length < 1) {
-        throw "No events to populate popover content."
-    }
-    else {
-        var html = "<div class=\"event-popover-container\">";
+            drop = new Drop({
+                target: document.querySelector('#popOverID-' + popOverID),
+                content: html,
+                position: 'right middle',
+                openOn: 'click'
+            });
 
-        for(var i = 0; i < events.length; i++) {
-            // Change the "/about/" section to a descriptive link to edit the event
-            // Should connect with a modal trigger, but we're going to have to pull 
-            // category data, date data, and probably some other fields.
-            html += "<div class=\"event-popover-event " + color[i + 1] + "\">" + events[i] + "</div>";
+            drop.open();
+            drop.close();
+
+            popOverID++;
         }
 
-        html += "</div>";
-
-        return "data-title='" + title + "' data-content='" + html + "'";
+        if(layoutType == "WEEK" && i > 0 && (i + 1) % 7 == 0) {
+            dateTracker.setDate(dateTracker.getDate() - 6);
+        }
+        else {
+            dateTracker.setDate(dateTracker.getDate() + 1);
+        }
     }
 }
