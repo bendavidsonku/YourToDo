@@ -34,7 +34,9 @@
                         {% for event in day %}
                         <tr>
                             <td class="planner-category-color-{{ event.get_parentCategory.get_color }} event">
-                                {{ event.get_name }}
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

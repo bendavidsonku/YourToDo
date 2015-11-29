@@ -589,16 +589,31 @@ ul.navbar-nav>li {
 	font-size: 16px;
 	vertical-align: top;
 	text-align: left;
+	padding: 0px !important;
 }
+
+.padding-10 {
+	padding: 5px;
+}
+
+#important-and-upcoming-list {
+	padding: 0;
+	height: 150px;
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+
 
 .planner-week-bottom-category {
 	color: #fff;
 	font-size: 20px;
+	height: 150px;
 	text-align: center;
 	vertical-align: center;
 }
 
-.planner-week-bottom-settings {
+.planner-bottom-settings {
 	vertical-align: top;
 }
 
@@ -1223,6 +1238,11 @@ input[type="checkbox"] {
 .important-and-upcoming-event {
 	padding-top: 3px;
 	padding-bottom: 3px;
+}
+
+.important-and-upcoming-list {
+	height: 140px;
+	width: 100%;
 }
 
 .important-and-upcoming-event-span {
