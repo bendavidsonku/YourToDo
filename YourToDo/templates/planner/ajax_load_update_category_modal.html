@@ -1,0 +1,220 @@
+<!-- Update Category Modal -->
+    <div id="ajax-update-category-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-update-category-modal-label">
+        <div class = "modal-dialog">
+            <div class = "modal-content">
+                 <div class = "modal-header">
+                    <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
+                    <h4 class = "modal-title" id = "ajax-update-category-modal-label">
+                       Update Category
+                    </h4>
+                 </div>
+                 <div class = "modal-body">
+                    <h4>Update Category Information:</h4>
+                    <p id="retrieve-category-id">
+                        {% if returnCategory %}
+                            <label for="category-name">Name: (required)</label><input class="form-control category-update-name-input" type="text" id="{{ returnCategory.get_category_id }}" value="{{ returnCategory.get_name }}">
+                        {% else %}
+                            <label for="category-name">Name: (required)</label><input class="form-control category-update-name-input" type="text">
+                        {% endif %}
+                    </p>
+                    <p> 
+                        <label for="category-color">Color: (required)</label>
+                        <div id="category-color-dropdown" class="dropdown">
+                            {% if returnCategory %}
+                                <button href="#category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-color-dropdown-button "><span class="attribute-label">{{ returnCategory.get_color_forHTML }}</span><span class="caret"></span></button>
+                            {% else %}
+                                <button href="#category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-color-dropdown-button "><span class="attribute-label">Choose Color</span><span class="caret"></span></button>
+                            {% endif %}
+                            <ul class="dropdown-menu dropdown-menu-category-color">
+                                <li><a href="#">Red</a></li>
+                                <li><a href="#">Dark Red</a></li>
+                                <li><a href="#">Light Red</a></li>
+                                <li><a href="#">Blue</a></li>
+                                <li><a href="#">Dark Blue</a></li>
+                                <li><a href="#">Light Blue</a></li>
+                                <li><a href="#">Green</a></li>
+                                <li><a href="#">Dark Green</a></li>
+                                <li><a href="#">Light Green</a></li>
+                                <li><a href="#">Yellow</a></li>
+                                <li><a href="#">Gold</a></li>
+                                <li><a href="#">Orange</a></li>
+                                <li><a href="#">Pink</a></li>
+                                <li><a href="#">Turquoise</a></li>
+                                <li><a href="#">Navy</a></li>
+                            </ul>
+                        </div>
+                    </p>
+                    <p>
+                        <label for="category-order">Order: (required)</label>
+                        <div id="category-order-dropdown" class="dropdown">
+                            {% if returnCategory %}
+                                <button href="#category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-order-dropdown-button"><span class="attribute-label">{{ returnCategory.get_order|add:"1" }}</span><span class="caret"></span></button>
+                            {% else %}
+                                <button href="#category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-order-dropdown-button"><span class="attribute-label">Choose Order</span><span class="caret"></span></button>
+                            {% endif %}
+                            <ul class="dropdown-menu dropdown-menu-category-order">
+                                {% for category in categoriesInPlanner %}
+                                    <li><a href="#">{{ category.get_order|add:"1" }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </p>
+                    <div>
+                        <br>
+                        <p id="update-category-error-message-1" style="display:none">
+                            <span id='category-creation-error'>Invalid new category information</span>
+                        </p>
+                        <p id="update-category-error-message-2" style="display:none">
+                            <span id='category-creation-error'>Categories cannot have the same name</span>
+                        </p>
+                    </div>
+                 </div>
+                 <div class = "modal-footer">
+                    <button type="button" id="update-category-delete-button" class="btn btn-default" data-dismiss="modal">
+                        Delete
+                    </button>
+                    <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                       Cancel
+                    </button>
+                    <button type ="button" class ="btn btn-success" id="update-category-submit">
+                       Update
+                    </button>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    $(function(){
+        $(".update-category-modal-button").unbind().click(function(){
+
+            var clickedCategoryId = this.id;
+
+            $.ajax({
+                url: "/load-category-update-modal/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    desiredCategoryToUpdateId: clickedCategoryId
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#inject-category-update-modal').empty().append(data);
+                    $('#ajax-update-category-modal').modal('toggle');
+                },
+            });
+            
+        });
+    });
+
+    $(function(){
+        $("#update-category-delete-button").unbind().click(function(){
+
+            var categoryToDeleteId = $('#retrieve-category-id input').attr('id');
+
+            $.ajax({
+                url: "/delete-category/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    ajax_desired_category_to_delete: categoryToDeleteId
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#ajax-update-category-modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    changeViewDate("NONE");
+                },
+            });
+        });
+    });
+
+    // Category Update Drop Down Menu Function - replaces default value with user-specified value
+    $(function(){
+
+        $(".dropdown-menu-category-color li a").click(function(){
+
+          $(this).parents('#category-color-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
+
+        });
+
+        $(".dropdown-menu-category-order li a").click(function(){
+
+          $(this).parents('#category-order-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
+
+        });
+
+    });
+
+    // Handles category update AJAX form submission and validates form before .ajax call
+    $('#update-category-submit').click(function(){
+        var categoryName = $(".category-update-name-input").val();
+        var categoryId = $('#retrieve-category-id input').attr('id');
+
+        var categoryColor = $(".category-color-dropdown-button").text();
+        categoryColor = categoryColor.replace("Choose Color", "");
+
+        var categoryOrder = $(".category-order-dropdown-button").text();
+        categoryOrder = categoryOrder.replace("Choose Order", "");
+        
+        var validForm = true;
+
+        if (categoryColor == "Choose Color" || categoryOrder == "Choose Order")
+        {
+            categoryColor = "";
+            categoryOrder = "";
+        }
+
+        if (categoryName.length == 0 || categoryColor == "" || categoryOrder == "")
+        {
+            $("#update-category-error-message-2").hide();
+            $("#update-category-error-message-1").show();
+            validForm = false;  
+        }
+
+        if (categoryName.length != 0 && categoryColor != "" && categoryOrder != "" && validForm == true)
+        {
+            $("#update-category-error-message-1").hide();
+        }
+
+        if (validForm == true)
+        {
+            $.ajax({
+                url: "/update-category/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    ajax_category_name: categoryName,
+                    ajax_category_id: categoryId,
+                    ajax_category_color: categoryColor,
+                    ajax_category_order: categoryOrder
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#ajax-update-category-modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    changeViewDate("NONE");
+                },
+                error: function() {
+                        $('#update-category-error-message-2').show();
+                },
+
+            });
+        }
+        
+    });
+
+    // Handles reseting the category update modal on close or update
+    $('#ajax-update-category-modal').on('hidden.bs.modal', function(){
+        $('.category-update-name-input').val("");
+        $('.category-color-dropdown-button').html("<span class='attribute-label'>Choose Color</span><span class='caret'></span>");
+        $('.category-order-dropdown-button').html("<span class='attribute-label'>Choose Order</span><span class='caret'></span>");
+        $('#update-category-error-message-1').hide();
+        $('#update-category-error-message-2').hide();
+    });
+
+</script>

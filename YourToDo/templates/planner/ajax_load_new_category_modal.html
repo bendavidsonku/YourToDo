@@ -1,0 +1,176 @@
+<!-- Category Creation Modal -->
+    <div id="ajax-create-category-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-create-category-modal-label">
+        <div class = "modal-dialog">
+            <div class = "modal-content">
+                 <div class = "modal-header">
+                    <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
+                    <h4 class = "modal-title" id = "ajax-create-category-modal-label">
+                       Create New Category
+                    </h4>
+                 </div>
+                 <div class = "modal-body">
+                    <h4>New Category Information:</h4>
+                    <p>
+                        <label for="category-name">Name: (required)</label><input class="form-control category-creation-name-input" type="text">
+                    </p>
+                    <p> 
+                        <label for="category-color">Color: (required)</label>
+                        <div id="create-category-color-dropdown" class="dropdown">
+                            
+                            <button href="#create-category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-color-dropdown-button "><span class="attribute-label">Choose Color</span><span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-create-category-color">
+                                <li><a href="#">Red</a></li>
+                                <li><a href="#">Dark Red</a></li>
+                                <li><a href="#">Light Red</a></li>
+                                <li><a href="#">Blue</a></li>
+                                <li><a href="#">Dark Blue</a></li>
+                                <li><a href="#">Light Blue</a></li>
+                                <li><a href="#">Green</a></li>
+                                <li><a href="#">Dark Green</a></li>
+                                <li><a href="#">Light Green</a></li>
+                                <li><a href="#">Yellow</a></li>
+                                <li><a href="#">Gold</a></li>
+                                <li><a href="#">Orange</a></li>
+                                <li><a href="#">Pink</a></li>
+                                <li><a href="#">Turquoise</a></li>
+                                <li><a href="#">Navy</a></li>
+                            </ul>
+                        </div>
+                    </p>
+                    <p>
+                        <label for="category-order">Order: (required)</label>
+                        <div id="create-category-order-dropdown" class="dropdown">
+                            <button href="#create-category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-order-dropdown-button"><span class="attribute-label">Choose Order</span><span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-create-category-order">
+                                {% for category in categoriesInPlanner %}
+                                    <li><a href="#">{{ category.get_order|add:"1" }}</a></li>
+                                {% endfor %}
+                                {% if categoriesInPlanner|length != 10 %}
+                                    <li><a href="#">{{ categoriesInPlanner|length|add:"1" }}</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </p>
+                    <div>
+                        <br>
+                        <p id="create-category-error-message-1" style="display:none">
+                            <span id='category-creation-error'>Invalid new category information</span>
+                        </p>
+                        <p id="create-category-error-message-2" style="display:none">
+                            <span id='category-creation-error'>A planner can only hold 10 categories</span>
+                        </p>
+                        <p id="create-category-error-message-3" style="display:none">
+                            <span id='category-creation-error'>Categories cannot have the same name</span>
+                        </p>
+                    </div>
+                 </div>
+                 <div class = "modal-footer">
+                    <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                       Cancel
+                    </button>
+                    <button type ="button" class ="btn btn-success" id="create-category-submit">
+                       Create
+                    </button>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Category Creation Drop Down Menu Function - replaces default value with user-specified value
+    $(function(){
+
+        $(".dropdown-menu-create-category-color li a").click(function(){
+
+          $(this).parents('#create-category-color-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
+
+        });
+
+        $(".dropdown-menu-create-category-order li a").click(function(){
+
+          $(this).parents('#create-category-order-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
+
+        });
+
+    });
+
+    // Handles category creation AJAX form submission and validates form before .ajax call
+    $('#create-category-submit').click(function(){
+        var categoryName = $(".category-creation-name-input").val();
+
+        var categoryColor = $(".category-color-dropdown-button").text();
+        categoryColor = categoryColor.replace("Choose Color", "");
+
+        var categoryOrder = $(".category-order-dropdown-button").text();
+        categoryOrder = categoryOrder.replace("Choose Order", "");
+        
+        var validForm = true;
+
+        var existingCategoryNamesCheck = $("span[id*='week-planner-category-names']").length;
+
+        if (categoryColor == "Choose Color" || categoryOrder == "Choose Order")
+        {
+            categoryColor = "";
+            categoryOrder = "";
+        }
+
+        if (categoryName.length == 0 || categoryColor == "" || categoryOrder == "")
+        {
+            $("#create-category-error-message-2").hide();
+            $("#create-category-error-message-3").hide();
+            $("#create-category-error-message-1").show();
+            validForm = false;  
+        }
+
+        if (categoryName.length != 0 && categoryColor != "" && categoryOrder != "" && validForm == true)
+        {
+            $("#create-category-error-message-1").hide();
+        }
+
+        if (validForm == true)
+        {
+            $.ajax({
+                url: "/create-category/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    ajax_category_name: categoryName,
+                    ajax_category_color: categoryColor,
+                    ajax_category_order: categoryOrder
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#ajax-create-category-modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    changeViewDate("NONE");
+                },
+                error: function() {
+                    // If this var is less than 10, the only other error that can occur is same name category
+                    if (existingCategoryNamesCheck < 10)
+                    {
+                        $('#create-category-error-message-1').hide();
+                        $('#create-category-error-message-3').show();
+                    }
+                    else 
+                    {
+                        $('#create-category-error-message-2').show();
+                    }
+                },
+
+            });
+        }
+        
+    });
+
+    // Handles reseting the category creation modal on close or create
+    $('#ajax-create-category-modal').on('hidden.bs.modal', function(){
+        $('.category-creation-name-input').val("");
+        $('.category-color-dropdown-button').html("<span class='attribute-label'>Choose Color</span><span class='caret'></span>");
+        $('.category-order-dropdown-button').html("<span class='attribute-label'>Choose Order</span><span class='caret'></span>");
+        $('#create-category-error-message-1').hide();
+        $('#create-category-error-message-2').hide();
+        $("#create-category-error-message-3").hide();
+    });
+
+</script>

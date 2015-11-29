@@ -148,7 +148,12 @@ function changeViewDate(size, amount) {
                     view_end_date: end_date
                 },
                 success: function(data, textStatus, jqXHR) {
+            loadEventUpdateModal();
+            loadCategoryUpdateModal();
                     $('#events-in-week-view').empty().append(data);
+            loadCategoryCreationModal()
+            loadEventCreationModal();
+            loadImportantAndUpcoming();
                 },
             });
             try{
@@ -184,9 +189,86 @@ function changeViewDate(size, amount) {
         default:
             throw "Invalid layout type in changeViewDate(), please use a valid layout type.";
     }
-
+    
     // Update all fields in case they changed
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
+}
+
+function loadCategoryCreationModal() {
+    $.ajax({
+        url: "/load-category-creation-modal/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-category-creation-modal').empty().append(data);
+        },
+    });
+}
+
+function loadCategoryUpdateModal() {
+    $.ajax({
+        url: "/load-category-update-modal/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-category-update-modal').empty().append(data);
+        },
+    });
+}
+
+function loadEventCreationModal() {
+    $.ajax({
+        url: "/load-event-creation-modal/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-event-creation-modal').empty().append(data);
+        },
+    });
+}
+
+function loadEventUpdateModal() {
+    $.ajax({
+        url: "/load-event-update-modal/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-event-update-modal').empty().append(data);
+        },
+    });
+}
+
+function loadImportantAndUpcoming() {
+
+    $.ajax({
+        url: "/load-important-and-upcoming/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#important-and-upcoming-list').empty().append(data);
+        },
+
+    });
 }
 
 // Store the month lengths & names

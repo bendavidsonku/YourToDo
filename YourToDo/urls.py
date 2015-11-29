@@ -47,8 +47,16 @@ urlpatterns += patterns('',
     url(r'^load-week-events/', 'YourToDo.views.loadPlannerWeekEvents', name="planner_load_week_events"),
     url(r'^load-month-events/', 'YourToDo.views.loadPlannerMonthEvents', name="planner_load_month_events"),
     url(r'^create-category/', 'YourToDo.views.createNewCategory', name ="create_category"),
+    url(r'^update-category/', 'YourToDo.views.updateCategory', name="update_category"),
+    url(r'^delete-category/', 'YourToDo.views.deleteCategory', name="delete_category"),
     url(r'^create-event/', 'YourToDo.views.createNewEvent', name="create_event"),
-
+    url(r'^update-event/', 'YourToDo.views.updateEvent', name="update_event"),
+    url(r'^delete-event/', 'YourToDo.views.deleteEvent', name="delete_event"),
+    url(r'^load-important-and-upcoming/', 'YourToDo.views.loadImportantAndUpcoming', name="load-important-and-upcoming"),
+    url(r'^load-category-creation-modal/', 'YourToDo.views.loadCategoryCreationModal', name="load-category-creation-modal"),
+    url(r'^load-event-creation-modal/', 'YourToDo.views.loadEventCreationModal', name='load-event-creation-modal'),
+    url(r'^load-event-update-modal/', 'YourToDo.views.loadEventUpdateModal', name="load-event-update-modal"),
+    url(r'^load-category-update-modal/', 'YourToDo.views.loadCategoryUpdateModal', name="load-category-update-modal"),
     # Include All Mezzanine Urls
     ("^", include("mezzanine.urls")),
 )
