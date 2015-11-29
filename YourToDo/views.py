@@ -609,3 +609,47 @@ def deleteEvent(request):
             Event.objects.delete_event(user, desiredEventToDeleteId)
 
     return HttpResponse('')
+
+def loadPlannerNotes(request):
+    if request.method == 'GET':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            context['planner'] = user.planner
+
+        return render_to_response('planner/ajax_load_misc_notes.html', context)
+
+    if request.method == 'POST':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            context['planner'] = user.planner
+
+        return render_to_response('planner/ajax_load_misc_notes_modal.html', context)
+
+def updatePlannerNotes(request):
+    if request.method == 'POST':
+        context = {}
+
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+
+            newPlannerNotes = request.POST.get("ajax_planner_notes", "")
+
+            user.planner.set_miscellaneousNotes(newPlannerNotes)
+
+    return HttpResponse('')
+
