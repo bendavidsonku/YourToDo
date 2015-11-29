@@ -582,6 +582,12 @@ ul.navbar-nav>li {
 	padding: 0px !important;
 }
 
+.planner-week-bottom-content-planner-notes {
+	font-size: 16px;
+	vertical-align: top;
+	text-align: left;
+}
+
 .padding-10 {
 	padding: 5px;
 }
@@ -592,8 +598,6 @@ ul.navbar-nav>li {
 	max-height: 150px;
 	overflow-y: auto;
 }
-
-
 
 .planner-week-bottom-category {
 	color: #fff;
@@ -1316,4 +1320,21 @@ input[type="checkbox"] {
 
 .dropdown-menu-create-category-order {
 	width: 150px;
+}
+
+#edit-planner-button-container {
+	float: right;
+}
+
+#edit-planner-misc-notes-button {
+	width: 50px;
+	height: 25px;
+	font-size: 13px;
+	padding-bottom: 25px;
+}
+
+#misc-planner-notes-textarea {
+	resize: none;
+	width: 550px;
+	height: 200px;
 }

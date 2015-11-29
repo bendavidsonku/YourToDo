@@ -151,9 +151,11 @@ function changeViewDate(size, amount) {
                     $('#events-in-week-view').empty().append(data);
                     loadEventUpdateModal();
                     loadCategoryUpdateModal();
-                    loadCategoryCreationModal()
-                    loadEventCreationModal()
+                    loadCategoryCreationModal();
+                    loadEventCreationModal();
                     loadImportantAndUpcoming();
+                    loadPlannerMiscNotesModal();
+                    loadPlannerMiscNotes();
                 },
             });
             try{
@@ -268,6 +270,38 @@ function loadImportantAndUpcoming() {
             $('#important-and-upcoming-list').empty().append(data);
         },
 
+    });
+}
+
+function loadPlannerMiscNotes() {
+
+    $.ajax({
+        url: "/load-planner-notes/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#planner-misc-notes').empty().append(data);
+        },
+    });
+}
+
+function loadPlannerMiscNotesModal() {
+
+    $.ajax({
+        url: "/load-planner-notes/",
+        type: "POST",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#inject-planner-notes-update-modal').empty().append(data);
+        },
     });
 }
 
