@@ -1,0 +1,9 @@
+{% for importantEvent in importantAndUpcoming %}
+	{% if importantEvent.get_complete != True %}
+		<div class="important-and-upcoming-event">
+			<span class="planner-category-color-{{ importantEvent.get_parentCategory.get_color }} important-and-upcoming-event-span">
+		    	{{ importantEvent.get_parentCategory.get_name }}: {{ importantEvent.get_name }} - {{ importantEvent.get_dateOfEvent }}
+		    </span>
+	    </div>
+    {% endif %}
+{% endfor %}
