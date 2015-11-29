@@ -44,15 +44,9 @@
                         <li>
                         	<a href="/">home</a>
                         </li>
-                        {% if user.is_authenticated %}
                         <li>
                             <a href="/planner">planner</a>
                         </li>
-                        {% else %}
-                        <li>
-                            <a href="/accounts/login">planner</a>
-                        </li>
-                        {% endif %}
                         <li>
                         	<a href="/about">about</a>
                         </li>
