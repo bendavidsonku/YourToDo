@@ -1,0 +1,78 @@
+<!-- Misc Notes Update Modal -->
+<div id="ajax-update-misc-notes-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-update-misc-notes-modal-label">
+    <div class = "modal-dialog">
+        <div class = "modal-content">
+             <div class = "modal-header">
+                <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
+                <h4 class = "modal-title" id = "ajax-update-misc-notes-modal-label">
+                   Update Planner Notes
+                </h4>
+             </div>
+             <div class = "modal-body">
+                <h4>Enter planner notes below:</h4>
+                <p>
+                    {% if planner.get_miscellaneousNotes != None %}
+                        <textarea name="planner-notes-textarea" id="misc-planner-notes-textarea">{{ planner.get_miscellaneousNotes }}</textarea>
+                    {% else %}
+                        <textarea name="planner-notes-textarea" id="misc-planner-notes-textarea"></textarea>
+                    {% endif %}
+                </p>
+             </div>
+             <div class = "modal-footer">
+                <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                   Cancel
+                </button>
+                <button type ="button" class ="btn btn-success" id="planner-notes-submit">
+                   Update
+                </button>
+             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function(){
+        $('#edit-planner-misc-notes-button').unbind().click(function(){
+
+            $.ajax({
+                url: "/load-planner-notes/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#inject-planner-notes-update-modal').empty().append(data);
+                    $('#ajax-update-misc-notes-modal').modal('toggle');
+                }
+            });
+
+        });
+    });
+
+    $(function(){
+        $('#planner-notes-submit').click(function() {
+
+            var plannerNotes = $('#misc-planner-notes-textarea').val();
+
+            $.ajax({
+                url: "/update-planner-notes/",
+                type: "POST",
+                dataType: 'html',
+                data:
+                {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    ajax_planner_notes: plannerNotes
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $('#ajax-update-misc-notes-modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    changeViewDate("NONE");
+                },
+            });
+        });
+    });
+
+</script>

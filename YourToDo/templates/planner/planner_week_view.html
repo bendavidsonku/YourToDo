@@ -120,14 +120,18 @@
             <td class="planner-week-bottom-category">
                 Notes
             </td>
-            <td class="planner-week-bottom-content">
-                {{ planner.get_miscellaneousNotes }}
+            <td class="planner-week-bottom-content-planner-notes">
+                <div id="edit-planner-button-container">
+                <button type="button" class="btn btn-default" id="edit-planner-misc-notes-button">Edit</button>
+                </div>
+                <span id="planner-misc-notes"></span>
             </td>
         </tr>
     </table>
 
     <span id="inject-category-creation-modal"></span>
     <span id="inject-event-creation-modal"></span>
+    <span id="inject-planner-notes-update-modal"></span>
 
 </div>
 
