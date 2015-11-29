@@ -535,45 +535,35 @@ ul.navbar-nav>li {
 	overflow-y: auto;
 }
 
-.popover {
-    background: #5F648D;
-    border: 2px solid rgba(255,255,255,.7);
-    max-width: none;
-}
-
-.popover.bottom .arrow:after {
-    border-bottom-color: #424857;
-}
-
-.popover-content, .popover-title {
-	background-color: #5F648D;
-	color: #fff;
-	font-size: 16px;
-}
-
 .event-popover-container {
 	font-size: 14px;
 	text-decoration: none;
 	display: inline-block;
-	margin: -5px -5px 0px -5px;
+	padding: 6px;
+	padding-top: 1px;
 	width: auto;
+	background-color: #5F648D;
+	border: 2px solid #fff;
 }
 
 .event-popover-event {
-	text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
 	text-decoration: none;
 	cursor: pointer;
 	outline: none !important;
 	color: #fff;
-	padding: 0px 2px;
+	padding: 3px;
 	border: 1px solid rgba(0,0,0,.3);
 	margin-top: 5px;
+	min-width: 120px;
 }
 
 .event-popover-event:hover {
 	border: 1px solid rgba(255,255,255,0.7);
+}
+
+.popover-date {
+	color: #fff;
+	font-size: 15px;
 }
 
 .planner-week-bottom {
