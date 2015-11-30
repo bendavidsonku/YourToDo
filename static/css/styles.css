@@ -387,14 +387,16 @@ ul.navbar-nav>li {
 	cursor: pointer;
 }
 
-.planner-mini-calendar-active td {
+.planner-mini-calendar-active td,
+.planner-mini-calendar-day-active {
 	background-color: #fff;
 	color: #000 !important;
-	border: 1px solid #424875 !important;
+	border-right: 1px solid #424875 !important;
 }
 
-.planner-mini-calendar-active td:hover {
-	background-color: inherit;
+.planner-mini-calendar-active td:hover,
+.planner-mini-calendar-day-active:hover {
+	background-color: inherit !important;
 	color: #fff !important;
 	border: 1px solid #fff !important;
 }

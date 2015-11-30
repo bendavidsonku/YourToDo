@@ -65,6 +65,10 @@ function getFullDate() {
     return day + ", " + month + " " + now.getDate() + ", " + year;
 }
 
+function getLayoutType() {
+    return localStorage.layoutType;
+}
+
 // Sets the sessionStorage viewDate to the specified date (limited to year, month, day)
 function setViewDate(year, month, day) {
     sessionStorage.viewDate = new Date(year, month, day);
@@ -451,8 +455,8 @@ this.miniCal = function() {
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
             // If we're in the current week, highlight it.
-            if((day - now.getDay() == dayTracker.getDate() && prevDays != 7) ||
-               (calWeek == 0 && day - now.getDay() < 1)) {
+            if(getLayoutType() == "Week" && ((day - now.getDay() == dayTracker.getDate() && prevDays != 7) ||
+               (calWeek == 0 && day - now.getDay() < 1))) {
                 html += '<tr class="planner-mini-calendar-active">';
             }
             else {
@@ -478,6 +482,9 @@ this.miniCal = function() {
                 // Post month filler days
                 else if(postDays > 0 && dayTracker.getMonth() != month) {
                     html += 'class="planner-mini-calendar-inactive"';
+                }
+                else if(getLayoutType() == "Day" && dayTracker.getDate() == getViewDate().getDate()) {
+                    html += 'class="planner-mini-calendar-day-active"';
                 }
                 
                 // Close the td bracket & put the date in, & update the date
