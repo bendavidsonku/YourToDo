@@ -630,10 +630,14 @@ def updateEvent(request):
             if oldEvent.get_timeStart() != updateEventStartTime:
                 if updateEventStartTime != "":
                     oldEvent.set_timeStart(updateEventStartTime)
+                elif updateEventStartTime == "":
+                    oldEvent.set_timeStart(None)
 
             if oldEvent.get_timeEnd() != updateEventEndTime:
                 if updateEventEndTime != "":
                     oldEvent.set_timeEnd(updateEventEndTime)
+                elif updateEventEndTime == "":
+                    oldEvent.set_timeEnd(None)
 
             if oldEvent.get_important() != updateEventImportant:
                 oldEvent.set_important(updateEventImportant)
