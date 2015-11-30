@@ -2,12 +2,15 @@
     {% for importantEvent in importantAndUpcoming %}
     	{% if importantEvent.get_complete != True %}
             <div>
-        		<div class="important-and-upcoming-event update-event-modal-button" id="{{ importantEvent.get_event_id }}">
-        			<span class="planner-category-color-{{ importantEvent.get_parentCategory.get_color }} important-and-upcoming-event-span">
-        		    	{{ importantEvent.get_parentCategory.get_name }}: {{ importantEvent.get_name }}
-        		    </span>
-        	    </div>
+                <div class="important-and-upcoming-event update-event-modal-button" id="{{ importantEvent.get_event_id }}">
+                    <span class="planner-category-color-{{ importantEvent.get_parentCategory.get_color }} important-and-upcoming-event-span">
+                        {{ importantEvent.get_parentCategory.get_name }}: {{ importantEvent.get_name }}
+                    </span>
+                </div>
                 &nbsp;- {{ importantEvent.get_dateOfEvent }}
+                {% if importantEvent.get_timeStart != None %}
+                    at {{ importantEvent.get_timeStart }}
+                {% endif %}
             </div>
         {% endif %}
     {% endfor %}
