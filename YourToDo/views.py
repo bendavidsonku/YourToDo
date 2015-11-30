@@ -173,6 +173,33 @@ def loadPlannerMonthEvents(request):
 
             return render_to_response('planner/ajax_events_in_planner_month_view.html', context)
 
+
+def loadRecentlyCompletedEvents(request):
+    context = {}
+
+    if request.method == 'GET':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        # Filter events in planner to get events that are within a 3 day +/- range of today
+        todaysDate = datetime.datetime.today()
+        threeDaysBefore = todaysDate - datetime.timedelta(days = 3)
+        threeDaysAhead = todaysDate + datetime.timedelta(days = 3)
+
+        threeDaysBefore = threeDaysBefore.strftime("%Y-%m-%d")
+        threeDaysAhead = threeDaysAhead.strftime("%Y-%m-%d")
+        print(threeDaysBefore)
+        print(threeDaysAhead)
+        context['recentlyCompletedEvents'] = Event.objects.get_all_events(user).filter(dateOfEvent__range=[threeDaysBefore, threeDaysAhead]).filter(complete = True)
+
+        return render_to_response('planner/ajax_recently_completed.html', context)
+    
+
+
+
 def loadImportantAndUpcoming(request):
     context = {}
 
@@ -183,7 +210,7 @@ def loadImportantAndUpcoming(request):
 
         user = User.objects.get(username = username)
 
-        # Get all events in planner
+        # Get all events in planner in date order
         context['eventsInPlanner'] = Event.objects.get_all_events_in_date_order(user)
 
         # Get current date
