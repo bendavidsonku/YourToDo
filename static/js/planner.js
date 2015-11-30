@@ -137,13 +137,12 @@ function changeViewDate(size, amount) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-day-view').empty().append(data);
-                    loadEventUpdateModal();
+                    loadImportantAndUpcoming();
+                    loadRecentlyCompleted();
                     loadCategoryUpdateModal();
                     loadCategoryCreationModal();
                     loadEventCreationModal();
-                    loadImportantAndUpcoming();
-                    loadPlannerMiscNotesModal();
-                    loadPlannerMiscNotes();
+                    loadEventUpdateModal();
                 },
             });
             try{
@@ -173,12 +172,12 @@ function changeViewDate(size, amount) {
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-week-view').empty().append(data);
                     loadImportantAndUpcoming();
-                    loadEventUpdateModal();
+                    loadPlannerMiscNotesModal();
+                    loadPlannerMiscNotes();
                     loadCategoryUpdateModal();
                     loadCategoryCreationModal();
                     loadEventCreationModal();
-                    loadPlannerMiscNotesModal();
-                    loadPlannerMiscNotes();
+                    loadEventUpdateModal();
                 },
             });
             try{
@@ -207,12 +206,12 @@ function changeViewDate(size, amount) {
                     $('#events-in-month-view').empty().append(data);
                     loadImportantAndUpcoming();
                     loadRecentlyCompleted();
-                    loadEventUpdateModal();
+                    loadPlannerMiscNotes();
+                    loadPlannerMiscNotesModal();
                     loadCategoryUpdateModal();
                     loadCategoryCreationModal();
                     loadEventCreationModal();
-                    loadPlannerMiscNotesModal();
-                    loadPlannerMiscNotes();
+                    loadEventUpdateModal();
                 },
             });
 
