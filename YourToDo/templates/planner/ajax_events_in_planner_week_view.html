@@ -9,6 +9,22 @@
         <col class="planner-week-days-day">
         <col class="planner-week-days-day">
         <col class="planner-week-days-day">
+        {% if categoriesInPlanner|length == 0 %}
+            <tr class="planner-week-row">
+                <td class="planner-week-category-container">
+                    <button class="btn-default" id="create-new-category-placeholder" data-toggle="modal" data-target="#ajax-create-category-modal">
+                        <span class="week-planner-category-names">Add New Category <br>+</span>
+                    </button>
+                </td>
+                <td class="planner-week-event-block"></td>
+                <td class="planner-week-event-block"></td>
+                <td class="planner-week-event-block"></td>
+                <td class="planner-week-event-block"></td>
+                <td class="planner-week-event-block"></td>
+                <td class="planner-week-event-block"></td>
+                <td class="planner-week-event-block"></td>
+            </tr>
+        {% endif %}
         {% for category in categoriesInPlanner %}
         <tr class="planner-week-row">
 
