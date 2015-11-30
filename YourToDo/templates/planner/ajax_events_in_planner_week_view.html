@@ -19,7 +19,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewStartDate %}
+                    {% for event in eventsInViewStartDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewStartDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
@@ -34,7 +45,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewSecondDate %}
+                    {% for event in eventsInViewSecondDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewSecondDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
@@ -49,7 +71,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewThirdDate %}
+                    {% for event in eventsInViewThirdDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewThirdDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
@@ -64,7 +97,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewFourthDate %}
+                    {% for event in eventsInViewFourthDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewFourthDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
@@ -79,7 +123,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewFifthDate %}
+                    {% for event in eventsInViewFifthDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewFifthDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
@@ -94,7 +149,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewSixthDate %}
+                    {% for event in eventsInViewSixthDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewSixthDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">
@@ -109,7 +175,18 @@
             </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
-                    {% for event in eventsInViewEndDate %}
+                    {% for event in eventsInViewEndDateWithTimeBox %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for event in eventsInViewEndDateWithoutTimeBox %}
                         {% if event.get_parentCategory == category %}
                         <tr>
                             <td class="planner-category-color-{{ category.get_color }}">

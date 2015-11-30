@@ -145,15 +145,24 @@ def loadPlannerWeekEvents(request):
             plannerViewEndDateAsDateTime = datetime.datetime.strptime(plannerViewEndDate, "%Y-%m-%d")
 
 
-            allEventsInPlanner = Event.objects.get_all_events(user)
+            allEventsInPlannerWithTimeBox = Event.objects.get_all_events(user).exclude(timeStart = None)
+            allEventsInPlannerWithoutTimeBox = Event.objects.get_all_events(user).filter(timeStart = None)
 
-            context['eventsInViewStartDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewStartDateAsDateTime)
-            context['eventsInViewSecondDate'] = allEventsInPlanner.filter(dateOfEvent = secondDayInViewAsDateTime)
-            context['eventsInViewThirdDate'] = allEventsInPlanner.filter(dateOfEvent = thirdDayInViewAsDateTime)
-            context['eventsInViewFourthDate'] = allEventsInPlanner.filter(dateOfEvent = fourthDayInViewAsDateTime)
-            context['eventsInViewFifthDate'] = allEventsInPlanner.filter(dateOfEvent = fifthDayInViewAsDateTime)
-            context['eventsInViewSixthDate'] = allEventsInPlanner.filter(dateOfEvent = sixthDayInViewAsDateTime)
-            context['eventsInViewEndDate'] = allEventsInPlanner.filter(dateOfEvent = plannerViewEndDateAsDateTime)
+            context['eventsInViewStartDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = plannerViewStartDateAsDateTime)
+            context['eventsInViewSecondDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = secondDayInViewAsDateTime)
+            context['eventsInViewThirdDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = thirdDayInViewAsDateTime)
+            context['eventsInViewFourthDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = fourthDayInViewAsDateTime)
+            context['eventsInViewFifthDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = fifthDayInViewAsDateTime)
+            context['eventsInViewSixthDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = sixthDayInViewAsDateTime)
+            context['eventsInViewEndDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = plannerViewEndDateAsDateTime)
+
+            context['eventsInViewStartDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = plannerViewStartDateAsDateTime)
+            context['eventsInViewSecondDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = secondDayInViewAsDateTime)
+            context['eventsInViewThirdDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = thirdDayInViewAsDateTime)
+            context['eventsInViewFourthDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = fourthDayInViewAsDateTime)
+            context['eventsInViewFifthDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = fifthDayInViewAsDateTime)
+            context['eventsInViewSixthDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = sixthDayInViewAsDateTime)
+            context['eventsInViewEndDateWithoutTimeBox'] = allEventsInPlannerWithoutTimeBox.filter(dateOfEvent = plannerViewEndDateAsDateTime)
 
             return render_to_response('planner/ajax_events_in_planner_week_view.html', context)
 
