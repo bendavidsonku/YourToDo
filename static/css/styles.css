@@ -788,6 +788,11 @@ ul.navbar-nav>li {
 	vertical-align: center;
 }
 
+/******************************************* Day Planner Styles *********************************************/
+.planner-day-top-date {
+	border: 1px solid #fff;
+}
+
 /* Extra Large Devices */
 @media screen and (min-width: 1200px) {
 	/* Week variable styles */
@@ -843,6 +848,10 @@ ul.navbar-nav>li {
 
 	.planner-date-week-selector {
 		width: 42%
+	}
+
+	.planner-date-day-selector {
+		width: 42%;
 	}
 
 	.planner-date-today-selector {
@@ -925,6 +934,10 @@ ul.navbar-nav>li {
 	.planner-date-today-selector {
 		width: 15.5%;
 	}
+
+	.planner-date-day-selector {
+		width: 43%;
+	}
 	/* If we decide the miniCal is on all three pages, get
 	rid of these and use the ones above. */
 	.planner-date-today-selector.planner-month {
@@ -1000,6 +1013,10 @@ ul.navbar-nav>li {
 
 	.planner-date-today-selector {
 		width: 13%;
+	}
+
+	.planner-date-day-selector {
+		width: 41%;
 	}
 	/* If we decide the miniCal is on all three pages, get
 	rid of these and use the ones above. */

@@ -55,6 +55,16 @@ function getViewDate() {
     return new Date(Date.parse(sessionStorage.viewDate));
 }
 
+// Returns the full date in the following format: Sunday November 29, 2015
+function getFullDate() {
+    var now = getViewDate(),
+        day = day_names_long[now.getDay()],
+        month = month_names_long[now.getMonth()],
+        year = now.getFullYear();
+
+    return day + ", " + month + " " + now.getDate() + ", " + year;
+}
+
 // Sets the sessionStorage viewDate to the specified date (limited to year, month, day)
 function setViewDate(year, month, day) {
     sessionStorage.viewDate = new Date(year, month, day);
@@ -123,15 +133,16 @@ function changeViewDate(size, amount) {
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-week-view').empty().append(data);
                 },
-            });
+            });*/
             try{
                 var cal = new miniCal();
                 cal.handleDateChange();
             } catch(err) {
                 throw "The miniCalendar had an update attempted on it, but it doesn't exist."
-            }*/
+            }
             document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
-            // #TODO: Show the current date as MM/DD formate (11/27)
+            document.getElementById("planner-date-day-selector").innerHTML = (viewDate.getMonth() + 1) + "/" + viewDate.getDate();
+            document.getElementById("planner-day-full-date").innerHTML = getFullDate();
             break;
         case "Week":
             start_date = getDateOfDay(0);
@@ -314,6 +325,8 @@ function loadPlannerMiscNotesModal() {
 
 // Store the month lengths & names
 var month_length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    day_names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    day_names_long = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     month_names = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July',
                    'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
     month_names_long = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
