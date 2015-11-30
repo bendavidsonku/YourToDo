@@ -18,6 +18,48 @@
             <td>Thu</td>
             <td>Fri</td>
             <td>Sat</td>
+            <td class="planner-month-sidebar" rowspan="7">
+                <table> 
+                    <tr class="planner-month-sidebar-category">
+                        <td>
+                            Important &amp; Upcoming
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-info planner-month-info">
+                        <td class="no-padding">
+                            <div id="important-and-upcoming-list">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-category">
+                        <td>
+                            Recently Completed
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-info planner-month-info">
+                        <td class="no-padding">
+                            <div id="recently-completed-list">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-category">
+                        <td>
+                            Categories
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-info planner-month-categories">
+                        <td>
+                            {% for category in categoriesInPlanner %}
+                            <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
+                                <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
+                                    <span id="week-planner-category-names">{{ category.get_name }}</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </td>
         </tr>
 
         {% for day, date, class in information %}
@@ -51,45 +93,34 @@
             hideOverflowEvents("MONTH");
         </script>
     </table>
-</div>
 
-<table class="planner-month-sidebar"> 
-    <tr class="planner-month-sidebar-category">
-        <td>
-            Important &amp; Upcoming
-        </td>
-    </tr>
-    <tr class="planner-month-sidebar-info">
-        <td class="no-padding">
-            <div id="important-and-upcoming-list">
-            </div>
-        </td>
-    </tr>
-    <tr class="planner-month-sidebar-category">
-        <td>
-            Recently Completed
-        </td>
-    </tr>
-    <tr class="planner-month-sidebar-info">
-        <td>
-            <div id="recently-completed-list">
-            </div>
-        </td>
-    </tr>
-    <tr class="planner-month-sidebar-category">
-        <td>
-            Categories
-        </td>
-    </tr>
-    <tr class="planner-month-sidebar-info">
-        <td>
-            {% for category in categoriesInPlanner %}
-            <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
-                <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
-                    <span id="week-planner-category-names">{{ category.get_name }}</span>
-                </button>
-            </div>
-            {% endfor %}
-        </td>
-    </tr>
-</table>
+    <!-- Bottom Content -->
+    <table class="planner-container planner-month-bottom">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-sidebar">
+
+        <tr>
+            <td class="planner-month-bottom-category">
+                Notes
+            </td>
+            <td class="planner-week-bottom-content-planner-notes" colspan="6">
+                <div id="edit-planner-button-container">
+                <button type="button" class="btn btn-default" id="edit-planner-misc-notes-button">Edit</button>
+                </div>
+                <span id="planner-misc-notes"></span>
+            </td>
+            <td class="planner-bottom-settings">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ajax-create-event-modal">New Event</button>
+                <button type="button" class="btn btn-default planner-week-bottom-settings-spacing" data-toggle="modal" data-target="#ajax-create-category-modal">New Category</button><br>
+
+                <span class="glyphicon glyphicon-cog"></span><span class="planner-month-bottom-settings">Settings</span>
+            </td>
+        </tr>
+    </table>
+</div>

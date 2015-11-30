@@ -1,20 +1,26 @@
 <div class="container">
     <table class="planner-container">
         <!-- Column Specification: Planner Month Content, Right Sidebar -->
-        <col class="planner-month-content-container">
-        <col class="planner-month-right-sidebar">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-day">
+        <col class="planner-month-sidebar">
 
         <!-- Top Row: Title -->
         <tr>
             <!-- Planner Title -->
-            <td class="planner-title" colspan="2">
+            <td class="planner-title" colspan="8">
                 {{ planner.get_name }}'s Planner
             </td>
         </tr><!-- End Top Row -->
 
         <!-- Top content: Date Selectors, layout selectors -->
         <tr class="planner-top-content">
-            <td class="planner-date-selectors">
+            <td class="planner-date-selectors" colspan="7">
                 <!-- Today Button -->
                 <div class="planner-date-today-selector planner-month">
                     <div class="btn-group planner-date-selectors-btn-group" role="group">
@@ -58,37 +64,13 @@
         </tr>
     </table>
 
-    <!-- TODO: Move this html to ajax_events_in_month_view or something -->
-	<span id="events-in-month-view"></span>
-
-    <!-- Bottom Content -->
-    <table class="planner-container planner-month-bottom">
-        <col class="planner-month-bottom-category">
-        <col class="planner-month-bottom-content">
-        <col class="planner-month-bottom-settings">
-
-        <tr>
-            <td class="planner-month-bottom-category">
-                Notes
-            </td>
-            <td class="planner-week-bottom-content-planner-notes">
-                <div id="edit-planner-button-container">
-                <button type="button" class="btn btn-default" id="edit-planner-misc-notes-button">Edit</button>
-                </div>
-                <span id="planner-misc-notes"></span>
-            </td>
-            <td class="planner-bottom-settings">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ajax-create-event-modal">New Event</button>
-                <button type="button" class="btn btn-default planner-week-bottom-settings-spacing" data-toggle="modal" data-target="#ajax-create-category-modal">New Category</button><br>
-
-                <span class="glyphicon glyphicon-cog"></span><span class="planner-month-bottom-settings">Settings</span>
-            </td>
-        </tr>
-    </table>
+    <span id="events-in-month-view"></span>
+    
+    <span id="inject-event-update-modal"></span>
+    <span id="inject-category-update-modal"></span>
+    <span id="inject-category-creation-modal"></span>
+    <span id="inject-event-creation-modal"></span>
+    <span id="inject-planner-notes-update-modal"></span>
+    <span id="inject-event-update-modal"></span>
+    <span id="inject-category-update-modal"></span>
 </div>
-
-<span id="inject-category-creation-modal"></span>
-<span id="inject-event-creation-modal"></span>
-<span id="inject-planner-notes-update-modal"></span>
-<span id="inject-event-update-modal"></span>
-<span id="inject-category-update-modal"></span>

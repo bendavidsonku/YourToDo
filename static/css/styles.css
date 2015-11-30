@@ -362,7 +362,6 @@ ul.navbar-nav>li {
 .planner-mini-calendar {
 	table-layout: fixed;
 	text-align: center;
-	border-collapse: collapse;
 	border-style: hidden;
 	font-size: 14px;
 	width: 100%;
@@ -482,9 +481,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-content {
-	display: block;
 	overflow-y: hidden;
-	overflow-x: hidden;
 	max-height: 510px;
 }
 
@@ -598,12 +595,6 @@ ul.navbar-nav>li {
 	padding: 0px !important;
 }
 
-#important-and-upcoming-list {
-	padding: 0;
-	max-height: 100%;
-	overflow-y: auto;
-}
-
 .planner-week-bottom-category {
 	color: #fff;
 	font-size: 20px;
@@ -635,13 +626,13 @@ ul.navbar-nav>li {
 
 /******************************************* Month Planner Styles *********************************************/
 .planner-month-content {
-	border-style: hidden;
-	float: left;
+	width: 100%;
+	height: 632px;
 }
 
 .planner-month-content-container {
 	border-left: 2px solid #424875;
-	border-right: none;
+	border-right: 2px solid #424875;
 }
 
 .planner-month-row > td {
@@ -653,20 +644,21 @@ ul.navbar-nav>li {
 }
 
 .planner-month-row {
-	height: 102px;
+	height: 103px;
 }
 
 .planner-month-sidebar {
+	border-right: none;
+}
+
+.planner-month-sidebar table {
+	height: 100%;
+	width: 100%;
 	border-style: hidden;
-	border-right: 2px solid #424875;
-	border-left: 1px solid #fff;
-	float: left;
-	height: 632px;
 }
 
 .planner-month-sidebar td {
 	border: 1px solid rgba(255, 255, 255, .3);
-	border-left: none;
 	color: #fff;
 }
 
@@ -682,11 +674,18 @@ ul.navbar-nav>li {
 	text-align: left;
 	vertical-align: top;
 	padding: 5px;
-	height: auto;
 }
 
 .planner-month-sidebar-info td.no-padding {
 	padding: 0px;
+}
+
+.planner-month-info {
+	height: 150px;
+}
+
+.planner-month-categories {
+	height: 231px;
 }
 
 .planner-month-category-legend {
@@ -723,15 +722,11 @@ ul.navbar-nav>li {
 	display: block;
 }
 
-.planner-month-content-days {
+.planner-month-content-days > td {
 	color: #fff;
 	height: 20px;
 	text-align: center;
-}
-
-.planner-month-content-days td {
 	border: 1px solid #fff;
-	border-right: none;
 }
 
 .planner-month-event-container {
@@ -838,6 +833,7 @@ ul.navbar-nav>li {
 
 .planner-day-right-sidebar {
 	height: 744px;
+	width: 100%;
 	border-style: hidden;
 	border-left: 1px solid #fff;
 }
@@ -876,23 +872,7 @@ ul.navbar-nav>li {
 	}
 
 	.planner-month-sidebar {
-		width: 286px;
-	}
-
-	.planner-month-bottom-category {
-		width: 121px;
-	}
-
-	.planner-month-bottom-content {
-		width: 732px;
-	}
-
-	.planner-month-bottom-settings {
-		width: 285px;
-	}	
-	
-	.planner-month-content-container {
-		width: 854px;
+		width: 284px;
 	}/* End month variable styles */
 
 	/* Day variable styles */
@@ -962,23 +942,7 @@ ul.navbar-nav>li {
 	}
 
 	.planner-month-sidebar {
-		width: 226px;
-	}
-
-	.planner-month-bottom-category {
-		width: 101px;
-	}
-
-	.planner-month-bottom-content {
-		width: 612px;
-	}
-
-	.planner-month-bottom-settings {
-		width: 225px;
-	}	
-	
-	.planner-month-content-container {
-		width: 714px;
+		width: 224px;
 	}/* End month variable styles */
 
 	/* Day variable styles */
@@ -1047,23 +1011,7 @@ ul.navbar-nav>li {
 	}
 
 	.planner-month-sidebar {
-		width: 167px;
-	}
-
-	.planner-month-bottom-category {
-		width: 78px;
-	}
-
-	.planner-month-bottom-content {
-		width: 474px;
-	}
-
-	.planner-month-bottom-settings {
-		width: 166px;
-	}
-	
-	.planner-month-content-container {
-		width: 553px;
+		width: 165px;
 	}/* End month variable styles */
 	
 	/* Day variable styles */
@@ -1363,16 +1311,46 @@ input[type="checkbox"] {
 	font-size: 14px;
 }
 
+#important-and-upcoming-list {
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+#recently-completed-list {
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+#all-day-events-list {
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+.planner-day-info {
+	height: 150px;
+}
+
 .important-and-upcoming-event {
 	padding-top: 3px;
 	padding-bottom: 3px;
-	display: inline;
+	display: inline-block;
 }
 
-.important-and-upcoming-list {
-	height: 150px;
-	max-height: 150px;
-	width: 100%;
+.recently-completed-event {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	display: inline-block;
+}
+
+.recently-completed-event-span {
+	padding-left: 5px;
+	padding-right: 5px;
+	cursor: pointer;
+	border: 1px solid rgba(0,0,0,.3);
+}
+
+.recently-completed-event-span:hover{
+	border: 1px solid rgba(255,255,255,.7);
 }
 
 .important-and-upcoming-event-span {
