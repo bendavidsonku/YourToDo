@@ -7,7 +7,10 @@
     		    	{{ importantEvent.get_parentCategory.get_name }}: {{ importantEvent.get_name }}
     		    </span>
     	    </div>
-            &nbsp;- {{ importantEvent.get_dateOfEvent }}
+            &nbsp;- {{ importantEvent.get_dateOfEvent }} 
+            {% if importantEvent.get_timeStart != None %}
+                at {{ importantEvent.get_timeStart }}
+            {% endif %}
         </div>
         {% endif %}
     {% endfor %}
