@@ -1,11 +1,14 @@
 <div class="padding-10">
     {% for importantEvent in importantAndUpcoming %}
     	{% if importantEvent.get_complete != True %}
-    		<div class="important-and-upcoming-event">
+        <div>
+    		<div class="important-and-upcoming-event update-event-modal-button" id="{{ importantEvent.get_event_id }}">
     			<span class="planner-category-color-{{ importantEvent.get_parentCategory.get_color }} important-and-upcoming-event-span">
-    		    	{{ importantEvent.get_parentCategory.get_name }}: {{ importantEvent.get_name }} - {{ importantEvent.get_dateOfEvent }}
+    		    	{{ importantEvent.get_parentCategory.get_name }}: {{ importantEvent.get_name }}
     		    </span>
     	    </div>
+            &nbsp;- {{ importantEvent.get_dateOfEvent }}
+        </div>
         {% endif %}
     {% endfor %}
 </div>

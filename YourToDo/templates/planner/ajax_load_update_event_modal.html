@@ -8,123 +8,134 @@
                    Update Event
                 </h4>
              </div>
-             <div class = "modal-body">
-                <h4>Update Event Information:</h4>
-                <p>
-                    {% if returnEvent %}
-                        <label for="event-name">Name: (required)</label><input class="form-control event-update-name-input" type="text" value="{{ returnEvent.get_name }}">
-                    {% else %}
-                        <label for="event-name">Name: (required)</label><input class="form-control event-update-name-input" type="text">
-                    {% endif %}
-                </p>
-                <p>
-                    <label for="event-parentCategory">This currently belongs to: (required)</label>
-                    <div id="event-parentCategory-dropdown" class="dropdown">
-                        {% if returnEvent %}
-                            <button href="#event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">{{ returnEvent.get_parentCategory.get_name }}</span><span class="caret"></span></button>
-                        {% else %}
-                            <button href="#event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
-                        {% endif %}
-                        <ul class="dropdown-menu dropdown-menu-event-parentCategory">
-                            {% if categoriesInPlanner|length == 0 %}
-                                <li><a href="#">Make a new category!</a></li>
+             <div class="modal-body">
+                 <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <p>
+                            {% if returnEvent %}
+                                <label for="event-name">Name: (required)</label><input class="form-control event-update-name-input" type="text" value="{{ returnEvent.get_name }}">
                             {% else %}
-                                {% for category in categoriesInPlanner %}
-                                    <li><a href="#">{{ category.get_name }}</a></li>
-                                {% endfor %}
+                                <label for="event-name">Name: (required)</label><input class="form-control event-update-name-input" type="text">
                             {% endif %}
-                        </ul>
+                        </p>
+                        <p>
+                            <label for="event-parentCategory">This currently belongs to: (required)</label>
+                            <div id="event-parentCategory-dropdown" class="dropdown">
+                                {% if returnEvent %}
+                                    <button href="#event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">{{ returnEvent.get_parentCategory.get_name }}</span><span class="caret"></span></button>
+                                {% else %}
+                                    <button href="#event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
+                                {% endif %}
+                                <ul class="dropdown-menu dropdown-menu-event-parentCategory">
+                                    {% if categoriesInPlanner|length == 0 %}
+                                        <li><a href="#">Make a new category!</a></li>
+                                    {% else %}
+                                        {% for category in categoriesInPlanner %}
+                                            <li><a href="#">{{ category.get_name }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </p>
+                        <p> 
+                            <label for="event-description">Description (optional):</label>
+                            <p>
+                            {% if returnEvent %}
+                                <textarea name="event-description" id="event-update-description-input">{{ returnEvent.get_description }}</textarea>
+                            {% else %}
+                                <textarea name="event-description" id="event-update-description-input"></textarea>
+                            {% endif %}
+                            </p>
+                        </p>
                     </div>
-                </p>
-                <p> 
-                    <label for="event-description">Description (optional):</label>
-                    <p>
-                    {% if returnEvent %}
-                        <textarea name="event-description" id="event-update-description-input">{{ returnEvent.get_description }}</textarea>
-                    {% else %}
-                        <textarea name="event-description" id="event-update-description-input"></textarea>
-                    {% endif %}
-                    <p>
-                </p>
-                <p id="retrieve-event-id">
-                    {% if returnEvent %}
-                        <label for=".event-update-date-input">Date of Event: (required)<input class="form-control event-update-date-input" type="date" id="{{ returnEvent.get_event_id }}" value="{{ returnEvent.get_dateOfEvent_forHTML }}"></label>
-                    {% else %}
-                        <label for=".event-update-date-input">Date of Event: (required)<input class="form-control event-update-date-input" type="date"></label>
-                    {% endif %}
-                </p>
-                <p>
-                    <label for="event-timeEstimate">Time Estimate (optional):</label>
-                    <div id="event-timeEstimate-dropdown" class="dropdown">
-                        {% if returnEvent %}
-                            <button href="#event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-timeEstimate-dropdown-button"><span class="attribute-label">{{ returnEvent.get_timeEstimate_forHTML }}</span><span class="caret"></span></button>
-                        {% else %}
-                            <button href="#event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
-                        {% endif %}
-                        <ul class="dropdown-menu dropdown-menu-event-timeEstimate">
-                            <li><a href="#">None</a></li>
-                            <li><a href="#">15 minutes</a></li>
-                            <li><a href="#">30 minutes</a></li>
-                            <li><a href="#">45 minutes</a></li>
-                            <li><a href="#">1 hour</a></li>
-                            <li><a href="#">2 hours</a></li>
-                            <li><a href="#">3 hours</a></li>
-                            <li><a href="#">4 hours</a></li>
-                            <li><a href="#">5 hours</a></li>
-                            <li><a href="#">6 hours</a></li>
-                            <li><a href="#">7 hours</a></li>
-                            <li><a href="#">8 hours</a></li>
-                            <li><a href="#">More than 8 hours</a></li>
-                        </ul>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <p id="retrieve-event-id">
+                            {% if returnEvent %}
+                                <label for=".event-update-date-input">Date of Event: (required)</label><input class="form-control event-update-date-input" type="date" id="{{ returnEvent.get_event_id }}" value="{{ returnEvent.get_dateOfEvent_forHTML }}">
+                            {% else %}
+                                <label for=".event-update-date-input">Date of Event: (required)</label><input class="form-control event-update-date-input" type="date">
+                            {% endif %}
+                        </p>
+                        <p>
+                            <label for="event-timeEstimate">Time Estimate (optional):</label>
+                            <div id="event-timeEstimate-dropdown" class="dropdown">
+                                {% if returnEvent %}
+                                    <button href="#event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle update-event-timeEstimate-dropdown-button"><span class="attribute-label">{{ returnEvent.get_timeEstimate_forHTML }}</span><span class="caret"></span></button>
+                                {% else %}
+                                    <button href="#event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle update-event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
+                                {% endif %}
+                                <ul class="dropdown-menu dropdown-menu-update-event-timeEstimate">
+                                    <li><a href="#">None</a></li>
+                                    <li><a href="#">15 minutes</a></li>
+                                    <li><a href="#">30 minutes</a></li>
+                                    <li><a href="#">45 minutes</a></li>
+                                    <li><a href="#">1 hour</a></li>
+                                    <li><a href="#">2 hours</a></li>
+                                    <li><a href="#">3 hours</a></li>
+                                    <li><a href="#">4 hours</a></li>
+                                    <li><a href="#">5 hours</a></li>
+                                    <li><a href="#">6 hours</a></li>
+                                    <li><a href="#">7 hours</a></li>
+                                    <li><a href="#">8 hours</a></li>
+                                    <li><a href="#">More than 8 hours</a></li>
+                                </ul>
+                            </div>
+                        </p>
+                        <p>
+                            {% if returnEvent %}
+                                {% if returnEvent.get_timeStart != None %}
+                                    <label for=".event-update-startTime-input">Start Time (optional):</label><input class="form-control event-update-startTime-input" type="time" value="{{ returnEvent.get_timeStart_forHTML }}">
+                                {% else %}
+                                    <label for=".event-update-startTime-input">Start Time (optional):</label><input class="form-control event-update-startTime-input" type="time">
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                        <p>
+                            {% if returnEvent %}
+                                {% if returnEvent.get_timeEnd != None %}
+                                    <label for=".event-update-endTime-input">End Time (optional):</label><input class="form-control event-update-endTime-input" type="time" value="{{ returnEvent.get_timeEnd_forHTML }}">
+                                {% else %}
+                                    <label for=".event-update-endTime-input">End Time (optional):</label><input class="form-control event-update-endTime-input" type="time">
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <p>
+                                    {% if returnEvent %}
+                                        {% if returnEvent.get_important == True %}
+                                            <label for=".event-update-important-input">Important:<input class="form control event-update-important-input" type="checkbox" checked></label> 
+                                        {% else %}
+                                            <label for=".event-update-important-input">Important:<input class="form control event-update-important-input" type="checkbox"></label> 
+                                        {% endif %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <p>
+                                    {% if returnEvent %}
+                                        {% if returnEvent.get_complete == True %}
+                                            <label for=".event-update-complete-input">Completed:<input class="form control event-update-complete-input" type="checkbox" checked></label>
+                                        {% else %}
+                                            <label for=".event-update-complete-input">Completed:<input class="form control event-update-complete-input" type="checkbox"></label>
+                                        {% endif %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                </p>
-                <p>
-                    {% if returnEvent %}
-                        {% if returnEvent.get_timeStart != None %}
-                            <label for=".event-update-startTime-input">Start Time (optional):<input class="form-control event-update-startTime-input" type="time" value="{{ returnEvent.get_timeStart_forHTML }}"></label>
-                        {% else %}
-                            <label for=".event-update-startTime-input">Start Time (optional):<input class="form-control event-update-startTime-input" type="time"></label>
-                        {% endif %}
-                    {% endif %}
-                </p>
-                <p>
-                    {% if returnEvent %}
-                        {% if returnEvent.get_timeEnd != None %}
-                            <label for=".event-update-endTime-input">End Time (optional):<input class="form-control event-update-endTime-input" type="time" value="{{ returnEvent.get_timeEnd_forHTML }}"></label>
-                        {% else %}
-                            <label for=".event-update-endTime-input">End Time (optional):<input class="form-control event-update-endTime-input" type="time"></label>
-                        {% endif %}
-                    {% endif %}
-                </p>
-                <p>
-                    {% if returnEvent %}
-                        {% if returnEvent.get_important == True %}
-                            <label for=".event-update-important-input">Important:<input class="form control event-update-important-input" type="checkbox" checked></label> 
-                        {% else %}
-                            <label for=".event-update-important-input">Important:<input class="form control event-update-important-input" type="checkbox"></label> 
-                        {% endif %}
-                    {% endif %}
-                </p>
-                <p>
-                    {% if returnEvent %}
-                        {% if returnEvent.get_complete == True %}
-                            <label for=".event-update-complete-input">Completed:<input class="form control event-update-complete-input" type="checkbox" checked></label>
-                        {% else %}
-                            <label for=".event-update-complete-input">Completed:<input class="form control event-update-complete-input" type="checkbox"></label>
-                        {% endif %}
-                    {% endif %}
-                </p>
-                <div>
-                    <br>
-                    <p id="update-event-error-message-1" style="display:none">
-                        <span id='event-creation-error'>Invalid new event information</span>
-                    </p>
-                    <p id="update-event-error-message-2" style="display:none">
-                        <span id='event-creation-error'>An event cannot have only a start time/only an end time</span>
-                    </p>
+                    <div>
+                        <br>
+                        <p id="update-event-error-message-1" style="display:none">
+                            <span id='event-creation-error'>Invalid new event information</span>
+                        </p>
+                        <p id="update-event-error-message-2" style="display:none">
+                            <span id='event-creation-error'>An event cannot have only a start time/only an end time</span>
+                        </p>
+                    </div>
                 </div>
-             </div>
-             <div class = "modal-footer">
+            <div class = "modal-footer">
                 <button type="button" id="update-event-delete-button" class="btn btn-default" data-dismiss="modal">
                     Delete
                 </button>
@@ -134,7 +145,7 @@
                 <button type ="button" class ="btn btn-success" id="update-event-submit">
                    Update
                 </button>
-             </div>
+            </div>
         </div>
     </div>
 </div>
@@ -195,7 +206,7 @@
           $(this).parents('#event-parentCategory-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
         });
 
-        $(".dropdown-menu-event-timeEstimate li a").click(function(){
+        $(".dropdown-menu-update-event-timeEstimate li a").click(function(){
 
             $(this).parents('#event-timeEstimate-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
         });
@@ -213,7 +224,7 @@
         var eventDescription = $('#event-update-description-input').val();
         var eventDate = $('.event-update-date-input').val();
 
-        var eventTimeEstimate = $('.event-timeEstimate-dropdown-button').text();
+        var eventTimeEstimate = $('.update-event-timeEstimate-dropdown-button').text();
         eventTimeEstimate = eventTimeEstimate.replace("Time Estimate", "");
 
         var eventStartTime = $('.event-update-startTime-input').val();
@@ -288,7 +299,7 @@
         $('.event-parentCategory-dropdown-button').html("<span class='attribute-label'>Event's Category</span><span class='caret'></span>");
         $('#event-update-description-input').val("");
         $('.event-update-date-input').val("");
-        $('.event-timeEstimate-dropdown-button').html("<span class='attribute-label'>Time Estimate</span><span class='caret'></span>");
+        $('.update-event-timeEstimate-dropdown-button').html("<span class='attribute-label'>Time Estimate</span><span class='caret'></span>");
         $('.event-update-startTime-input').val("");
         $('.event-update-endTime-input').val("");
         $('.event-update-important-input').prop("checked", false);

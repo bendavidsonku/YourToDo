@@ -1,0 +1,9 @@
+<div class="padding-10">
+	{% for event in recentlyCompletedEvents %}
+		<div class="recently-completed-event update-event-modal-button" id="{{ event.get_event_id }}">
+			<span class="planner-category-color-{{ event.get_parentCategory.get_color }} recently-completed-event-span">
+				{{ event.get_parentCategory.get_name }}: {{ event.get_name }}
+			</span>
+		</div>
+	{% endfor %}
+</div>

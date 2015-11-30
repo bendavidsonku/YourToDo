@@ -149,11 +149,11 @@ function changeViewDate(size, amount) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-week-view').empty().append(data);
+                    loadImportantAndUpcoming();
                     loadEventUpdateModal();
                     loadCategoryUpdateModal();
                     loadCategoryCreationModal();
                     loadEventCreationModal();
-                    loadImportantAndUpcoming();
                     loadPlannerMiscNotesModal();
                     loadPlannerMiscNotes();
                 },
@@ -182,11 +182,12 @@ function changeViewDate(size, amount) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-month-view').empty().append(data);
+                    loadImportantAndUpcoming();
+                    loadRecentlyCompleted();
                     loadEventUpdateModal();
                     loadCategoryUpdateModal();
                     loadCategoryCreationModal();
                     loadEventCreationModal();
-                    loadImportantAndUpcoming();
                     loadPlannerMiscNotesModal();
                     loadPlannerMiscNotes();
                 },
@@ -263,6 +264,22 @@ function loadEventUpdateModal() {
     });
 }
 
+function loadRecentlyCompleted() {
+
+    $.ajax({
+        url: "/load-recently-completed-events/",
+        type: "GET",
+        dataType: 'html',
+        data:
+        {
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#recently-completed-list').empty().append(data);
+        },
+    });
+}
+
 function loadImportantAndUpcoming() {
 
     $.ajax({
@@ -276,7 +293,6 @@ function loadImportantAndUpcoming() {
         success: function(data, textStatus, jqXHR) {
             $('#important-and-upcoming-list').empty().append(data);
         },
-
     });
 }
 

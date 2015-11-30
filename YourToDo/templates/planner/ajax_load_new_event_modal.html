@@ -9,7 +9,6 @@
                 </h4>
              </div>
              <div class = "modal-body">
-                <h4>New Event Information:</h4>
                 <p>
                     <label for="event-name">Name: (required)</label><input class="form-control event-creation-name-input" type="text">
                 </p>
@@ -40,7 +39,7 @@
                 <p>
                     <label for="event-timeEstimate">Time Estimate (optional):</label>
                     <div id="create-event-timeEstimate-dropdown" class="dropdown">
-                        <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
+                        <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
                         <ul class="dropdown-menu dropdown-menu-create-event-timeEstimate">
                             <li><a href="#">None</a></li>
                             <li><a href="#">15 minutes</a></li>
@@ -59,10 +58,10 @@
                     </div>
                 </p>
                 <p>
-                    <label for=".event-creation-startTime-input">Start Time (optional):<input class="form-control event-creation-startTime-input" type="time"></label>
+                    <label for=".event-creation-startTime-input">Start Time (optional):</label><input class="form-control event-creation-startTime-input" type="time">
                 </p>
                 <p>
-                    <label for=".event-creation-endTime-input">End Time (optional):<input class="form-control event-creation-endTime-input" type="time"></label>
+                    <label for=".event-creation-endTime-input">End Time (optional):</label><input class="form-control event-creation-endTime-input" type="time">
                 </p>
                 <p>
                     <label for=".event-creation-important-input">Important:<input class="form control event-creation-important-input" type="checkbox"></label> 
@@ -116,7 +115,7 @@
         var eventDescription = $('#event-creation-description-input').val();
         var eventDate = $('.event-creation-date-input').val();
 
-        var eventTimeEstimate = $('.event-timeEstimate-dropdown-button').text();
+        var eventTimeEstimate = $('.create-event-timeEstimate-dropdown-button').text();
         eventTimeEstimate = eventTimeEstimate.replace("Time Estimate", "");
 
         var eventStartTime = $('.event-creation-startTime-input').val();
@@ -188,7 +187,7 @@
         $('.event-parentCategory-dropdown-button').html("<span class='attribute-label'>Event's Category</span><span class='caret'></span>");
         $('#event-creation-description-input').val("");
         $('.event-creation-date-input').val("");
-        $('.event-timeEstimate-dropdown-button').html("<span class='attribute-label'>Time Estimate</span><span class='caret'></span>");
+        $('.create-event-timeEstimate-dropdown-button').html("<span class='attribute-label'>Time Estimate</span><span class='caret'></span>");
         $('.event-creation-startTime-input').val("");
         $('.event-creation-endTime-input').val("");
         $('.event-creation-important-input').prop("checked", false);
