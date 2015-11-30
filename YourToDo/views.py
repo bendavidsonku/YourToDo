@@ -184,7 +184,7 @@ def loadImportantAndUpcoming(request):
         user = User.objects.get(username = username)
 
         # Get all events in planner
-        context['eventsInPlanner'] = Event.objects.get_all_events(user)
+        context['eventsInPlanner'] = Event.objects.get_all_events_in_date_order(user)
 
         # Get current date
         todaysDate = datetime.datetime.today()

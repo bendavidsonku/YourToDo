@@ -242,6 +242,10 @@ class EventManager(models.Manager):
 		categoryId = Category.objects.get_category_by_name(request, categoryName).get_category_id()
 		return super(EventManager, self).filter(parentPlanner = plannerId).filter(parentCategory = categoryId)
 
+	def get_all_events_in_date_order(self, request):
+		plannerId = request.planner.id
+		return super(EventManager, self).filter(parentPlanner = plannerId).order_by('dateOfEvent')
+
 	def get_all_events(self, request):
 		plannerId = request.planner.id
 		return super(EventManager, self).filter(parentPlanner = plannerId)
