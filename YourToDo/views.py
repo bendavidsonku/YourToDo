@@ -97,6 +97,28 @@ def PlannerView(request):
 
     return render_to_response('planner/planner_base.html', context, context_instance = RequestContext(request))
 
+def loadPlannerDayEvents(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+            
+            # Process to get planner content to display
+            context = {}
+            context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+            #Get startDate and endDate out of the ajax data that was passed in
+            dateString = request.POST.get("view_date", "")
+            date = datetime.datetime.strptime(dateString, "%Y-%m-%d")
+
+            allEventsInPlanner = Event.objects.get_all_events(user)
+            
+            context['events'] = allEventsInPlanner.filter(dateOfEvent = date)
+
+            return render_to_response('planner/ajax_events_in_planner_day_view.html', context)
+
 def loadPlannerWeekEvents(request):
     if request.method == 'POST':
         username = None

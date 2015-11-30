@@ -124,20 +124,28 @@ function changeViewDate(size, amount) {
 
     switch(localStorage.layoutType) {
         case "Day":
-            /*$.ajax({
+            start_date = getDateOfDay(viewDate.getDay());
+
+            $.ajax({
                 url: "/load-day-events/",
                 type: "POST",
                 dataType: 'html',
                 data: 
                 {
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                    view_start_date: start_date,
-                    view_end_date: end_date
+                    view_date: start_date,
                 },
                 success: function(data, textStatus, jqXHR) {
-                    $('#events-in-week-view').empty().append(data);
+                    $('#events-in-day-view').empty().append(data);
+                    loadEventUpdateModal();
+                    loadCategoryUpdateModal();
+                    loadCategoryCreationModal();
+                    loadEventCreationModal();
+                    loadImportantAndUpcoming();
+                    loadPlannerMiscNotesModal();
+                    loadPlannerMiscNotes();
                 },
-            });*/
+            });
             try{
                 var cal = new miniCal();
                 cal.handleDateChange();

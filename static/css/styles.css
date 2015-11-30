@@ -10,7 +10,7 @@ html, body {
 	min-height: 100%;
 	position: relative;
 	background-color: #5F648D;
-	padding-bottom: 50px;
+	padding-bottom: 60px;
 }
 
 .header {
@@ -611,6 +611,7 @@ ul.navbar-nav>li {
 
 .planner-bottom-settings {
 	vertical-align: top;
+	text-align: left;
 }
 
 .planner-bottom-settings button, 
@@ -621,6 +622,7 @@ ul.navbar-nav>li {
 
 .planner-week-bottom-settings-spacing {
 	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .planner-week-bottom-settings-settings {
@@ -795,6 +797,48 @@ ul.navbar-nav>li {
 	border: 1px solid #fff;
 }
 
+.planner-day-left-sidebar {
+	vertical-align: top;
+	padding: 5px;
+}
+
+.planner-day-time-table {
+	width: 55px;
+}
+
+.planner-day-content {
+	height: 746px;
+	border-bottom: 2px solid #424875;
+}
+
+.planner-day-content-table {
+	width: 100%;
+}
+
+.planner-day-content-table td {
+	height: 31px;
+	width: 100%;
+	border: 1px solid rgba(255,255,255,.3);
+	border-bottom: none;
+	padding: 2px;
+}
+
+.planner-day-content-table.time-table {
+	text-align: right;
+}
+
+.planner-day-right-sidebar {
+	height: 744px;
+	border-style: hidden;
+	border-left: 1px solid #fff;
+}
+
+.planner-day-right-sidebar td {
+	border: 1px solid rgba(255,255,255,.3);
+	border-left: 1px solid #fff;
+	padding: 5px;
+}
+
 /* Extra Large Devices */
 @media screen and (min-width: 1200px) {
 	/* Week variable styles */
@@ -838,6 +882,11 @@ ul.navbar-nav>li {
 	.planner-month-content-container {
 		width: 854px;
 	}/* End month variable styles */
+
+	/* Day variable styles */
+	.planner-day-event-container {
+		width: 655px;
+	}/* End day variable styles */
 	
 	/* Date Selectors Widths */
 	.planner-date-year-selector {
@@ -920,6 +969,11 @@ ul.navbar-nav>li {
 		width: 714px;
 	}/* End month variable styles */
 
+	/* Day variable styles */
+	.planner-day-event-container {
+		width: 510px;
+	}/* End day variable styles */
+
 	/* Date Selectors Widths */
 	.planner-date-year-selector {
 		width: 16.5%;
@@ -999,6 +1053,11 @@ ul.navbar-nav>li {
 	.planner-month-content-container {
 		width: 553px;
 	}/* End month variable styles */
+	
+	/* Day variable styles */
+	.planner-day-event-container {
+		width: 355px;
+	}/* End day variable styles */
 
 	/* Date Selectors Widths */
 	.planner-date-year-selector {
