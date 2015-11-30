@@ -1,0 +1,135 @@
+<div class="planner-week-content">
+    <table class="planner-container planner-container-content">
+        <!-- Column Specification: Left sidebar, 7 days -->
+        <col class="planner-week-left-sidebar">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        {% for category in categoriesInPlanner %}
+        <tr class="planner-week-row">
+
+                <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
+                <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
+                    <span id="week-planner-category-names">{{ category.get_name }}</span>
+                </button>
+                </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewStartDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewSecondDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewThirdDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewFourthDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewFifthDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewSixthDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="planner-week-event-block">
+                <table class="planner-week-event-container">
+                    {% for event in eventsInViewEndDate %}
+                        {% if event.get_parentCategory == category %}
+                        <tr>
+                            <td class="planner-category-color-{{ category.get_color }}">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>     
+        </tr>
+        {% endfor %}
+
+        <script>
+            hideOverflowEvents("WEEK");
+        </script>
+    </table>
+</div>
+
+<span id="inject-event-update-modal"></span>
+<span id="inject-category-update-modal"></span>
