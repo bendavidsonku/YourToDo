@@ -1,10 +1,96 @@
-<div class='container'>
-	DAY VIEW
-	<td class="planner-layout-selectors" colspan="2">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default btn-layout-selector active" id="btn-layout-day" onclick="changeViewLayout('Day')">Day</button>
-            <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-week" onclick="changeViewLayout('Week')">Week</button>
-            <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-month" onclick="changeViewLayout('Month')">Month</button>
-        </div>
-    </td>
+<div class="container">
+    <table class="planner-container">
+        <!-- Column Specification: Left sidebar, 7 days -->
+        <col class="planner-week-left-sidebar">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+        <col class="planner-week-days-day">
+
+         <!-- Top Row: Mini Calendar/Title -->
+        <tr>
+            <!-- Mini Calendar -->
+            <td rowspan="3" id="planner-mini-calendar" class="planner-mini-cal-container">
+            </td>
+            <!-- Planner Title #TODO Let users name their own titles -->
+            <td class="planner-title" colspan="7">
+                {{ planner.get_name }}'s Planner
+            </td>
+        </tr><!-- End Top Row -->
+
+        <!-- Top content: Date Selectors, layout selectors -->
+        <tr class="planner-top-content">
+            <td class="planner-date-selectors" colspan="5">
+                <!-- Today Button -->
+                <div class="planner-date-today-selector">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('TODAY')">Today</button>
+                    </div>
+                </div>
+
+                <!-- Monthly dates (i.e. "< Nov. >") -->
+                <div class="planner-date-month-selector planner-day">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('MONTH', -1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('MONTH', 1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                        </button>
+                    </div>
+                    <span id="planner-date-month-selector"></span>
+                </div>
+
+                <!-- Date (i.e. "< > 11/29") -->
+                <div class="planner-date-day-selector planner-day">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('DAY', -1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('DAY', 1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                        </button>
+                    </div>
+                    <span id="planner-date-day-selector"></span>
+                </div>
+
+                <!-- Years (i.e. "< 2015 >" ) -->
+                <div class="planner-date-year-selector planner-day">
+                    <div class="btn-group planner-date-selectors-btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('YEAR', -1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-left planner-date-selectors-button"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-date-selector" onclick="changeViewDate('YEAR', 1)">
+                            <span class="glyphicon glyphicon glyphicon-menu-right planner-date-selectors-button"></span>
+                        </button>
+                    </div>
+                    <span id="planner-date-year-selector"></span>
+                </div>
+            </td>
+            <td class="planner-layout-selectors" colspan="2">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default btn-layout-selector active" id="btn-layout-day" onclick="changeViewLayout('Day')">Day</button>
+                    <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-week" onclick="changeViewLayout('Week')">Week</button>
+                    <button type="button" class="btn btn-default btn-layout-selector" id="btn-layout-month" onclick="changeViewLayout('Month')">Month</button>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="planner-week-days planner-day-top-date" colspan="7">
+                <span id="planner-day-full-date"></span>
+            </td>
+        </tr>
+    </table>
+
+    <span id="events-in-day-view"></span>
+
+    <span id="inject-event-update-modal"></span>
+    <span id="inject-category-update-modal"></span>
+    <span id="inject-category-creation-modal"></span>
+    <span id="inject-event-creation-modal"></span>
+    <span id="inject-planner-notes-update-modal"></span>
 </div>

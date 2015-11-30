@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from YourToDo.forms import ContactForm
 from planner.models import Planner, Category, Event
@@ -47,20 +48,23 @@ def contact_success(request):
 
 def logout(request):
 	auth.logout(request)
-	return render_to_response('base.html')
+	return HttpResponseRedirect('/')
 
-# TODO
-# Update this view to include all supported layouts (day, week, and month)
-# We're either going to need to send a different html layout here, or something.
-#
-# At this point, I'm just making one layout to get started.
-
-#LOGIN REQUIRED?????
+@login_required(login_url='/accounts/login/')
 def PlannerView(request):
     plannerLayoutSelection = request.POST.get("planner_layout", "")
     context = {}
 
     if plannerLayoutSelection == "Day":
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+        # Get the necessary context to display
+        context['planner'] = user.planner
+        context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+        context['eventsInPlanner'] = Event.objects.get_all_events(user)
         return render_to_response('planner/planner_day_view.html', context, context_instance = RequestContext(request))
 
     elif plannerLayoutSelection == "Week":
@@ -93,6 +97,27 @@ def PlannerView(request):
 
     return render_to_response('planner/planner_base.html', context, context_instance = RequestContext(request))
 
+def loadPlannerDayEvents(request):
+    if request.method == 'POST':
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+
+            user = User.objects.get(username = username)
+            
+            # Process to get planner content to display
+            context = {}
+            context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
+
+            #Get startDate and endDate out of the ajax data that was passed in
+            dateString = request.POST.get("view_date", "")
+            date = datetime.datetime.strptime(dateString, "%Y-%m-%d")
+
+            allEventsInPlanner = Event.objects.get_all_events(user)
+            
+            context['events'] = allEventsInPlanner.filter(dateOfEvent = date)
+
+            return render_to_response('planner/ajax_events_in_planner_day_view.html', context)
 
 def loadPlannerWeekEvents(request):
     if request.method == 'POST':
@@ -408,7 +433,6 @@ def deleteCategory(request):
             Category.objects.delete_category(user, desiredCategoryToDeleteId)
 
     return HttpResponse('')
-            
 
 def createNewCategory(request):
     if request.method == 'POST':
@@ -463,7 +487,6 @@ def createNewCategory(request):
             Category.objects.create_category(user, newCategoryName, newCategoryColor, newCategoryOrder)
 
     return HttpResponse('')
-
 
 def createNewEvent(request):
     if request.method == 'POST':
@@ -679,4 +702,3 @@ def updatePlannerNotes(request):
             user.planner.set_miscellaneousNotes(newPlannerNotes)
 
     return HttpResponse('')
-

@@ -55,6 +55,20 @@ function getViewDate() {
     return new Date(Date.parse(sessionStorage.viewDate));
 }
 
+// Returns the full date in the following format: Sunday November 29, 2015
+function getFullDate() {
+    var now = getViewDate(),
+        day = day_names_long[now.getDay()],
+        month = month_names_long[now.getMonth()],
+        year = now.getFullYear();
+
+    return day + ", " + month + " " + now.getDate() + ", " + year;
+}
+
+function getLayoutType() {
+    return localStorage.layoutType;
+}
+
 // Sets the sessionStorage viewDate to the specified date (limited to year, month, day)
 function setViewDate(year, month, day) {
     sessionStorage.viewDate = new Date(year, month, day);
@@ -110,18 +124,26 @@ function changeViewDate(size, amount) {
 
     switch(localStorage.layoutType) {
         case "Day":
-            /*$.ajax({
+            start_date = getDateOfDay(viewDate.getDay());
+
+            $.ajax({
                 url: "/load-day-events/",
                 type: "POST",
                 dataType: 'html',
                 data: 
                 {
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                    view_start_date: start_date,
-                    view_end_date: end_date
+                    view_date: start_date,
                 },
                 success: function(data, textStatus, jqXHR) {
-                    $('#events-in-week-view').empty().append(data);
+                    $('#events-in-day-view').empty().append(data);
+                    loadEventUpdateModal();
+                    loadCategoryUpdateModal();
+                    loadCategoryCreationModal();
+                    loadEventCreationModal();
+                    loadImportantAndUpcoming();
+                    loadPlannerMiscNotesModal();
+                    loadPlannerMiscNotes();
                 },
             });
             try{
@@ -129,9 +151,10 @@ function changeViewDate(size, amount) {
                 cal.handleDateChange();
             } catch(err) {
                 throw "The miniCalendar had an update attempted on it, but it doesn't exist."
-            }*/
+            }
             document.getElementById("planner-date-month-selector").innerHTML = month_names[viewDate.getMonth()];
-            // #TODO: Show the current date as MM/DD formate (11/27)
+            document.getElementById("planner-date-day-selector").innerHTML = (viewDate.getMonth() + 1) + "/" + viewDate.getDate();
+            document.getElementById("planner-day-full-date").innerHTML = getFullDate();
             break;
         case "Week":
             start_date = getDateOfDay(0);
@@ -330,6 +353,8 @@ function loadPlannerMiscNotesModal() {
 
 // Store the month lengths & names
 var month_length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    day_names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    day_names_long = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     month_names = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July',
                    'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
     month_names_long = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -454,8 +479,8 @@ this.miniCal = function() {
         // Loop for 6 weeks always (max number needed for the longest month)
         for(var calWeek = 0; calWeek < 6; calWeek++) {
             // If we're in the current week, highlight it.
-            if((day - now.getDay() == dayTracker.getDate() && prevDays != 7) ||
-               (calWeek == 0 && day - now.getDay() < 1)) {
+            if(getLayoutType() == "Week" && ((day - now.getDay() == dayTracker.getDate() && prevDays != 7) ||
+               (calWeek == 0 && day - now.getDay() < 1))) {
                 html += '<tr class="planner-mini-calendar-active">';
             }
             else {
@@ -481,6 +506,9 @@ this.miniCal = function() {
                 // Post month filler days
                 else if(postDays > 0 && dayTracker.getMonth() != month) {
                     html += 'class="planner-mini-calendar-inactive"';
+                }
+                else if(getLayoutType() == "Day" && dayTracker.getDate() == getViewDate().getDate()) {
+                    html += 'class="planner-mini-calendar-day-active"';
                 }
                 
                 // Close the td bracket & put the date in, & update the date

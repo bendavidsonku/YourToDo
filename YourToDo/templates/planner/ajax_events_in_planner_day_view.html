@@ -1,0 +1,102 @@
+<div class="planner-day-content">
+    <table class="planner-container planner-container-content">
+        <!-- Column Specification: Left sidebar, 7 days -->
+        <col class="planner-week-left-sidebar">
+        <col class="planner-day-time-table">
+        <col class="planner-day-event-container">
+        <col class="planner-month-sidebar">
+        <tr>
+            <!-- Categories Legend -->
+            <td class="planner-day-left-sidebar">
+                {% for category in categoriesInPlanner %}
+                <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
+                    <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
+                        <span id="week-planner-category-names">{{ category.get_name }}</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </td>
+
+            <!-- Time Bar (vertical) -->
+            <td>
+                <table class="planner-day-content-table time-table">
+                    <tr><td>12 am</td></tr>
+                    <tr><td>1 am</td></tr>
+                    <tr><td>2 am</td></tr>
+                    <tr><td>3 am</td></tr>
+                    <tr><td>4 am</td></tr>
+                    <tr><td>5 am</td></tr>
+                    <tr><td>6 am</td></tr>
+                    <tr><td>7 am</td></tr>
+                    <tr><td>8 am</td></tr>
+                    <tr><td>9 am</td></tr>
+                    <tr><td>10 am</td></tr>
+                    <tr><td>11 am</td></tr>
+                    <tr><td>12 pm</td></tr>
+                    <tr><td>1 pm</td></tr>
+                    <tr><td>2 pm</td></tr>
+                    <tr><td>3 pm</td></tr>
+                    <tr><td>4 pm</td></tr>
+                    <tr><td>5 pm</td></tr>
+                    <tr><td>6 pm</td></tr>
+                    <tr><td>7 pm</td></tr>
+                    <tr><td>8 pm</td></tr>
+                    <tr><td>9 pm</td></tr>
+                    <tr><td>10 pm</td></tr>
+                    <tr><td>11 pm</td></tr>
+                </table>
+            </td>
+
+            <!-- Event Container -->
+            <td>
+                Howdy
+            </td>
+
+            <!-- Right Sidebar -->
+            <td>
+                <table class="planner-day-right-sidebar"> 
+                    <tr class="planner-month-sidebar-category">
+                        <td>
+                            All Day Events
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-info">
+                        <td>
+                            <div id="all-day-events-list">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-category">
+                        <td>
+                            Important &amp; Upcoming
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-info">
+                        <td class="padding-0">
+                            <div id="important-and-upcoming-list">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-category">
+                        <td>
+                            Recently Completed
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-info">
+                        <td>
+                            Events that you have recently marked as 'completed' will show up here.
+                        </td>
+                    </tr>
+                    <tr class="planner-month-sidebar-category">
+                        <td class="planner-bottom-settings">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ajax-create-event-modal">New Event</button>
+                            <button type="button" class="btn btn-default planner-week-bottom-settings-spacing" data-toggle="modal" data-target="#ajax-create-category-modal">New Category</button><br>
+
+                            <span class="glyphicon glyphicon-cog"></span><span class="planner-month-bottom-settings">Settings</span>
+                        </td> 
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

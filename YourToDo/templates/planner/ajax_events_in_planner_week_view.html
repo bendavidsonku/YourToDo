@@ -12,11 +12,11 @@
         {% for category in categoriesInPlanner %}
         <tr class="planner-week-row">
 
-                <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
+            <td class="planner-week-category-container planner-category-color-{{ category.get_color }}">
                 <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
                     <span id="week-planner-category-names">{{ category.get_name }}</span>
                 </button>
-                </td>
+            </td>
             <td class="planner-week-event-block">
                 <table class="planner-week-event-container">
                     {% for event in eventsInViewStartDate %}
