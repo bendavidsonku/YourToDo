@@ -62,7 +62,14 @@
                     </tr>
                     <tr class="planner-month-sidebar-info planner-day-info">
                         <td class="no-padding">
-                            <div id="all-day-events-list">
+                            <div id="all-day-events-list" class="padding-5">
+                                {% for event in allDayEvents %}
+                                <div class="important-and-upcoming-event update-event-modal-button" id="{{ event.get_event_id }}">
+                                    <span class="planner-category-color-{{ event.get_parentCategory.get_color }} important-and-upcoming-event-span">
+                                        {{ event.get_parentCategory.get_name }}: {{ event.get_name }}
+                                    </span>
+                                </div>
+                                {% endfor %}
                             </div>
                         </td>
                     </tr>
@@ -89,7 +96,7 @@
                         </td>
                     </tr>
                     <tr class="planner-month-sidebar-category">
-                        <td class="planner-bottom-settings padding-5">
+                        <td class="planner-bottom-settings planner-day-settings padding-5">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ajax-create-event-modal">New Event</button>
                             <button type="button" class="btn btn-default planner-week-bottom-settings-spacing" data-toggle="modal" data-target="#ajax-create-category-modal">New Category</button><br>
 

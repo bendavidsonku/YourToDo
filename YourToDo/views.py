@@ -109,14 +109,18 @@ def loadPlannerDayEvents(request):
             context = {}
             context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
 
-            #Get startDate and endDate out of the ajax data that was passed in
-            dateString = request.POST.get("view_date", "")
-            date = datetime.datetime.strptime(dateString, "%Y-%m-%d")
+            # Get the input start date
+            date = request.POST.get("date", "")
 
-            allEventsInPlanner = Event.objects.get_all_events(user)
+            # Get the date as a datetime objects
+            today = datetime.datetime.strptime(date, "%Y-%m-%d")
+
+            timedEvents = Event.objects.get_all_events(user).exclude(timeStart = None)
+            untimedEvents = Event.objects.get_all_events(user).filter(timeStart = None)
             
-            context['events'] = allEventsInPlanner.filter(dateOfEvent = date)
-
+            context['allDayEvents'] = untimedEvents.filter(dateOfEvent = today)
+            context['timedEvents'] = timedEvents.filter(dateOfEvent = today)
+            
             return render_to_response('planner/ajax_events_in_planner_day_view.html', context)
 
 def loadPlannerWeekEvents(request):
