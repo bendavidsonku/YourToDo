@@ -9,7 +9,6 @@
                     </h4>
                  </div>
                  <div class = "modal-body">
-                    <h4>Update Category Information:</h4>
                     <p id="retrieve-category-id">
                         {% if returnCategory %}
                             <label for="category-name">Name: (required)</label><input class="form-control category-update-name-input" type="text" id="{{ returnCategory.get_category_id }}" value="{{ returnCategory.get_name }}">
@@ -21,7 +20,7 @@
                         <label for="category-color">Color: (required)</label>
                         <div id="category-color-dropdown" class="dropdown">
                             {% if returnCategory %}
-                                <button href="#category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-color-dropdown-button "><span class="attribute-label">{{ returnCategory.get_color_forHTML }}</span><span class="caret"></span></button>
+                                <button href="#category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle update-category-color-dropdown-button"><span class="attribute-label">{{ returnCategory.get_color_forHTML }}</span><span class="caret"></span></button>
                             {% else %}
                                 <button href="#category-color-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-color-dropdown-button "><span class="attribute-label">Choose Color</span><span class="caret"></span></button>
                             {% endif %}
@@ -48,7 +47,7 @@
                         <label for="category-order">Order: (required)</label>
                         <div id="category-order-dropdown" class="dropdown">
                             {% if returnCategory %}
-                                <button href="#category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-order-dropdown-button"><span class="attribute-label">{{ returnCategory.get_order|add:"1" }}</span><span class="caret"></span></button>
+                                <button href="#category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle update-category-order-dropdown-button"><span class="attribute-label">{{ returnCategory.get_order|add:"1" }}</span><span class="caret"></span></button>
                             {% else %}
                                 <button href="#category-order-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle category-order-dropdown-button"><span class="attribute-label">Choose Order</span><span class="caret"></span></button>
                             {% endif %}
@@ -154,10 +153,10 @@
         var categoryName = $(".category-update-name-input").val();
         var categoryId = $('#retrieve-category-id input').attr('id');
 
-        var categoryColor = $(".category-color-dropdown-button").text();
+        var categoryColor = $(".update-category-color-dropdown-button").text();
         categoryColor = categoryColor.replace("Choose Color", "");
 
-        var categoryOrder = $(".category-order-dropdown-button").text();
+        var categoryOrder = $(".update-category-order-dropdown-button").text();
         categoryOrder = categoryOrder.replace("Choose Order", "");
         
         var validForm = true;
@@ -211,8 +210,8 @@
     // Handles reseting the category update modal on close or update
     $('#ajax-update-category-modal').on('hidden.bs.modal', function(){
         $('.category-update-name-input').val("");
-        $('.category-color-dropdown-button').html("<span class='attribute-label'>Choose Color</span><span class='caret'></span>");
-        $('.category-order-dropdown-button').html("<span class='attribute-label'>Choose Order</span><span class='caret'></span>");
+        $('.update-category-color-dropdown-button').html("<span class='attribute-label'>Choose Color</span><span class='caret'></span>");
+        $('.update-category-order-dropdown-button').html("<span class='attribute-label'>Choose Order</span><span class='caret'></span>");
         $('#update-category-error-message-1').hide();
         $('#update-category-error-message-2').hide();
     });
