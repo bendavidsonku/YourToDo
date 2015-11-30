@@ -216,8 +216,7 @@ def loadRecentlyCompletedEvents(request):
 
         threeDaysBefore = threeDaysBefore.strftime("%Y-%m-%d")
         threeDaysAhead = threeDaysAhead.strftime("%Y-%m-%d")
-        print(threeDaysBefore)
-        print(threeDaysAhead)
+        
         context['recentlyCompletedEvents'] = Event.objects.get_all_events(user).filter(dateOfEvent__range=[threeDaysBefore, threeDaysAhead]).filter(complete = True)
 
         return render_to_response('planner/ajax_recently_completed.html', context)
