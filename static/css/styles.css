@@ -833,6 +833,7 @@ ul.navbar-nav>li {
 
 .planner-day-right-sidebar {
 	height: 744px;
+	width: 100%;
 	border-style: hidden;
 	border-left: 1px solid #fff;
 }
