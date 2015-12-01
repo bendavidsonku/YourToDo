@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 from YourToDo.forms import ContactForm
 from planner.models import Planner, Category, Event
+from userprofile.models import UserProfile
 
 # Static Page Views
 def about(request):
@@ -49,6 +50,69 @@ def contact_success(request):
 def logout(request):
 	auth.logout(request)
 	return HttpResponseRedirect('/')
+
+@login_required
+def loadUpdateAccountInformation(request):
+    context = {}
+    loadUpdateAccountInformationForm = request.POST.get("load_user_information_form", "")
+
+    if loadUpdateAccountInformationForm == "ready":
+        username = None
+
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        context['user'] = user
+        context['userProfile'] = user.profile
+
+        return render_to_response('userprofile/user-account-information.html', context, context_instance = RequestContext(request))
+
+
+    return render_to_response('userprofile/ajax_user_account_information_container.html', context, context_instance = RequestContext(request))
+
+
+def updateAccountInformation(request):
+    typeOfDataIncoming = request.POST.get("ajax_update_account_data_type", "")
+
+    if typeOfDataIncoming == "html":
+        updateUserProfileFirstName = request.POST.get("ajax_user_first_name", "")
+        updateUserProfileLastName = request.POST.get("ajax_user_last_name", "")
+        updateUserProfilePhoneNumber = request.POST.get("ajax_user_phone_number", "")
+        updateUserProfileDateOfBirth = request.POST.get("ajax_user_date_of_birth", "")
+
+        username = None
+
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        oldUserProfile = user.profile
+
+        if oldUserProfile.get_firstName() != updateUserProfileFirstName:
+            oldUserProfile.set_firstName(updateUserProfileFirstName)
+
+        if oldUserProfile.get_lastName() != updateUserProfileLastName:
+            oldUserProfile.set_lastName(updateUserProfileLastName)
+
+        if oldUserProfile.get_phoneNumber() != updateUserProfilePhoneNumber:
+            oldUserProfile.set_phoneNumber(updateUserProfilePhoneNumber)
+
+        if oldUserProfile.get_dateOfBirth_forHTML() == None and updateUserProfileDateOfBirth != "":
+            oldUserProfile.set_dateOfBirth(updateUserProfileDateOfBirth)
+        elif oldUserProfile.get_dateOfBirth_forHTML() == None and updateUserProfileDateOfBirth == "":
+            pass
+        elif oldUserProfile.get_dateOfBirth_forHTML() != updateUserProfileDateOfBirth:
+            if updateUserProfileDateOfBirth != "":
+                oldUserProfile.set_dateOfBirth(updateUserProfileDateOfBirth)
+            elif updateUserProfileDateOfBirth == "":
+                oldUserProfile.set_dateOfBirth(None)
+
+        return HttpResponse('')
+
+
 
 @login_required(login_url='/accounts/login/')
 def PlannerView(request):

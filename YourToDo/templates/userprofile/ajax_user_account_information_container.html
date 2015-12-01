@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}Account Information{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+    <script src="{% static 'js/userprofile.js' %}"></script>
+
+    {% csrf_token %}
+	<span id="user-account-information-render-area">
+	</span>
+
+{% endblock %}
