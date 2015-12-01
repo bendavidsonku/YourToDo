@@ -50,7 +50,7 @@ def logout(request):
 	auth.logout(request)
 	return HttpResponseRedirect('/')
 
-@login_required(login_url='/accounts/login/')
+@login_required
 def PlannerView(request):
     plannerLayoutSelection = request.POST.get("planner_layout", "")
     context = {}
@@ -111,15 +111,48 @@ def loadPlannerDayEvents(request):
 
             # Get the input start date
             date = request.POST.get("date", "")
-
-            # Get the date as a datetime objects
             today = datetime.datetime.strptime(date, "%Y-%m-%d")
 
-            timedEvents = Event.objects.get_all_events(user).exclude(timeStart = None)
             untimedEvents = Event.objects.get_all_events(user).filter(timeStart = None)
-            
             context['allDayEvents'] = untimedEvents.filter(dateOfEvent = today)
-            context['timedEvents'] = timedEvents.filter(dateOfEvent = today)
+
+            timeBlocks = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am',
+                          '6 am', '7 am', '8 am', '9 am', '10 am', '11 am',
+                          '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm',
+                          '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm']
+            timedEvents = Event.objects.get_all_events(user).exclude(timeStart = None)
+            timedEvents = timedEvents.filter(dateOfEvent = today)
+            
+            eventList = []
+            durationList = []
+            passEvent = False
+
+            # For each time block, associate a timeBlock with it, events, if any, and their durations
+            # If no events, append a duration of -1.
+
+            # This assumes no event overlap, so we'll have to take that into account later on.
+
+            for index, block in enumerate(timeBlocks):
+                for event in timedEvents:
+                    start_time = datetime.time.strftime(event.get_timeStart(), "%H")
+
+                    if int(start_time) == index:
+                        end_time = datetime.time.strftime(event.get_timeEnd(), "%H")
+                        duration = int(end_time) - int(start_time)
+                        durationList.append(duration)
+                        eventList.append(event)
+                        passEvent = False
+                        break
+                    else:
+                        passEvent = True
+
+                if passEvent or len(timedEvents) == 0:
+                    durationList.append(0)
+                    eventList.append("NO")
+                    passEvent = False
+            
+            context['timedEvents'] = zip(eventList, durationList)
+            context['timeBlocks'] = timeBlocks
             
             return render_to_response('planner/ajax_events_in_planner_day_view.html', context)
 
