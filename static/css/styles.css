@@ -591,6 +591,10 @@ ul.navbar-nav>li {
 	padding: 5px;
 }
 
+.padding-10 {
+	padding: 10px;
+}
+
 .padding-0 {
 	padding: 0px !important;
 }
