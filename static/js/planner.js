@@ -133,7 +133,7 @@ function changeViewDate(size, amount) {
                 data: 
                 {
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                    view_date: start_date,
+                    date: start_date,
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#events-in-day-view').empty().append(data);
