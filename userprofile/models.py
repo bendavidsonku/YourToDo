@@ -10,7 +10,7 @@ class UserProfile(models.Model):
 	lastName = models.CharField(max_length = 60)
 	phoneNumber = models.CharField(max_length = 15)
 	dateOfBirth = models.DateField(auto_now = False, auto_now_add = False, null = True)
-	profilePicture = models.ImageField(upload_to = 'static/media/profile-pictures', null = True)
+	profilePicture = models.ImageField(upload_to = 'profile-pictures', null = True)
 
 	def __unicode__(self):
 		return self.user.username
@@ -53,6 +53,7 @@ class UserProfile(models.Model):
 		else:
 			return None
 
-
+	def get_profilePicture(self):
+		return self.profilePicture
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user = u)[0])
