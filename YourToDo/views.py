@@ -371,23 +371,10 @@ def loadImportantAndUpcoming(request):
 
         todaysDate = todaysDate.strftime("%Y-%m-%d")
         threeWeeksAhead = threeWeeksAhead.strftime("%Y-%m-%d")
+        currentTime = datetime.datetime.now()
 
-        todaysDate = datetime.datetime.strptime(todaysDate, "%Y-%m-%d")
-        threeWeeksAhead = datetime.datetime.strptime(threeWeeksAhead, "%Y-%m-%d")
-
-        importantAndUpcomingList = []
-
-        for event in context['eventsInPlanner']:
-            if event.get_important() == True:
-                tempDate = event.get_dateOfEvent().strftime("%Y-%m-%d")
-                tempDate = datetime.datetime.strptime(tempDate, "%Y-%m-%d")
-                if tempDate >= todaysDate and tempDate <= threeWeeksAhead:
-                    importantAndUpcomingList.append(event)
-                else:
-                    pass
-
-        context['importantAndUpcoming'] = importantAndUpcomingList
-
+        context['importantAndUpcoming']  = Event.objects.get_all_events(user).filter(dateOfEvent__range=[todaysDate, threeWeeksAhead]).filter(important = True).exclude(dateOfEvent = todaysDate, timeEnd__lt = currentTime)
+        
         return render_to_response('planner/ajax_important_and_upcoming.html', context)
 
 def loadCategoryCreationModal(request):
