@@ -3,6 +3,9 @@
 		<div class="recently-completed-event update-event-modal-button" id="{{ event.get_event_id }}">
 			<span class="planner-category-color-{{ event.get_parentCategory.get_color }} recently-completed-event-span">
 				{{ event.get_parentCategory.get_name }}: {{ event.get_name }}
+                {% if event.get_complete %}
+                <span class="completed-event-overlay sidebar-icon"></span>
+                {% endif %}
 			</span>
 		</div>
 	{% endfor %}
