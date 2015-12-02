@@ -554,7 +554,6 @@ hideOverflowEvents = function(layoutType) {
             monthPadder = 0;
             dateTracker = getViewDate();
             dateTracker.setDate(dateTracker.getDate() - dateTracker.getDay());
-            console.log(dateTracker);
             break;
         case "MONTH":
             contentBlocks = $(".planner-month-event-container");
