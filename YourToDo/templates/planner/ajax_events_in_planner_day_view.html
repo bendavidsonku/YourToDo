@@ -20,36 +20,37 @@
             <!-- Time Bar (vertical) -->
             <td>
                 <table class="planner-day-content-table time-table">
-                    <tr><td>12 am</td></tr>
-                    <tr><td>1 am</td></tr>
-                    <tr><td>2 am</td></tr>
-                    <tr><td>3 am</td></tr>
-                    <tr><td>4 am</td></tr>
-                    <tr><td>5 am</td></tr>
-                    <tr><td>6 am</td></tr>
-                    <tr><td>7 am</td></tr>
-                    <tr><td>8 am</td></tr>
-                    <tr><td>9 am</td></tr>
-                    <tr><td>10 am</td></tr>
-                    <tr><td>11 am</td></tr>
-                    <tr><td>12 pm</td></tr>
-                    <tr><td>1 pm</td></tr>
-                    <tr><td>2 pm</td></tr>
-                    <tr><td>3 pm</td></tr>
-                    <tr><td>4 pm</td></tr>
-                    <tr><td>5 pm</td></tr>
-                    <tr><td>6 pm</td></tr>
-                    <tr><td>7 pm</td></tr>
-                    <tr><td>8 pm</td></tr>
-                    <tr><td>9 pm</td></tr>
-                    <tr><td>10 pm</td></tr>
-                    <tr><td>11 pm</td></tr>
+                    {% for time in timeBlocks %}
+                    <tr><td>{{ time }}</td></tr>
+                    {% endfor %}
                 </table>
             </td>
 
             <!-- Event Container -->
             <td>
-                Howdy
+                <table class="planner-day-content-table event-table">
+                    {% for event, duration in timedEvents %}
+                        {% if duration > 0 %}
+                        <tr>
+                            <td rowspan="{{ duration }}">
+                                <div class="update-event-modal-button planner-day-timed-event" id="{{ event.get_event_id }}" style="height: 100%">
+                                    <span class="planner-category-color-{{ event.get_parentCategory.get_color }}" id="planner-day-event-{{ event.get_event_id }}">
+                                        {{ event.get_timeStart }} - {{ event.get_name }}
+                                    </span>
+                                </div>
+                            </td>
+                            {% for row in duration|make_list %}
+                                {% if forloop.first %}
+                                {% else %}
+                                </tr><tr><td></td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% else %}
+                        <tr><td></td></tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </td>
 
             <!-- Right Sidebar -->
@@ -57,12 +58,19 @@
                 <table class="planner-day-right-sidebar"> 
                     <tr class="planner-month-sidebar-category">
                         <td>
-                            All Day Events
+                            Tasks for Today
                         </td>
                     </tr>
                     <tr class="planner-month-sidebar-info planner-day-info">
                         <td class="no-padding">
-                            <div id="all-day-events-list">
+                            <div id="all-day-events-list" class="padding-5">
+                                {% for event in allDayEvents %}
+                                <div class="important-and-upcoming-event update-event-modal-button" id="{{ event.get_event_id }}">
+                                    <span class="planner-category-color-{{ event.get_parentCategory.get_color }} important-and-upcoming-event-span">
+                                        {{ event.get_parentCategory.get_name }}: {{ event.get_name }}
+                                    </span>
+                                </div>
+                                {% endfor %}
                             </div>
                         </td>
                     </tr>
@@ -89,7 +97,7 @@
                         </td>
                     </tr>
                     <tr class="planner-month-sidebar-category">
-                        <td class="planner-bottom-settings padding-5">
+                        <td class="planner-bottom-settings planner-day-settings padding-10">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ajax-create-event-modal">New Event</button>
                             <button type="button" class="btn btn-default planner-week-bottom-settings-spacing" data-toggle="modal" data-target="#ajax-create-category-modal">New Category</button><br>
 
