@@ -130,6 +130,7 @@ def updateUserProfilePicture(request):
             profilePictureForm.save()
             return HttpResponse('')
 
+@login_required
 def PlannerView(request):
     plannerLayoutSelection = request.POST.get("planner_layout", "")
     context = {}
