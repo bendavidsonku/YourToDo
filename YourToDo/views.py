@@ -99,7 +99,6 @@ def updateAccountInformation(request):
         oldUserProfile = user.profile
 
         if oldUserProfile.get_firstName() != updateUserProfileFirstName:
-            print('changed')
             oldUserProfile.set_firstName(updateUserProfileFirstName)
 
         if oldUserProfile.get_lastName() != updateUserProfileLastName:
