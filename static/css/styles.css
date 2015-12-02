@@ -481,7 +481,8 @@ ul.navbar-nav>li {
 
 .planner-week-content {
 	overflow-y: hidden;
-	max-height: 510px;
+	overflow-x: hidden;
+	max-height: 511px;
 }
 
 .planner-week-row > td:not(:first-child) {
