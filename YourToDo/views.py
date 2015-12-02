@@ -219,6 +219,10 @@ def loadPlannerDayEvents(request):
                     if int(start_time) == index:
                         end_time = datetime.time.strftime(event.get_timeEnd(), "%H")
                         duration = int(end_time) - int(start_time)
+
+                        if duration < 1:
+                            duration = 1
+                            
                         durationList.append(duration)
                         eventList.append(event)
                         passEvent = False
