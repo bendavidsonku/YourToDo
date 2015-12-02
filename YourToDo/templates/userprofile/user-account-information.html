@@ -1,0 +1,122 @@
+<div class="container">
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+			<div class="center-block">
+				<h2 class="account-information-plain-text">Account Information</h2>
+			</div>
+				{% if userProfile.firstName != None %}
+					{% if userProfile.firstName == "" %}
+						<input class="form-control account-information-field" id="account-information-first-name" type="text" placeholder="First Name">
+					{% else %}
+					<input class="form-control account-information-field" id="account-information-first-name" type="text" value="{{ userProfile.firstName }}">
+					{% endif %}
+				{% else %}
+					<input class="form-control account-information-field" id="account-information-first-name" type="text" placeholder="First Name">
+				{% endif %}
+
+				{% if userProfile.lastName != None %}
+					{% if userProfile.lastName == "" %}
+						<input class="form-control account-information-field" id="account-information-last-name" type="text" placeholder="Last Name">
+					{% else %}
+					<input class="form-control account-information-field" id="account-information-last-name" type="text" value="{{ userProfile.lastName }}">
+					{% endif %}
+				{% else %}
+					<input class="form-control account-information-field" id="account-information-last-name" type="text" placeholder="Last Name">
+				{% endif %}
+
+				{% if user.email != None %}
+					<input class="form-control account-information-field" id="account-information-email" type="text" value="{{ user.email }}" readonly>
+				{% else %}
+					<input class="form-control account-information-field" id="account-information-email" type="text" placeholder="Email" readonly>
+				{% endif %}
+
+				{% if userProfile.phoneNumber != None %}
+					{% if userProfile.phoneNumber == "" %}
+						<input class="form-control account-information-field" id="account-information-phone-number" type="text" placeholder="Phone Number">
+					{% else %}
+					<input class="form-control account-information-field" id="account-information-phone-number" type="text" value="{{ userProfile.phoneNumber }}">
+					{% endif %}
+				{% else %}
+					<input class="form-control account-information-field" id="account-information-phone-number" type="text" placeholder="Phone Number">
+				{% endif %}
+
+
+				{% if userProfile.dateOfBirth != None %}
+					<span id="date-placeholder-wrapper">
+						<input class="form-control account-information-field" id="account-information-date-of-birth" type="date" placeholder="Date of Birth:" value="{{ userProfile.get_dateOfBirth_forHTML }}">
+					</span>
+				{% else %}
+					<span id="date-placeholder-wrapper">
+						<input class="form-control account-information-field" id="account-information-date-of-birth" type="date" placeholder="Date of Birth:">
+					</span>
+				{% endif %}
+
+				{% if profilePictureForm %}
+				<div class="account-information-field">
+					<form action="" method="post" id="upload-profile-picture-form" enctype="multipart/form-data">{% csrf_token %}
+						<span id="upload-profile-picture-data">
+							{{ profilePictureForm.profilePicture }}
+						</span>
+					</form>
+				</div>
+				<br>
+				<br>
+				{% else %}
+					<label for="#account-information-profile-picture" id="account-information-profile-picture-label">Upload Profile Picture Below</label><input class="account-information-field" id="account-information-profile-picture" type="file" name="user-profile-picture" accept="image/*">
+				{% endif %}
+
+				<button class="btn btn-success" id="submit-account-information">Update Account Information</button>
+
+				<div>
+	                <br>
+	                <p>
+	                	<span id='update-profile-success-message-render-area' style="display: none">
+	                	</span>
+	                </p>
+                </div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	$(function() {
+		$('#submit-account-information').click(function() {
+			var ajaxUpdateAccountDataType = "html";
+			var userFirstName = $('#account-information-first-name').val();
+			var userLastName = $('#account-information-last-name').val();
+			var userPhoneNumber = $('#account-information-phone-number').val();
+			var userDateOfBirth = $('#account-information-date-of-birth').val();
+			
+			$.ajax({
+				url: "/update-user-information/",
+				type: "POST",
+				dataType: 'html',
+				data:
+				{
+					csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+					ajax_update_account_data_type: ajaxUpdateAccountDataType,
+					ajax_user_first_name: userFirstName,
+					ajax_user_last_name: userLastName,
+					ajax_user_phone_number: userPhoneNumber,
+					ajax_user_date_of_birth: userDateOfBirth
+				},
+			});
+
+			var userProfilePicture = new FormData($('#upload-profile-picture-form').get(0));
+
+			$.ajax({
+				url: "/update-user-profile-picture/",
+				type: "POST",
+				data: userProfilePicture,
+				cache: false,
+				processData: false,
+				contentType: false,
+			});
+
+			setTimeout(function(){ loadUserAccountInformation(true);}, 500);
+
+		});
+	});
+
+</script>

@@ -239,6 +239,9 @@ INSTALLED_APPS = (
 
     # Planner app installation
     'planner',
+
+    # User Profile App
+    'userprofile',
     
     # "mezzanine.accounts",
     # "mezzanine.mobile",
@@ -343,3 +346,6 @@ else:
 ACCOUNT_ACTIVATION_DAYS = 1
 REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = '/planner'
+
+# User profile: auth profile extension
+AUTH_PROFILE_MODULE = 'userprofile.UserProfile'

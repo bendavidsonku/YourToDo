@@ -631,7 +631,7 @@ ul.navbar-nav>li {
 /******************************************* Month Planner Styles *********************************************/
 .planner-month-content {
 	width: 100%;
-	height: 632px;
+	height: 782px;
 }
 
 .planner-month-content-container {
@@ -1537,4 +1537,72 @@ input[type="checkbox"] {
 	padding: 0;
 	border: none;
 	border-top: 1px #424875 solid;
+}
+
+/*------------------ Begin Account Information STyles ----------------------*/
+.account-information-plain-text {
+	color: #fff;
+}
+
+.account-information-field {
+	width: 100%;
+	height: 60px;
+	font-size: 18px;
+	margin-bottom: 25px;
+}
+
+#date-placeholder-wrapper input[type="date"]:before {
+	content: attr(placeholder) !important;
+	margin-right: 5px;
+	color: #aaa;
+}
+
+#date-placeholder-wrapper input[type="date"]:focus:before,
+#date-placeholder-wrapper input[type="date"]:valid:before {
+	content: "";
+}
+
+#account-information-profile-picture {
+	color: #fff;
+}
+
+#account-information-profile-picture-label {
+	color: #fff;
+	font-size: 20px;
+}
+
+#submit-account-information {
+	width: 300px;
+	height: 60px;
+	font-size: 18px;
+}
+
+#submit-account-information {
+	width: 100%;
+}
+
+#account-information-email {
+	background-color: #C3C37A;
+}
+
+#upload-profile-picture-data {
+	color: #fff;
+}
+
+#upload-profile-picture-data a {
+	color: #6c6;
+}
+
+#update-profile-success-message-render-area {
+	color: #fff;
+	display: block;
+	background-color: #5cb85c;
+	padding: 5px;
+	width: 100%;
+	border-radius: 5px;
+	text-align: center;
+}
+
+#settings-day-week-month-button {
+	color: #fff;
 }

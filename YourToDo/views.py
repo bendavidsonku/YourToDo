@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib import auth
 from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -16,6 +17,8 @@ from django.contrib.auth.decorators import login_required
 
 from YourToDo.forms import ContactForm
 from planner.models import Planner, Category, Event
+from userprofile.models import UserProfile
+from userprofile.forms import UserAccountSettingsImageUploadForm
 
 # Static Page Views
 def about(request):
@@ -51,6 +54,82 @@ def logout(request):
 	return HttpResponseRedirect('/')
 
 @login_required
+def loadUpdateAccountInformation(request):
+    context = {}
+
+    loadUpdateAccountInformationForm = request.POST.get("load_user_information_form", "")
+
+    if loadUpdateAccountInformationForm == "ready":
+        username = None
+
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        context['user'] = user
+        context['userProfile'] = user.profile
+
+        profilePictureForm = UserAccountSettingsImageUploadForm(request.POST, instance = request.user.profile)
+
+        context['profilePictureForm'] = profilePictureForm
+
+        return render_to_response('userprofile/user-account-information.html', context, context_instance = RequestContext(request))
+
+
+    return render_to_response('userprofile/ajax_user_account_information_container.html', context, context_instance = RequestContext(request))
+
+
+def updateAccountInformation(request):
+    typeOfDataIncoming = request.POST.get("ajax_update_account_data_type", "")
+
+    if typeOfDataIncoming == "html":
+        updateUserProfileFirstName = request.POST.get("ajax_user_first_name", "")
+        updateUserProfileLastName = request.POST.get("ajax_user_last_name", "")
+        updateUserProfilePhoneNumber = request.POST.get("ajax_user_phone_number", "")
+        updateUserProfileDateOfBirth = request.POST.get("ajax_user_date_of_birth", "")
+
+        username = None
+
+        if request.user.is_authenticated():
+            username = request.user.username
+
+        user = User.objects.get(username = username)
+
+        oldUserProfile = user.profile
+
+        if oldUserProfile.get_firstName() != updateUserProfileFirstName:
+            oldUserProfile.set_firstName(updateUserProfileFirstName)
+
+        if oldUserProfile.get_lastName() != updateUserProfileLastName:
+            oldUserProfile.set_lastName(updateUserProfileLastName)
+
+        if oldUserProfile.get_phoneNumber() != updateUserProfilePhoneNumber:
+            oldUserProfile.set_phoneNumber(updateUserProfilePhoneNumber)
+
+        if oldUserProfile.get_dateOfBirth_forHTML() == None and updateUserProfileDateOfBirth != "":
+            oldUserProfile.set_dateOfBirth(updateUserProfileDateOfBirth)
+        elif oldUserProfile.get_dateOfBirth_forHTML() == None and updateUserProfileDateOfBirth == "":
+            pass
+        elif oldUserProfile.get_dateOfBirth_forHTML() != updateUserProfileDateOfBirth:
+            if updateUserProfileDateOfBirth != "":
+                oldUserProfile.set_dateOfBirth(updateUserProfileDateOfBirth)
+            elif updateUserProfileDateOfBirth == "":
+                oldUserProfile.set_dateOfBirth(None)
+
+    return HttpResponse('')
+
+
+@csrf_exempt
+def updateUserProfilePicture(request):
+    if request.method == 'POST':
+
+        profilePictureForm = UserAccountSettingsImageUploadForm(request.POST, request.FILES, instance = request.user.profile)
+
+        if profilePictureForm.is_valid():
+            profilePictureForm.save()
+            return HttpResponse('')
+
 def PlannerView(request):
     plannerLayoutSelection = request.POST.get("planner_layout", "")
     context = {}
@@ -266,8 +345,6 @@ def loadRecentlyCompletedEvents(request):
         context['recentlyCompletedEvents'] = Event.objects.get_all_events(user).filter(dateOfEvent__range=[threeDaysBefore, threeDaysAhead]).filter(complete = True)
 
         return render_to_response('planner/ajax_recently_completed.html', context)
-    
-
 
 
 def loadImportantAndUpcoming(request):
@@ -335,6 +412,7 @@ def loadEventCreationModal(request):
 
         return render_to_response('planner/ajax_load_new_event_modal.html', context)
 
+
 def loadEventUpdateModal(request):
     if request.method == 'GET':
         context = {}
@@ -365,6 +443,7 @@ def loadEventUpdateModal(request):
         context['categoriesInPlanner'] = Category.objects.get_categories_in_order(user)
 
         return render_to_response('planner/ajax_load_update_event_modal.html', context)
+
 
 def loadCategoryUpdateModal(request):
     if request.method == 'GET':
@@ -466,6 +545,7 @@ def updateCategory(request):
 
     return HttpResponse('')
 
+
 def deleteCategory(request):
     if request.method == 'POST':
         username = None
@@ -478,6 +558,7 @@ def deleteCategory(request):
             Category.objects.delete_category(user, desiredCategoryToDeleteId)
 
     return HttpResponse('')
+
 
 def createNewCategory(request):
     if request.method == 'POST':
@@ -532,6 +613,7 @@ def createNewCategory(request):
             Category.objects.create_category(user, newCategoryName, newCategoryColor, newCategoryOrder)
 
     return HttpResponse('')
+
 
 def createNewEvent(request):
     if request.method == 'POST':
@@ -593,6 +675,7 @@ def createNewEvent(request):
                 Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
 
     return HttpResponse('')
+
 
 def updateEvent(request):
     if request.method == 'POST':
@@ -696,6 +779,7 @@ def updateEvent(request):
 
     return HttpResponse('')
 
+
 def deleteEvent(request):
     if request.method == 'POST':
         username = None
@@ -708,6 +792,7 @@ def deleteEvent(request):
             Event.objects.delete_event(user, desiredEventToDeleteId)
 
     return HttpResponse('')
+
 
 def loadPlannerNotes(request):
     if request.method == 'GET':
@@ -735,6 +820,7 @@ def loadPlannerNotes(request):
             context['planner'] = user.planner
 
         return render_to_response('planner/ajax_load_misc_notes_modal.html', context)
+
 
 def updatePlannerNotes(request):
     if request.method == 'POST':
