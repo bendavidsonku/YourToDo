@@ -51,9 +51,29 @@
 					</span>
 				{% endif %}
 
-				<label for="#account-information-profile-picture" id="account-information-profile-picture-label">Upload Profile Picture Below</label><input class="account-information-field" id="account-information-profile-picture" type="file" name="user-profile-picture" accept="image/*">
+				{% if profilePictureForm %}
+				<div class="account-information-field">
+					<form action="" method="post" id="upload-profile-picture-form" enctype="multipart/form-data">{% csrf_token %}
+						<span id="upload-profile-picture-data">
+							{{ profilePictureForm.profilePicture }}
+						</span>
+					</form>
+				</div>
+				<br>
+				<br>
+				{% else %}
+					<label for="#account-information-profile-picture" id="account-information-profile-picture-label">Upload Profile Picture Below</label><input class="account-information-field" id="account-information-profile-picture" type="file" name="user-profile-picture" accept="image/*">
+				{% endif %}
 
 				<button class="btn btn-success" id="submit-account-information">Update Account Information</button>
+
+				<div>
+	                <br>
+	                <p>
+	                	<span id='update-profile-success-message-render-area' style="display: none">
+	                	</span>
+	                </p>
+                </div>
 		</div>
 	</div>
 </div>
@@ -67,7 +87,7 @@
 			var userLastName = $('#account-information-last-name').val();
 			var userPhoneNumber = $('#account-information-phone-number').val();
 			var userDateOfBirth = $('#account-information-date-of-birth').val();
-			console.log(userDateOfBirth);
+			
 			$.ajax({
 				url: "/update-user-information/",
 				type: "POST",
@@ -81,10 +101,20 @@
 					ajax_user_phone_number: userPhoneNumber,
 					ajax_user_date_of_birth: userDateOfBirth
 				},
-				success: function(data, textStatus, jqXHR) {
-					loadUserAccountInformation();
-				},
 			});
+
+			var userProfilePicture = new FormData($('#upload-profile-picture-form').get(0));
+
+			$.ajax({
+				url: "/update-user-profile-picture/",
+				type: "POST",
+				data: userProfilePicture,
+				cache: false,
+				processData: false,
+				contentType: false,
+			});
+
+			setTimeout(function(){ loadUserAccountInformation(true);}, 500);
 
 		});
 	});

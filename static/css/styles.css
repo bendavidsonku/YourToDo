@@ -1530,3 +1530,21 @@ input[type="checkbox"] {
 #account-information-email {
 	background-color: #C3C37A;
 }
+
+#upload-profile-picture-data {
+	color: #fff;
+}
+
+#upload-profile-picture-data a {
+	color: #6c6;
+}
+
+#update-profile-success-message-render-area {
+	color: #fff;
+	display: block;
+	background-color: #5cb85c;
+	padding: 5px;
+	width: 100%;
+	border-radius: 5px;
+	text-align: center;
+}

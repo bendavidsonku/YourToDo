@@ -45,6 +45,8 @@ urlpatterns += patterns('',
     # User Profile Url
     url(r'^user-account-information/', 'YourToDo.views.loadUpdateAccountInformation', name='user-account-information'),
     url(r'^update-user-information/', 'YourToDo.views.updateAccountInformation', name='update-user-information'),
+    url(r'^update-user-profile-picture/', 'YourToDo.views.updateUserProfilePicture', name='update-user-profile-picture'),
+
     # Application Urls
     url(r'^planner/', 'YourToDo.views.PlannerView', name = "planner_view"),
     url(r'^load-day-events/', 'YourToDo.views.loadPlannerDayEvents', name="planner_load_day_events"),
