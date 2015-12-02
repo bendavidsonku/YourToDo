@@ -1548,3 +1548,7 @@ input[type="checkbox"] {
 	border-radius: 5px;
 	text-align: center;
 }
+
+#settings-day-week-month-button {
+	color: #fff;
+}
