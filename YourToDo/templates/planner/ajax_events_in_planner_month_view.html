@@ -62,7 +62,7 @@
             </td>
         </tr>
 
-        {% for day, date, class in information %}
+        {% for dayTimed, dayUntimed, date, class in information %}
             {% if forloop.counter0|divisibleby:7 %}
             <tr class="planner-month-row">
             {% endif %}
@@ -73,11 +73,28 @@
                                 {{ date }}
                             </td>
                         </tr>
-                        {% for event in day %}
+                        {% for event in dayTimed %}
                         <tr>
                             <td class="planner-category-color-{{ event.get_parentCategory.get_color }} event">
                                 <div class="update-event-modal-button" id="{{ event.get_event_id }}">
                                     {{ event.get_name }}
+                                    {% if event.get_complete %}
+                                    <span class="completed-event-overlay icon-pad-small"></span>
+                                    {% elif event.get_timeEnd != None %}
+                                    <span class="timed-event-overlay icon-pad-small"></span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% for event in dayUntimed %}
+                        <tr>
+                            <td class="planner-category-color-{{ event.get_parentCategory.get_color }} event">
+                                <div class="update-event-modal-button" id="{{ event.get_event_id }}">
+                                    {{ event.get_name }}
+                                    {% if event.get_complete %}
+                                    <span class="completed-event-overlay icon-pad-small"></span>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>

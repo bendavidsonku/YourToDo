@@ -57,7 +57,7 @@
                         <li class="dropdown">
                             <a data-target="#" id="acctDropDown" role="button" aria-haspopup="true" aria-expanded="false">
                                 {% if user.profile.get_profilePicture %}
-                                <img class="user-pic-nav" src="{{ user.profile.get_profilePicture.url }}" alt="{{ user.get_firstName }}'s Profile Picture" />
+                                <img class="user-pic-nav" src="{{ user.profile.get_profilePicture.url }}" alt="{{ user.profile.get_firstName }}'s Profile Picture" />
                                 {% else %}
                                 <img class="user-pic-nav" src="{% static 'img/default_user.png' %}" alt="User Profile Picture" />
                                 {% endif %}

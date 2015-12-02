@@ -335,7 +335,6 @@ ul.navbar-nav>li {
 
 
 /****************************************** Week Planner Styles ******************************************/
-
 .planner-container {
 	width: 100%;
 	border-left: 2px solid #424875;
@@ -1390,20 +1389,27 @@ input[type="checkbox"] {
 	display: inline-block;
 }
 
+.planner-day-tasks-event,
 .recently-completed-event {
-	padding-top: 3px;
 	padding-bottom: 3px;
-	display: inline-block;
 }
 
+.planner-day-tasks-event-span,
 .recently-completed-event-span {
+	border-style: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 	padding-left: 5px;
 	padding-right: 5px;
 	cursor: pointer;
+	display: inline-block;
+	width: 100%;
 	border: 1px solid rgba(0,0,0,.3);
 }
 
-.recently-completed-event-span:hover{
+.recently-completed-event-span:hover,
+.important-and-upcoming-event-span:hover {
 	border: 1px solid rgba(255,255,255,.7);
 }
 
@@ -1414,10 +1420,6 @@ input[type="checkbox"] {
 	border: 1px solid rgba(0,0,0,.3);
 }
 
-.important-and-upcoming-event-span:hover{
-	border: 1px solid rgba(255,255,255,.7);
-}
-
 /* TEMPORARY FIX FOR STYLING OF EVENT AND CATEGORY BUTTONS
 /* HAVE JAY LOOK AT THIS 
 */
@@ -1426,6 +1428,7 @@ input[type="checkbox"] {
 	background-repeat:no-repeat;
 	border: none;
 	outline: none;
+	position: relative;
 }
 
 .update-category-modal-button {
@@ -1605,4 +1608,43 @@ input[type="checkbox"] {
 
 #settings-day-week-month-button {
 	color: #fff;
+}
+
+.timed-event-overlay {
+	background-image: url('../img/alarm-clock-icon.png');
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 9px;
+	width: 9px;
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.completed-event-overlay {
+	background-image: url('../img/check-mark-icon.png');
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 9px;
+	width: 9px;
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.sidebar-icon {
+	margin-right: 3px;
+	margin-top: 6px;
+}
+
+.icon-pad {
+	margin-right: 3px;
+	margin-top: 3px;
+}
+
+.icon-pad-small {
+	margin-right: 1px;
+	margin-top: 1px;
 }
