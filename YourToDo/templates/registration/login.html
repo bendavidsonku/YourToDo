@@ -29,6 +29,10 @@
         <br>
         <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
         <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
+        <h3 id="social-network-login-header">Login with a social network</h3>
+        <p>
+            <a href="{% url 'social:begin' 'facebook' %}?next=/planner"><img src="https://www.facebook.com/images/fb_icon_325x325.png" style="width: 75px; height: 75px;"></a>
+        </p>
 </div>
 </div>
 <div class="footer">
