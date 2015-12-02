@@ -42,6 +42,9 @@ urlpatterns += patterns('',
     url(r'^accounts/logout/',   'YourToDo.views.logout', name='auth_logout'),
     url(r'^accounts/',          include('registration.backends.default.urls')),
 
+    # Python Social Auth URLs
+    url('', include('social.apps.django_app.urls', namespace='social')),
+
     # User Profile Url
     url(r'^user-account-information/', 'YourToDo.views.loadUpdateAccountInformation', name='user-account-information'),
     url(r'^update-user-information/', 'YourToDo.views.updateAccountInformation', name='update-user-information'),

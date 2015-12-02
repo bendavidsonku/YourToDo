@@ -24,10 +24,12 @@
 					<input class="form-control account-information-field" id="account-information-last-name" type="text" placeholder="Last Name">
 				{% endif %}
 
-				{% if user.email != None %}
+				{% if user.email == "" %}
+
+				{% elif user.email != None %}
 					<input class="form-control account-information-field" id="account-information-email" type="text" value="{{ user.email }}" readonly>
 				{% else %}
-					<input class="form-control account-information-field" id="account-information-email" type="text" placeholder="Email" readonly>
+
 				{% endif %}
 
 				{% if userProfile.phoneNumber != None %}

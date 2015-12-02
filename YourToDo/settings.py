@@ -127,7 +127,13 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = False
 
-AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
+AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",
+    #'social.backends.google.GooglePlusAuth',
+    'social.backends.facebook.FacebookOAuth2',
+    #'social.backends.twitter.TwitterOAuth',
+    #'social.backends.instagram.InstagramOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    )
 
 # The numeric mode to set newly-uploaded files to. The value should be
 # a mode you'd pass directly to os.chmod.
@@ -231,10 +237,13 @@ INSTALLED_APPS = (
     "mezzanine.galleries",
     "mezzanine.twitter",
 
-    #Django-Registration-Redux installation
+    # Django-Registration-Redux installation
     'registration',
 
-    #Lib holds templates for html files
+    # Python-Social-Auth installation
+    'social.apps.django_app.default',
+
+    # Lib holds templates for html files
     'lib',
 
     # Planner app installation
@@ -261,6 +270,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "mezzanine.conf.context_processors.settings",
     "mezzanine.pages.context_processors.page",
+    "social.apps.django_app.context_processors.backends",
+    "social.apps.django_app.context_processors.login_redirect",
 )
 
 # List of middleware classes to use. Order is important; in the request phase,
@@ -349,3 +360,8 @@ LOGIN_REDIRECT_URL = '/planner'
 
 # User profile: auth profile extension
 AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
+
+# Facebook Login Setup
+SOCIAL_AUTH_FACEBOOK_KEY = '1044787728885026'
+SOCIAL_AUTH_FACEBOOK_SECRET = '2533ef8944604da02c66060ecfdcaaeb'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']

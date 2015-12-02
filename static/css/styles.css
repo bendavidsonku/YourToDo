@@ -1610,6 +1610,10 @@ input[type="checkbox"] {
 	color: #fff;
 }
 
+#social-network-login-header {
+	color: #fff;
+}
+
 .timed-event-overlay {
 	background-image: url('../img/alarm-clock-icon.png');
 	position: absolute;
