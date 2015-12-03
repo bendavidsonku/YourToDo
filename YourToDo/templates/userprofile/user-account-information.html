@@ -57,6 +57,8 @@
 				<div class="account-information-field">
 					<form action="" method="post" id="upload-profile-picture-form" enctype="multipart/form-data">{% csrf_token %}
 						<span id="upload-profile-picture-data">
+							Profile Picture:
+							<br>
 							{{ profilePictureForm.profilePicture }}
 						</span>
 					</form>
