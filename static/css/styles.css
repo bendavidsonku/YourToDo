@@ -678,6 +678,7 @@ ul.navbar-nav>li {
 	text-align: left;
 	vertical-align: top;
 	padding: 5px;
+	border: none;
 }
 
 .planner-month-sidebar-info td.no-padding {
@@ -1411,6 +1412,7 @@ input[type="checkbox"] {
 	border: 1px solid rgba(0,0,0,.3);
 }
 
+.planner-day-tasks-event span:hover,
 .recently-completed-event-span:hover,
 .important-and-upcoming-event-span:hover {
 	border: 1px solid rgba(255,255,255,.7);
