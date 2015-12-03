@@ -451,7 +451,7 @@ ul.navbar-nav>li {
 }
 
 .planner-week-row {
-	height: 102px;
+	height: 103px;
 	width: 100%;
 }
 
@@ -482,7 +482,7 @@ ul.navbar-nav>li {
 .planner-week-content {
 	overflow-y: hidden;
 	overflow-x: hidden;
-	max-height: 511px;
+	max-height: 515px;
 }
 
 .planner-week-row > td:not(:first-child) {
@@ -648,7 +648,7 @@ ul.navbar-nav>li {
 }
 
 .planner-month-row {
-	height: 103px;
+	height: 105px;
 }
 
 .planner-month-sidebar {
@@ -689,7 +689,9 @@ ul.navbar-nav>li {
 }
 
 .planner-month-categories {
-	height: 231px;
+	max-height: 245px;
+	overflow-y: auto;
+	display: block;
 }
 
 .planner-month-category-legend {
@@ -736,7 +738,7 @@ ul.navbar-nav>li {
 .planner-month-event-container {
 	width: 100%;
 	table-layout: fixed;
-	border-collapse:separate; 
+	border-collapse: separate; 
 	border-spacing: 2px;
 }
 

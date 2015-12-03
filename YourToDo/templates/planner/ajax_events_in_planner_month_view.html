@@ -47,8 +47,8 @@
                             Categories
                         </td>
                     </tr>
-                    <tr class="planner-month-sidebar-info planner-month-categories">
-                        <td>
+                    <tr class="planner-month-sidebar-info">
+                        <td class="planner-month-categories">
                             {% for category in categoriesInPlanner %}
                             <div class="planner-month-category-legend planner-category-color-{{ category.get_color }}">
                                 <button type="button" class="update-category-modal-button" id="{{ category.get_category_id }}">
