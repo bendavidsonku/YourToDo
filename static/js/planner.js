@@ -1,32 +1,31 @@
 $(document).ready(function() {
 
-    // Session Storage
+    // Check session storage to see if viewdate is set, if not, set it to today
     if (!(sessionStorage.viewDate)) {
         var now = new Date();
         sessionStorage.viewDate = now;
     }
 
-    // Use this for debugging to reset localStorage
-    //localStorage.clear();
-
-    // Local Storage
+    // Check if local storage is set, if not, set it to "Week"
     if (!(localStorage.layoutType)) {
         localStorage.layoutType = "Week";
     }
 
+    // Fills data slots on page load
     changeViewLayout(localStorage.layoutType);
 });
 
 /*
-    Renders the current layoutType to the page
+    Renders the current layoutType to the page using an AJAX call to django
 
-    #TODO Actually make this work with different layouts
+    @param viewType 
+        The desired layout type: "Day", "Week", "Month"
 */
 function changeViewLayout(viewType) {
     var btns = $(".btn-layout-selector");
 
     if(localStorage.layoutType == viewType) {
-            // Do nothing
+        // Do nothing
     }
     else {
         localStorage.layoutType = viewType;
@@ -44,6 +43,8 @@ function changeViewLayout(viewType) {
         },
         success: function(data, textStatus, jqXHR) {
             $('#planner-day-week-month-render-area').empty().append(data);
+
+            // Make sure all the events get populated
             changeViewDate("NONE");
         },
     });
@@ -55,7 +56,7 @@ function getViewDate() {
     return new Date(Date.parse(sessionStorage.viewDate));
 }
 
-// Returns the full date in the following format: Sunday November 29, 2015
+// Returns the full date in the following format: 'Sunday November 29, 2015'
 function getFullDate() {
     var now = getViewDate(),
         day = day_names_long[now.getDay()],
@@ -65,6 +66,7 @@ function getFullDate() {
     return day + ", " + month + " " + now.getDate() + ", " + year;
 }
 
+// Returns the currently selected layoutType stored in local storage
 function getLayoutType() {
     return localStorage.layoutType;
 }
@@ -226,6 +228,7 @@ function changeViewDate(size, amount) {
     document.getElementById("planner-date-year-selector").innerHTML = viewDate.getFullYear();
 }
 
+// Injects the category creation modal to the html
 function loadCategoryCreationModal() {
     $.ajax({
         url: "/load-category-creation-modal/",
@@ -241,6 +244,7 @@ function loadCategoryCreationModal() {
     });
 }
 
+// Injects the category update modal to the html
 function loadCategoryUpdateModal() {
     $.ajax({
         url: "/load-category-update-modal/",
@@ -256,6 +260,7 @@ function loadCategoryUpdateModal() {
     });
 }
 
+// Injects the event creation modal to the html
 function loadEventCreationModal() {
     $.ajax({
         url: "/load-event-creation-modal/",
@@ -271,6 +276,7 @@ function loadEventCreationModal() {
     });
 }
 
+// Injects the event update modal to the html
 function loadEventUpdateModal() {
     $.ajax({
         url: "/load-event-update-modal/",
@@ -286,6 +292,7 @@ function loadEventUpdateModal() {
     });
 }
 
+// Injects the recentlyCompleted rendered html to the base html
 function loadRecentlyCompleted() {
 
     $.ajax({
@@ -302,6 +309,7 @@ function loadRecentlyCompleted() {
     });
 }
 
+// Injects the important and upcoming rendered html to the base html
 function loadImportantAndUpcoming() {
 
     $.ajax({
@@ -318,6 +326,7 @@ function loadImportantAndUpcoming() {
     });
 }
 
+// Injects the notes rendered html to the base html
 function loadPlannerMiscNotes() {
 
     $.ajax({
@@ -334,6 +343,7 @@ function loadPlannerMiscNotes() {
     });
 }
 
+// Injects the notes modal to the base html
 function loadPlannerMiscNotesModal() {
 
     $.ajax({
@@ -376,7 +386,29 @@ this.getWeekString = function() {
     return monthNum1 + "/" + weekSunday + " - " + monthNum2 + "/" + weekSaturday;
 }
 
-// Returns the date object holding the date of the calendar day appearing in slot 0 of 42 of this month.
+/*
+    Returns the date object holding the date of the calendar day appearing in slot 0 of 42 of this month.
+    This is based off of our 6 week calendar setup, by default
+    _________________________________________________________
+    |*******|       |       |       |       |       |       |
+    |***0***|   1   |   2   |   3   |   4   |   5   |   6   |
+    |_______|_______|_______|_______|_______|_______|_______|
+    |       |       |       |       |       |       |       |
+    |   7   |   8   |   9   |  10   |  11   |  12   |  13   |
+    |_______|_______|_______|_______|_______|_______|_______|
+    |       |       |       |       |       |       |       |
+    |  14   |  15   |  16   |  17   |  18   |  19   |  20   |
+    |_______|_______|_______|_______|_______|_______|_______|
+    |       |       |       |       |       |       |       |
+    |  21   |  22   |  23   |  24   |  25   |  26   |  27   |
+    |_______|_______|_______|_______|_______|_______|_______|
+    |       |       |       |       |       |       |       |
+    |  28   |  29   |  30   |  31   |  32   |  33   |  34   |
+    |_______|_______|_______|_______|_______|_______|_______|
+    |       |       |       |       |       |       |       |
+    |  35   |  36   |  37   |  38   |  39   |  40   |  41   |
+    |_______|_______|_______|_______|_______|_______|_______|
+*/
 getCalFirstDay = function() {
     var now = getViewDate();
         day = now.getDate();
