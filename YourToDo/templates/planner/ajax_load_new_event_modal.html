@@ -2,70 +2,167 @@
 <div id="ajax-create-event-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-create-event-modal-label">
     <div class = "modal-dialog">
         <div class = "modal-content">
-             <div class = "modal-header">
+            <div class = "modal-header">
                 <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
                 <h4 class = "modal-title" id = "ajax-create-event-modal-label">
                    Create New Event
                 </h4>
-             </div>
-             <div class = "modal-body">
-                <p>
-                    <label for="event-name">Name: (required)</label><input class="form-control event-creation-name-input" type="text">
-                </p>
-                <p>
-                    <label for="event-parentCategory">To which category does this event belong? (required)</label>
-                    <div id="create-event-parentCategory-dropdown" class="dropdown">
-                        <button href="#create-event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-create-event-parentCategory">
-                            {% if categoriesInPlanner|length == 0 %}
-                                <li><a href="#">Make a new category!</a></li>
-                            {% else %}
-                                {% for category in categoriesInPlanner %}
-                                    <li><a href="#">{{ category.get_name }}</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        </ul>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>
+                            <label for="event-name">Name: (required)</label><input class="form-control event-creation-name-input" type="text">
+                        </p>
+                        <p>
+                            <label for="event-parentCategory">Select category for event: (required)</label>
+                            <div id="create-event-parentCategory-dropdown" class="dropdown">
+                                <button href="#create-event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-create-event-parentCategory">
+                                    {% if categoriesInPlanner|length == 0 %}
+                                        <li><a href="#">Make a new category!</a></li>
+                                    {% else %}
+                                        {% for category in categoriesInPlanner %}
+                                            <li><a href="#">{{ category.get_name }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </p>
+                        <p> 
+                            <label for="event-description">Description (optional):</label>
+                            <p>
+                            <textarea name="event-description" id="event-creation-description-input"></textarea>
+                            </p>
+                        </p>
                     </div>
-                </p>
-                <p> 
-                    <label for="event-description">Description (optional):</label>
-                    <p>
-                    <textarea name="event-description" id="event-creation-description-input"></textarea>
-                    <p>
-                </p>
-                <p>
-                    <label for=".event-creation-date-input">Date of Event: (required)<input class="form-control event-creation-date-input" type="date"></label>
-                </p>
-                <p>
-                    <label for="event-timeEstimate">Time Estimate (optional):</label>
-                    <div id="create-event-timeEstimate-dropdown" class="dropdown">
-                        <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-create-event-timeEstimate">
-                            <li><a href="#">None</a></li>
-                            <li><a href="#">15 minutes</a></li>
-                            <li><a href="#">30 minutes</a></li>
-                            <li><a href="#">45 minutes</a></li>
-                            <li><a href="#">1 hour</a></li>
-                            <li><a href="#">2 hours</a></li>
-                            <li><a href="#">3 hours</a></li>
-                            <li><a href="#">4 hours</a></li>
-                            <li><a href="#">5 hours</a></li>
-                            <li><a href="#">6 hours</a></li>
-                            <li><a href="#">7 hours</a></li>
-                            <li><a href="#">8 hours</a></li>
-                            <li><a href="#">More than 8 hours</a></li>
-                        </ul>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>
+                            <label for=".event-creation-date-input">Date of Event: (required)</label><input class="form-control event-creation-date-input" type="date">
+                        </p>
+                        <p>
+                            <label for="event-timeEstimate">Time Estimate (optional):</label>
+                            <div id="create-event-timeEstimate-dropdown" class="dropdown">
+                                <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-create-event-timeEstimate">
+                                    <li><a href="#">None</a></li>
+                                    <li><a href="#">15 minutes</a></li>
+                                    <li><a href="#">30 minutes</a></li>
+                                    <li><a href="#">45 minutes</a></li>
+                                    <li><a href="#">1 hour</a></li>
+                                    <li><a href="#">2 hours</a></li>
+                                    <li><a href="#">3 hours</a></li>
+                                    <li><a href="#">4 hours</a></li>
+                                    <li><a href="#">5 hours</a></li>
+                                    <li><a href="#">6 hours</a></li>
+                                    <li><a href="#">7 hours</a></li>
+                                    <li><a href="#">8 hours</a></li>
+                                    <li><a href="#">More than 8 hours</a></li>
+                                </ul>
+                            </div>
+                        </p>
+                        <p>
+                            <label for=".event-creation-startTime-input">Start Time (optional):</label><input class="form-control event-creation-startTime-input" type="time">
+                        </p>
+                        <p>
+                            <label for=".event-creation-endTime-input">End Time (optional):</label><input class="form-control event-creation-endTime-input" type="time">
+                        </p>
+                        <p>
+                            <label for=".event-creation-important-input">Important:<input class="event-creation-important-input" type="checkbox"></label> 
+                        </p>
                     </div>
-                </p>
-                <p>
-                    <label for=".event-creation-startTime-input">Start Time (optional):</label><input class="form-control event-creation-startTime-input" type="time">
-                </p>
-                <p>
-                    <label for=".event-creation-endTime-input">End Time (optional):</label><input class="form-control event-creation-endTime-input" type="time">
-                </p>
-                <p>
-                    <label for=".event-creation-important-input">Important:<input class="form control event-creation-important-input" type="checkbox"></label> 
-                </p>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                    <label for=".event-creation-repeat-input">Reoccuring:</label><input class="event-creation-repeat-input" type="checkbox">
+                        <div id="create-event-repeat-options-container" style="display:none">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-daily">Daily</button>
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-weekly">Weekly</button>
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-monthly">Monthly</button>
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-yearly">Yearly</button>
+                            </div>
+                            <p>
+                                <div id="repeat-options" style="display:none">
+                                    Repeat every 
+                                    <div id="create-event-repeat-occurance-number-dropdown" class="dropdown">
+                                        <button href="#create-event-repeat-occurance-number-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-repeat-event-occurance-dropdown-button"><span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-create-event-repeat-occurance-number">
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li><a href="#">6</a></li>
+                                            <li><a href="#">7</a></li>
+                                            <li><a href="#">8</a></li>
+                                            <li><a href="#">9</a></li>
+                                            <li><a href="#">10</a></li>
+                                            <li><a href="#">11</a></li>
+                                            <li><a href="#">12</a></li>
+                                            <li><a href="#">13</a></li>
+                                            <li><a href="#">14</a></li>
+                                            <li><a href="#">15</a></li>
+                                            <li><a href="#">16</a></li>
+                                            <li><a href="#">17</a></li>
+                                            <li><a href="#">18</a></li>
+                                            <li><a href="#">19</a></li>
+                                            <li><a href="#">20</a></li>
+                                            <li><a href="#">21</a></li>
+                                            <li><a href="#">22</a></li>
+                                            <li><a href="#">23</a></li>
+                                            <li><a href="#">24</a></li>
+                                            <li><a href="#">25</a></li>
+                                            <li><a href="#">26</a></li>
+                                            <li><a href="#">27</a></li>
+                                            <li><a href="#">28</a></li>
+                                            <li><a href="#">29</a></li>
+                                            <li><a href="#">30</a></li>
+                                        </ul> 
+                                    </div>
+                                    <span id="daily-repeat-options" style="display:none">
+                                        days
+                                    </span>
+                                    <span id="weekly-repeat-options" style="display:none">
+                                        weeks
+                                    </span>
+                                    <span id="monthly-repeat-options" style="display:none">
+                                        months
+                                    </span>
+                                    <span id="yearly-repeat-options" style="display:none">
+                                        years
+                                    </span>
+                                </div>
+                            </p>
+                            <div id="create-event-weekly-repeat-choice-container" style="display:none">
+                                <p class="custom-options-spacing">
+                                <p>
+                                    <label>Weekdays</label><input id="event-creation-weekdays-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
+                                    <br>
+                                    <label>Monday, Wednesday, Friday</label><input id="event-creation-mwf-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
+                                    <br>
+                                    <label>Tuesday, Thursday</label><input id="event-creation-tr-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
+                                    <br>
+                                    or choose custom days:
+                                    <br>
+                                    <label class="event-creation-day-label">S</label><input id="event-creation-week-day-choice-sunday" type="checkbox">
+                                    <label class="event-creation-day-label">M</label><input id="event-creation-week-day-choice-monday" type="checkbox">
+                                    <label class="event-creation-day-label">T</label><input id="event-creation-week-day-choice-tuesday" type="checkbox">
+                                    <label class="event-creation-day-label">W</label><input id="event-creation-week-day-choice-wednesday" type="checkbox">
+                                    <label class="event-creation-day-label">T</label><input id="event-creation-week-day-choice-thursday" type="checkbox">
+                                    <label class="event-creation-day-label">F</label><input id="event-creation-week-day-choice-friday" type="checkbox">
+                                    <label class="event-creation-day-label">S</label><input id="event-creation-week-day-choice-saturday" type="checkbox">
+                            </div>
+                            <div id="create-event-monthly-repeat-choice-container" style="display:none">
+                                <p class="custom-options-spacing">
+                                </p>
+                                <label>Repeat same day next month</label><input id="event-creation-same-day-next-month-checkbox" type="checkbox">
+                                <label>Repeat same day of the week next month</label><input id="event-creation-same-day-week-next-month-checkbox" type="checkbox">
+                            </div>
+                            <p id="event-creation-reoccurance-explanation" style="display:none">
+                                testing
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <div>
                     <br>
                     <p id="create-event-error-message-1" style="display:none">
@@ -90,6 +187,407 @@
 
 <script>
 
+    var reoccuranceSelectionTracker = null;
+
+    $(document).ready(function() {
+
+        $('.event-creation-repeat-input').change(function() {
+            if(this.checked)
+            {
+                $('#create-event-repeat-options-container').show();
+            }
+            else
+            {
+                $('#create-event-repeat-options-container').hide();
+                $('#repeat-options').hide();
+                $('#create-event-monthly-repeat-choice-container').hide();
+                resetAllMonthlyOptions();
+                $('#create-event-weekly-repeat-choice-container').hide();
+                resetAllWeeklyOptions();
+                $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
+                $('#event-creation-reoccurance-explanation').hide();
+
+            }
+        });
+
+        //The following on click functions reset the necessary attributes in the modal
+        $('#button-repeat-daily').click(function() {
+            reoccuranceSelectionTracker = 0;
+            $('#repeat-options').show();
+            $('#daily-repeat-options').show();
+            $('#weekly-repeat-options').hide();
+            resetAllWeeklyOptions();
+            $('#create-event-weekly-repeat-choice-container').hide();
+            $('#monthly-repeat-options').hide();
+            resetAllMonthlyOptions();
+            $('#create-event-monthly-repeat-choice-container').hide();
+            $('#yearly-repeat-options').hide();
+            $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
+            $('#event-creation-reoccurance-explanation').hide();
+        });
+
+        $('#button-repeat-weekly').click(function() {
+            reoccuranceSelectionTracker = 1;
+            $('#repeat-options').show();
+            $('#daily-repeat-options').hide();
+            $('#weekly-repeat-options').show();
+            $('#create-event-weekly-repeat-choice-container').show();
+            $('#monthly-repeat-options').hide();
+            resetAllMonthlyOptions();
+            $('#create-event-monthly-repeat-choice-container').hide();
+            $('#yearly-repeat-options').hide();
+            $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
+            $('#event-creation-reoccurance-explanation').hide();
+        });
+
+        $('#event-creation-weekdays-checkbox').change(function() {
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            $('#event-creation-week-day-choice-sunday').prop("checked", false);
+            $('#event-creation-week-day-choice-monday').prop("checked", false);
+            $('#event-creation-week-day-choice-tuesday').prop("checked", false);
+            $('#event-creation-week-day-choice-wednesday').prop("checked", false);
+            $('#event-creation-week-day-choice-thursday').prop("checked", false);
+            $('#event-creation-week-day-choice-friday').prop("checked", false);
+            $('#event-creation-week-day-choice-saturday').prop("checked", false);
+
+            if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--" && $('#event-creation-weekdays-checkbox').is(":checked"))
+            {
+
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly, Monday through Friday');
+                }
+                else 
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+
+            else if ($('event-creation-weekdays-checkbox').is(":checked") == false)
+            {
+                if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+                {
+                    repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                    }
+                }
+
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').hide();
+                }
+            }
+        });
+
+        $('#event-creation-mwf-checkbox').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            $('#event-creation-week-day-choice-sunday').prop("checked", false);
+            $('#event-creation-week-day-choice-monday').prop("checked", false);
+            $('#event-creation-week-day-choice-tuesday').prop("checked", false);
+            $('#event-creation-week-day-choice-wednesday').prop("checked", false);
+            $('#event-creation-week-day-choice-thursday').prop("checked", false);
+            $('#event-creation-week-day-choice-friday').prop("checked", false);
+            $('#event-creation-week-day-choice-saturday').prop("checked", false);
+
+            if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--" && $('#event-creation-mwf-checkbox').is(":checked"))
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Monday, Wednesday, and Friday');
+                }
+                else 
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Monday, Wednesday, and Friday');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+
+            else if ($('event-creation-mwf-checkbox').is(":checked") == false)
+            {
+                if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+                {
+                    repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                    }
+                }
+
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').hide();
+                }
+            }
+        });
+
+        $('#event-creation-tr-checkbox').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-week-day-choice-sunday').prop("checked", false);
+            $('#event-creation-week-day-choice-monday').prop("checked", false);
+            $('#event-creation-week-day-choice-tuesday').prop("checked", false);
+            $('#event-creation-week-day-choice-wednesday').prop("checked", false);
+            $('#event-creation-week-day-choice-thursday').prop("checked", false);
+            $('#event-creation-week-day-choice-friday').prop("checked", false);
+            $('#event-creation-week-day-choice-saturday').prop("checked", false);
+
+            if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--" && $('#event-creation-tr-checkbox').is(":checked"))
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Tuesday and Thursday');
+                }
+                else 
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Tuesday and Thursday');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+
+            else if ($('event-creation-tr-checkbox').is(":checked") == false)
+            {
+                if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+                {
+                    repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                    }
+                }
+
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').hide();
+                }
+            }
+        });
+
+        $('#event-creation-week-day-choice-sunday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#event-creation-week-day-choice-monday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#event-creation-week-day-choice-tuesday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#event-creation-week-day-choice-wednesday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#event-creation-week-day-choice-thursday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#event-creation-week-day-choice-friday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#event-creation-week-day-choice-saturday').change(function() {
+            $('#event-creation-weekdays-checkbox').prop("checked", false);
+            $('#event-creation-mwf-checkbox').prop("checked", false);
+            $('#event-creation-tr-checkbox').prop("checked", false);
+            weekdaySelectionCreator();
+        });
+
+        $('#button-repeat-monthly').click(function() {
+            reoccuranceSelectionTracker = 2;
+            $('#repeat-options').show();
+            $('#daily-repeat-options').hide();
+            $('#weekly-repeat-options').hide();
+            resetAllWeeklyOptions();
+            $('#create-event-weekly-repeat-choice-container').hide();
+            $('#monthly-repeat-options').show();
+            $('#create-event-monthly-repeat-choice-container').show();
+            $('#yearly-repeat-options').hide();
+            $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
+            $('#event-creation-reoccurance-explanation').hide();
+        });
+
+        $('#event-creation-same-day-next-month-checkbox').change(function() {
+            $('#event-creation-same-day-week-next-month-checkbox').prop("checked", false);
+
+            if ($('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                if ($('.event-creation-date-input').val() != "")
+                {
+                    repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+                    var tempString = $('.event-creation-date-input').val();
+
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+            }
+
+            else if ($('#event-creation-same-day-next-month-checkbox').is(":checked") == false && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+        });
+
+        $('#event-creation-same-day-week-next-month-checkbox').change(function() {
+            $('#event-creation-same-day-next-month-checkbox').prop("checked", false);
+
+            if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                if ($('.event-creation-date-input').val() != "")
+                {
+                    repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+                    var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
+
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+            }
+
+            else if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked") == false && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+        });
+
+        $('.event-creation-date-input').change(function() {
+
+            if (reoccuranceSelectionTracker == 2 && $('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+                var tempString = $('.event-creation-date-input').val();
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+
+            if (reoccuranceSelectionTracker == 2 && $('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+                var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+        });
+
+        $('#button-repeat-yearly').click(function() {
+            reoccuranceSelectionTracker = 3;
+            $('#repeat-options').show();
+            $('#daily-repeat-options').hide();
+            $('#weekly-repeat-options').hide();
+            resetAllWeeklyOptions();
+            $('#create-event-weekly-repeat-choice-container').hide();
+            $('#monthly-repeat-options').hide();
+            $('#create-event-monthly-repeat-choice-container').hide();
+            resetAllMonthlyOptions();
+            $('#yearly-repeat-options').show();
+            $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
+            $('#event-creation-reoccurance-explanation').hide();
+        });
+        
+    });
+
     // Event Drop Down Menu Function - replaces default value with user-specified value
     $(function(){
 
@@ -101,6 +599,158 @@
         $(".dropdown-menu-create-event-timeEstimate li a").click(function(){
 
             $(this).parents('#create-event-timeEstimate-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
+        });
+
+        //This function assists in generating an explanation of how a user's event will occur
+        $(".dropdown-menu-create-event-repeat-occurance-number li a").click(function(){
+
+            $(this).parents('#create-event-repeat-occurance-number-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
+
+            var repeatNumber = parseInt($(this).text());
+
+            if (reoccuranceSelectionTracker == 0)
+            {
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur daily');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' days');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+
+            if (reoccuranceSelectionTracker == 1)
+            {
+                if (weekdaySelectionCreator() > 0)
+                {
+                    // Let the function call from above run and do nothing inside this 
+                }
+                else if ($('#event-creation-weekdays-checkbox').is(":checked"))
+                {
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly, Monday through Friday');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+                else if ($('#event-creation-mwf-checkbox').is(":checked"))
+                {
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Monday, Wednesday, and Friday');
+                    }
+                    else 
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Monday, Wednesday, and Friday');
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+                else if ($('#event-creation-tr-checkbox').is(":checked"))
+                {
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Tuesday and Thursday');
+                    }
+                    else 
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Tuesday and Thursday');
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+                else
+                {
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+            }
+
+            if (reoccuranceSelectionTracker == 2)
+            {
+                if ($('#event-creation-same-day-next-month-checkbox').is(":checked"))
+                {
+                    if ($('.event-creation-date-input').val() != "")
+                    {
+                        var tempString = $('.event-creation-date-input').val();
+                        if (repeatNumber == 1)
+                        {
+                            $('#event-creation-reoccurance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
+                        }
+                        else
+                        {
+                            $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
+                        }
+
+                        $('#event-creation-reoccurance-explanation').show();
+                    }
+                }
+
+                else if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked"))
+                {
+                    if ($('.event-creation-date-input').val() != "")
+                    {
+                        var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
+                        if (repeatNumber == 1)
+                        {
+                            $('#event-creation-reoccurance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                        }
+                        else
+                        {
+                            $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                        }
+
+                        $('#event-creation-reoccurance-explanation').show();
+                    }
+                }
+
+                else
+                {
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur monthly');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months');
+                    }
+
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+
+            }
+
+            if (reoccuranceSelectionTracker == 3)
+            {
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur yearly');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' years');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+
+
         });
 
     });
@@ -131,7 +781,6 @@
 
         if ((eventStartTime != "" && eventEndTime == "") || (eventStartTime == "" && eventEndTime != ""))
         {
-            console.log("entered");
             $('#create-event-error-message-1').hide();
             $('#create-event-error-message-2').show();
             validForm = false;
@@ -191,8 +840,319 @@
         $('.event-creation-startTime-input').val("");
         $('.event-creation-endTime-input').val("");
         $('.event-creation-important-input').prop("checked", false);
+        $('.event-creation-repeat-input').prop("checked", false);
+        $('#create-event-repeat-options-container').hide();
+        $('#repeat-options').hide();
+        $('#weekly-repeat-options').hide();
+        resetAllWeeklyOptions();
+        $('#create-event-weekly-repeat-choice-container').hide();
+        $('#monthly-repeat-options').hide();
+        $('#create-event-monthly-repeat-choice-container').hide();
+        resetAllMonthlyOptions();
+        $('#yearly-repeat-options').hide();
         $('#create-event-error-message-1').hide();
         $('#create-event-error-message-2').hide();
+        $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
+        $('#event-creation-reoccurance-explanation').hide();
     });
+
+    //The following function resets the necessary attributes in the modal
+    function resetAllWeeklyOptions() {
+        $('#event-creation-weekdays-checkbox').prop("checked", false);
+        $('#event-creation-mwf-checkbox').prop("checked", false);
+        $('#event-creation-tr-checkbox').prop("checked", false);
+        $('#event-creation-week-day-choice-sunday').prop("checked", false);
+        $('#event-creation-week-day-choice-monday').prop("checked", false);
+        $('#event-creation-week-day-choice-tuesday').prop("checked", false);
+        $('#event-creation-week-day-choice-wednesday').prop("checked", false);
+        $('#event-creation-week-day-choice-thursday').prop("checked", false);
+        $('#event-creation-week-day-choice-friday').prop("checked", false);
+        $('#event-creation-week-day-choice-saturday').prop("checked", false);
+    }
+
+    function resetAllMonthlyOptions() {
+        $('#event-creation-same-day-next-month-checkbox').prop("checked", false);
+        $('#event-creation-same-day-week-next-month-checkbox').prop("checked", false);
+    }
+
+    // Handles explanation display of custom selected days
+    function weekdaySelectionCreator() {
+
+        var sunday = false;
+        var monday = false;
+        var tuesday = false;
+        var wednesday = false;
+        var thursday = false;
+        var friday = false;
+        var saturday = false;
+        var creationString = "";
+        var multipleMarked = 0;
+
+        if ($('#event-creation-week-day-choice-sunday').is(":checked"))
+        {
+            sunday = true;
+            creationString = "Sunday|";
+            multipleMarked++;
+        }
+
+        if ($('#event-creation-week-day-choice-monday').is(":checked"))
+        {
+            monday = true;
+            creationString = creationString + "Monday|";
+            multipleMarked++;
+        }
+
+        if ($('#event-creation-week-day-choice-tuesday').is(":checked"))
+        {
+            tuesday = true;
+            creationString = creationString + "Tuesday|";
+            multipleMarked++;
+        }
+
+        if ($('#event-creation-week-day-choice-wednesday').is(":checked"))
+        {
+            wednesday = true;
+            creationString = creationString + "Wednesday|";
+            multipleMarked++;
+        }
+
+        if ($('#event-creation-week-day-choice-thursday').is(":checked"))
+        {
+            thursday = true;
+            creationString = creationString + "Thursday|";
+            multipleMarked++;
+        }
+
+        if ($('#event-creation-week-day-choice-friday').is(":checked"))
+        {
+            friday = true;
+            creationString = creationString + "Friday|";
+            multipleMarked++;
+        }
+
+        if ($('#event-creation-week-day-choice-saturday').is(":checked"))
+        {
+            saturday = true;
+            creationString = creationString + "Saturday|";
+            multipleMarked++;
+        }
+
+        if (sunday == true && monday == true && tuesday == true && wednesday == true && thursday == true && friday == true && saturday == true)
+        {
+            if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+                
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every day');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, every day');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+        }
+
+        else if (sunday == false && monday == true && tuesday == true && wednesday == true && thursday == true && friday == true && saturday == false)
+        {
+            if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly, Monday through Friday');
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
+                }
+
+                $('#event-creation-reoccurance-explanation').show();
+            }
+        }
+
+        else
+        {
+            if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            {
+                repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
+
+                if (multipleMarked > 1)
+                {
+                    for (i = 0; i < multipleMarked - 1; i++)
+                    {
+                        creationString = creationString.replace("|", ", ");
+                    }
+
+                    creationString = creationString.replace("|", "");
+                }
+
+                else if (multipleMarked == 1)
+                {   
+                    creationString = creationString.replace("|", "");
+                }
+
+                else
+                {
+                    // Do Nothing
+                }
+
+                if (repeatNumber == 1)
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly on ' + creationString);
+                }
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on ' + creationString);
+                }
+
+                if (multipleMarked == 0)
+                {
+                    if (repeatNumber == 1)
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                    }
+                    else
+                    {
+                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                    }
+                }
+
+                else
+                {
+                    $('#event-creation-reoccurance-explanation').show();
+                }
+                
+            }
+        }
+
+        return multipleMarked;
+
+    }
+
+    function dateParcer(date)
+    {
+        returnDate = date.charAt(8);
+
+        if (returnDate == "0")
+        {
+            return date.charAt(9);
+        }
+
+        else
+        {
+            return(date.charAt(8) + date.charAt(9));
+        }
+    }
+
+    function findNthDayOfTheWeekInMonth(selectedDate)
+    {
+        var year = selectedDate.substring(0,4);
+        var month = selectedDate.substring(5,7);
+        var day = selectedDate.substring(8,10);
+
+        // Gives a Javascript date object of the date passed in as a parameter
+        selectedDate = new Date(year, month - 1, day);
+
+        // Gets "day identifying index" of the passed in date
+        var selectedDay = selectedDate.getDay();
+
+        // Gives a Javascript date object of the first day of the month of the date passed in as a parameter
+        var dateTracker = new Date(year, month - 1, 1);
+
+        // Gets first day of the month in the given "selectedDate"
+        var dayTracker = new Date(year, month - 1, 1).getDay();
+
+        // Gets how many days are in the month of the given "selectedDate"
+        var daysInTheMonth = new Date(year, month, 0).getDate();
+
+        var nthOccuranceOfSelectedDay = 0;
+
+        for(i = 0; i < daysInTheMonth; i++)
+        {
+            if (selectedDay == dayTracker)
+            {
+                if (selectedDate.getTime() == dateTracker.getTime())
+                {
+                    i = 40; // stop loop
+                    nthOccuranceOfSelectedDay++;
+                }
+                else 
+                {
+                    nthOccuranceOfSelectedDay++;
+                }
+            }
+
+            if (dayTracker == 6)
+            {
+                dayTracker = 0;
+            }
+            else
+            {
+                dayTracker++;
+            }
+
+            dateTracker.setDate(dateTracker.getDate() + 1);
+        }
+
+        var returnDate;
+
+        if (selectedDay == 0)
+        {
+            returnDate = "Sunday";
+        }
+        else if (selectedDay == 1)
+        {
+            returnDate = "Monday";
+        }
+        else if (selectedDay == 2)
+        {
+            returnDate = "Tuesday";
+        }
+        else if (selectedDay == 3)
+        {
+            returnDate = "Wednesday";
+        }
+        else if (selectedDay == 4)
+        {
+            returnDate = "Thursday";
+        }
+        else if (selectedDay == 5)
+        {
+            returnDate = "Friday";
+        }
+        else if (selectedDay == 6)
+        {
+            returnDate = "Saturday";
+        }
+
+        if (nthOccuranceOfSelectedDay == 1)
+        {
+            nthOccuranceOfSelectedDay = "first";
+        }
+        else if (nthOccuranceOfSelectedDay == 2)
+        {
+            nthOccuranceOfSelectedDay = "second";
+        }
+        else if (nthOccuranceOfSelectedDay == 3)
+        {
+            nthOccuranceOfSelectedDay = "third";
+        }
+        else if (nthOccuranceOfSelectedDay == 4)
+        {
+            nthOccuranceOfSelectedDay = "fourth";
+        }
+        else if (nthOccuranceOfSelectedDay == 5)
+        {
+            nthOccuranceOfSelectedDay = "last";
+        }
+        
+        var dayAndOccurance = [returnDate, nthOccuranceOfSelectedDay];
+        return dayAndOccurance;
+    }
 
 </script>
