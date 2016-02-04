@@ -329,7 +329,10 @@ function loadPlannerMiscNotes() {
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
         success: function(data, textStatus, jqXHR) {
-            $('#planner-misc-notes').empty().append(data);
+            var textLines = data.split('\n');
+            textLines.shift();
+            textLines = Array.prototype.join.call(textLines, '\n');
+            $('#planner-misc-notes').empty().append(textLines);
         },
     });
 }
