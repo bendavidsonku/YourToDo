@@ -72,7 +72,7 @@
                         </p>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
-                    <label for=".event-creation-repeat-input">Reoccuring:</label><input class="event-creation-repeat-input" type="checkbox">
+                    <label for=".event-creation-repeat-input">Recurring:</label><input class="event-creation-repeat-input" type="checkbox">
                         <div id="create-event-repeat-options-container" style="display:none">
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-daily">Daily</button>
@@ -134,6 +134,7 @@
                             </p>
                             <div id="create-event-weekly-repeat-choice-container" style="display:none">
                                 <p class="custom-options-spacing">
+                                </p>
                                 <p>
                                     <label>Weekdays</label><input id="event-creation-weekdays-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
                                     <br>
@@ -157,8 +158,23 @@
                                 <label>Repeat same day next month</label><input id="event-creation-same-day-next-month-checkbox" type="checkbox">
                                 <label>Repeat same day of the week next month</label><input id="event-creation-same-day-week-next-month-checkbox" type="checkbox">
                             </div>
-                            <p id="event-creation-reoccurance-explanation" style="display:none">
-                                testing
+                            <p id="event-creation-recurrance-explanation" style="display:none">
+                            </p>
+                            <p class="event-creation-recurrance-duration" style="display:none">
+                                <span style="font-weight: bold">Recurrance Ends:</span><br>
+                                <input id="event-creation-recurrance-duration-never" type="radio" name="recurrance-option"> Never<br>
+                                <p class="custom-duration-options-spacing"></p>
+                                <span class="event-creation-recurrance-duration" style="display:none">
+                                    <input id="event-creation-recurrance-duration-amount-radio" type="radio" name="recurrance-option">
+                                    After
+                                    <input class="input-disabled" id="event-creation-recurrance-duration-amount-text" type="text"> occurances<br>
+                                </span>
+                                <p class="custom-duration-options-spacing"></p>
+                                <span class="event-creation-recurrance-duration" style="display:none">
+                                    <input id="event-creation-recurrance-duration-date-radio" type="radio" name="recurrance-option">
+                                    On
+                                    <input class="input-disabled" id="event-creation-recurrance-duration-date-date" type="date">
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -187,10 +203,11 @@
 
 <script>
 
-    var reoccuranceSelectionTracker = null;
+    var recurranceSelectionTracker = null;
 
     $(document).ready(function() {
 
+        //The following function handles the reset of recurrance options when the "recurring" check box's value changes
         $('.event-creation-repeat-input').change(function() {
             if(this.checked)
             {
@@ -200,20 +217,53 @@
             {
                 $('#create-event-repeat-options-container').hide();
                 $('#repeat-options').hide();
+                $('.event-creation-recurrance-duration').hide();
                 $('#create-event-monthly-repeat-choice-container').hide();
                 resetAllMonthlyOptions();
                 $('#create-event-weekly-repeat-choice-container').hide();
                 resetAllWeeklyOptions();
                 $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
-                $('#event-creation-reoccurance-explanation').hide();
+                $('#event-creation-recurrance-explanation').hide();
+                $('input[type=radio][name=recurrance-option]').prop("checked", false);
+                $('#event-creation-recurrance-duration-amount-text').val("");
+                $('#event-creation-recurrance-duration-date-date').val("");
+            }
+        });
 
+        //The following function manages the radio button input options for recurrance options
+        $('input[type=radio][name=recurrance-option]').change(function(){
+            if ($('#event-creation-recurrance-duration-never').is(':checked'))
+            {
+                $('#event-creation-recurrance-duration-amount-text').prop('readonly', true);
+                $('#event-creation-recurrance-duration-amount-text').addClass('input-disabled'); 
+                $('#event-creation-recurrance-duration-date-date').prop('readonly', true);
+                $('#event-creation-recurrance-duration-date-date').addClass('input-disabled');
+                $('#event-creation-recurrance-duration-amount-text').val("");
+                $('#event-creation-recurrance-duration-date-date').val("");
+            }
+            else if ($('#event-creation-recurrance-duration-amount-radio').is(':checked'))
+            {
+                $('#event-creation-recurrance-duration-amount-text').prop('readonly', false);
+                $('#event-creation-recurrance-duration-amount-text').removeClass('input-disabled');
+                $('#event-creation-recurrance-duration-date-date').prop('readonly', true);
+                $('#event-creation-recurrance-duration-date-date').addClass('input-disabled');
+                $('#event-creation-recurrance-duration-date-date').val("");
+            }
+            else if ($('#event-creation-recurrance-duration-date-radio').is(':checked'))
+            {
+                $('#event-creation-recurrance-duration-amount-text').prop('readonly', true);
+                $('#event-creation-recurrance-duration-amount-text').addClass('input-disabled');
+                $('#event-creation-recurrance-duration-date-date').prop('readonly', false);
+                $('#event-creation-recurrance-duration-date-date').removeClass('input-disabled');
+                $('#event-creation-recurrance-duration-amount-text').val("");
             }
         });
 
         //The following on click functions reset the necessary attributes in the modal
         $('#button-repeat-daily').click(function() {
-            reoccuranceSelectionTracker = 0;
+            recurranceSelectionTracker = 0;
             $('#repeat-options').show();
+            $('.event-creation-recurrance-duration').show();
             $('#daily-repeat-options').show();
             $('#weekly-repeat-options').hide();
             resetAllWeeklyOptions();
@@ -223,12 +273,16 @@
             $('#create-event-monthly-repeat-choice-container').hide();
             $('#yearly-repeat-options').hide();
             $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
-            $('#event-creation-reoccurance-explanation').hide();
+            $('#event-creation-recurrance-explanation').hide();
+            $('input[type=radio][name=recurrance-option]').prop("checked", false);
+            $('#event-creation-recurrance-duration-amount-text').val("");
+            $('#event-creation-recurrance-duration-date-date').val("");
         });
 
         $('#button-repeat-weekly').click(function() {
-            reoccuranceSelectionTracker = 1;
+            recurranceSelectionTracker = 1;
             $('#repeat-options').show();
+            $('.event-creation-recurrance-duration').show();
             $('#daily-repeat-options').hide();
             $('#weekly-repeat-options').show();
             $('#create-event-weekly-repeat-choice-container').show();
@@ -237,7 +291,10 @@
             $('#create-event-monthly-repeat-choice-container').hide();
             $('#yearly-repeat-options').hide();
             $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
-            $('#event-creation-reoccurance-explanation').hide();
+            $('#event-creation-recurrance-explanation').hide();
+            $('input[type=radio][name=recurrance-option]').prop("checked", false);
+            $('#event-creation-recurrance-duration-amount-text').val("");
+            $('#event-creation-recurrance-duration-date-date').val("");
         });
 
         $('#event-creation-weekdays-checkbox').change(function() {
@@ -258,14 +315,14 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly, Monday through Friday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur weekly, Monday through Friday');
                 }
                 else 
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
 
             else if ($('event-creation-weekdays-checkbox').is(":checked") == false)
@@ -276,17 +333,17 @@
 
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
 
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').hide();
+                    $('#event-creation-recurrance-explanation').hide();
                 }
             }
         });
@@ -308,14 +365,14 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Monday, Wednesday, and Friday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur weekly on Monday, Wednesday, and Friday');
                 }
                 else 
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Monday, Wednesday, and Friday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Monday, Wednesday, and Friday');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
 
             else if ($('event-creation-mwf-checkbox').is(":checked") == false)
@@ -326,17 +383,17 @@
 
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
 
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').hide();
+                    $('#event-creation-recurrance-explanation').hide();
                 }
             }
         });
@@ -358,14 +415,14 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Tuesday and Thursday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur weekly on Tuesday and Thursday');
                 }
                 else 
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Tuesday and Thursday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Tuesday and Thursday');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
 
             else if ($('event-creation-tr-checkbox').is(":checked") == false)
@@ -376,17 +433,17 @@
 
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
 
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').hide();
+                    $('#event-creation-recurrance-explanation').hide();
                 }
             }
         });
@@ -441,8 +498,9 @@
         });
 
         $('#button-repeat-monthly').click(function() {
-            reoccuranceSelectionTracker = 2;
+            recurranceSelectionTracker = 2;
             $('#repeat-options').show();
+            $('.event-creation-recurrance-duration').show();
             $('#daily-repeat-options').hide();
             $('#weekly-repeat-options').hide();
             resetAllWeeklyOptions();
@@ -451,7 +509,10 @@
             $('#create-event-monthly-repeat-choice-container').show();
             $('#yearly-repeat-options').hide();
             $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
-            $('#event-creation-reoccurance-explanation').hide();
+            $('#event-creation-recurrance-explanation').hide();
+            $('input[type=radio][name=recurrance-option]').prop("checked", false);
+            $('#event-creation-recurrance-duration-amount-text').val("");
+            $('#event-creation-recurrance-duration-date-date').val("");
         });
 
         $('#event-creation-same-day-next-month-checkbox').change(function() {
@@ -466,14 +527,14 @@
 
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
+                        $('#event-creation-recurrance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
             }
 
@@ -483,14 +544,14 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly');
+                    $('#event-creation-recurrance-explanation').text('This event will occur monthly');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' months');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
         });
 
@@ -506,14 +567,14 @@
 
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                        $('#event-creation-recurrance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
             }
 
@@ -523,57 +584,58 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly');
+                    $('#event-creation-recurrance-explanation').text('This event will occur monthly');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' months');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
         });
 
         $('.event-creation-date-input').change(function() {
 
-            if (reoccuranceSelectionTracker == 2 && $('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            if (recurranceSelectionTracker == 2 && $('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
             {
                 repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
                 var tempString = $('.event-creation-date-input').val();
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
+                    $('#event-creation-recurrance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
 
-            if (reoccuranceSelectionTracker == 2 && $('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            if (recurranceSelectionTracker == 2 && $('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
             {
                 repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
                 var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                    $('#event-creation-recurrance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
         });
 
         $('#button-repeat-yearly').click(function() {
-            reoccuranceSelectionTracker = 3;
+            recurranceSelectionTracker = 3;
             $('#repeat-options').show();
+            $('.event-creation-recurrance-duration').show();
             $('#daily-repeat-options').hide();
             $('#weekly-repeat-options').hide();
             resetAllWeeklyOptions();
@@ -583,7 +645,10 @@
             resetAllMonthlyOptions();
             $('#yearly-repeat-options').show();
             $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
-            $('#event-creation-reoccurance-explanation').hide();
+            $('#event-creation-recurrance-explanation').hide();
+            $('input[type=radio][name=recurrance-option]').prop("checked", false);
+            $('#event-creation-recurrance-duration-amount-text').val("");
+            $('#event-creation-recurrance-duration-date-date').val("");
         });
         
     });
@@ -608,21 +673,21 @@
 
             var repeatNumber = parseInt($(this).text());
 
-            if (reoccuranceSelectionTracker == 0)
+            if (recurranceSelectionTracker == 0)
             {
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur daily');
+                    $('#event-creation-recurrance-explanation').text('This event will occur daily');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' days');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' days');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
 
-            if (reoccuranceSelectionTracker == 1)
+            if (recurranceSelectionTracker == 1)
             {
                 if (weekdaySelectionCreator() > 0)
                 {
@@ -632,57 +697,57 @@
                 {
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly, Monday through Friday');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly, Monday through Friday');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
                 else if ($('#event-creation-mwf-checkbox').is(":checked"))
                 {
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Monday, Wednesday, and Friday');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly on Monday, Wednesday, and Friday');
                     }
                     else 
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Monday, Wednesday, and Friday');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Monday, Wednesday, and Friday');
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
                 else if ($('#event-creation-tr-checkbox').is(":checked"))
                 {
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly on Tuesday and Thursday');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly on Tuesday and Thursday');
                     }
                     else 
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Tuesday and Thursday');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on Tuesday and Thursday');
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
                 else
                 {
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
             }
 
-            if (reoccuranceSelectionTracker == 2)
+            if (recurranceSelectionTracker == 2)
             {
                 if ($('#event-creation-same-day-next-month-checkbox').is(":checked"))
                 {
@@ -691,14 +756,14 @@
                         var tempString = $('.event-creation-date-input').val();
                         if (repeatNumber == 1)
                         {
-                            $('#event-creation-reoccurance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
+                            $('#event-creation-recurrance-explanation').text('This event will occur monthly on day ' + dateParcer(tempString));
                         }
                         else
                         {
-                            $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
+                            $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' months on day ' + dateParcer(tempString));
                         }
 
-                        $('#event-creation-reoccurance-explanation').show();
+                        $('#event-creation-recurrance-explanation').show();
                     }
                 }
 
@@ -709,14 +774,14 @@
                         var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
                         if (repeatNumber == 1)
                         {
-                            $('#event-creation-reoccurance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                            $('#event-creation-recurrance-explanation').text('This event will occur monthly on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                         }
                         else
                         {
-                            $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+                            $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                         }
 
-                        $('#event-creation-reoccurance-explanation').show();
+                        $('#event-creation-recurrance-explanation').show();
                     }
                 }
 
@@ -724,30 +789,30 @@
                 {
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur monthly');
+                        $('#event-creation-recurrance-explanation').text('This event will occur monthly');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' months');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' months');
                     }
 
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
 
             }
 
-            if (reoccuranceSelectionTracker == 3)
+            if (recurranceSelectionTracker == 3)
             {
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur yearly');
+                    $('#event-creation-recurrance-explanation').text('This event will occur yearly');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' years');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' years');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
 
 
@@ -843,6 +908,7 @@
         $('.event-creation-repeat-input').prop("checked", false);
         $('#create-event-repeat-options-container').hide();
         $('#repeat-options').hide();
+        $('.event-creation-recurrance-duration').hide();
         $('#weekly-repeat-options').hide();
         resetAllWeeklyOptions();
         $('#create-event-weekly-repeat-choice-container').hide();
@@ -853,7 +919,10 @@
         $('#create-event-error-message-1').hide();
         $('#create-event-error-message-2').hide();
         $('.create-event-repeat-event-occurance-dropdown-button').html('<span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span>');
-        $('#event-creation-reoccurance-explanation').hide();
+        $('#event-creation-recurrance-explanation').hide();
+        $('input[type=radio][name=recurrance-option]').prop("checked", false);
+        $('#event-creation-recurrance-duration-amount-text').val("");
+        $('#event-creation-recurrance-duration-date-date').val("");
     });
 
     //The following function resets the necessary attributes in the modal
@@ -945,14 +1014,14 @@
                 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every day');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every day');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, every day');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, every day');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
         }
 
@@ -964,14 +1033,14 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly, Monday through Friday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur weekly, Monday through Friday');
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks, Monday through Friday');
                 }
 
-                $('#event-creation-reoccurance-explanation').show();
+                $('#event-creation-recurrance-explanation').show();
             }
         }
 
@@ -1003,28 +1072,28 @@
 
                 if (repeatNumber == 1)
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur weekly on ' + creationString);
+                    $('#event-creation-recurrance-explanation').text('This event will occur weekly on ' + creationString);
                 }
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on ' + creationString);
+                    $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks on ' + creationString);
                 }
 
                 if (multipleMarked == 0)
                 {
                     if (repeatNumber == 1)
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur weekly');
+                        $('#event-creation-recurrance-explanation').text('This event will occur weekly');
                     }
                     else
                     {
-                        $('#event-creation-reoccurance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
+                        $('#event-creation-recurrance-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
 
                 else
                 {
-                    $('#event-creation-reoccurance-explanation').show();
+                    $('#event-creation-recurrance-explanation').show();
                 }
                 
             }

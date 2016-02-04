@@ -1546,8 +1546,20 @@ input[type="checkbox"] {
 
 #misc-planner-notes-textarea {
 	resize: none;
+	overflow: auto;
 	width: 550px;
-	height: 200px;
+}
+
+#planner-misc-notes {
+	color: #fff;
+	resize: none;
+	width: 85%;
+	height: 135px;
+	background-color: #5F648D;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	white-space: normal;
 }
 
 #create-new-category-placeholder {
@@ -1787,6 +1799,20 @@ input[type="checkbox"] {
 	bottom: 2px;
 }
 
-#event-creation-reoccurance-explanation {
+#event-creation-recurrance-explanation {
 	font-weight: bold;
 }
+
+#event-creation-recurrance-duration-amount-text {
+	width: 60px;
+}
+
+#event-creation-recurrance-duration-amount-text {
+	height: 23px;
+}
+
+.input-disabled {
+	background-color: #EBEBE4;
+	border: 1px solid #ABADB3;
+}
+

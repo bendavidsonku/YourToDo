@@ -12,9 +12,9 @@
                 <h4>Enter planner notes below:</h4>
                 <p>
                     {% if planner.get_miscellaneousNotes != None %}
-                        <textarea name="planner-notes-textarea" id="misc-planner-notes-textarea">{{ planner.get_miscellaneousNotes }}</textarea>
+                        <textarea rows="6" name="planner-notes-textarea" id="misc-planner-notes-textarea">{{ planner.get_miscellaneousNotes }}</textarea>
                     {% else %}
-                        <textarea name="planner-notes-textarea" id="misc-planner-notes-textarea"></textarea>
+                        <textarea rows = "6" name="planner-notes-textarea" id="misc-planner-notes-textarea"></textarea>
                     {% endif %}
                 </p>
              </div>
