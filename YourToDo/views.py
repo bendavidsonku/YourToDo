@@ -619,6 +619,7 @@ def createNewEvent(request):
 
             user = User.objects.get(username = username)
 
+            # Get all information from ajax call
             newEventName = request.POST.get("ajax_event_name", "")
             newEventParentCategory = request.POST.get("ajax_event_parentCategory", "")
             newEventDescription = request.POST.get("ajax_event_description", "")
@@ -627,6 +628,10 @@ def createNewEvent(request):
             newEventStartTime = request.POST.get("ajax_event_startTime", "")
             newEventEndTime = request.POST.get("ajax_event_endTime", "")
             newEventImportant = request.POST.get("ajax_event_important", "")
+            newEventRecurrenceType = request.POST.get("ajax_event_recurrence_type", "")
+            newEventRecurrenceCheckboxArray = request.POST.getlist("ajax_event_recurrence_checkbox_array[]", "")
+            newEventPeriodOfRecurrence = request.POST.get("ajax_event_period_of_recurrence", "")
+            newEventRecurrenceEndOptions = request.POST.getlist("ajax_event_recurrence_end_options_array[]", "")
 
             # Fix the Event Time Estimate Field
             if newEventTimeEstimate == "" or newEventTimeEstimate == "None":
@@ -658,17 +663,91 @@ def createNewEvent(request):
             else:
                 pass
 
+            # Check if event is important
             if newEventImportant == "false":
                 newEventImportant = False
             else:
                 newEventImportant = True
 
-            # Check to see if user assigned timeStart AND timeEnd to event
-            if newEventStartTime == "" or newEventEndTime == "":
-                Event.objects.create_event_no_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate)
+            # Store necessary data if user specifies the event should reccur & call create
+            if newEventRecurrenceType == "None":
+                # Check to see if user assigned timeStart AND timeEnd to event
+                if newEventStartTime == "" or newEventEndTime == "":
+                    Event.objects.create_event_no_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate)
+                else:
+                    # else user has given time frame for event so create with timeBox
+                    Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
             else:
-                # else user has given time frame for event so create with timeBox
-                Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
+                # Daily Recurrence
+                if newEventRecurrenceType == "0":
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        print(newEventRecurrenceEndOptions[0])
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        print(newEventRecurrenceEndOptions[1])
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        print(newEventRecurrenceEndOptions[1])
+                # Weekly Recurrence
+                elif newEventRecurrenceType == "1":
+                    # The following checks build an array holding the corresponding days of the week the user specified in the modal
+                    checkBoxFound = False
+                    for x in newEventRecurrenceCheckboxArray:
+                        if x == "1":
+                            checkBoxFound = True
+                    if checkBoxFound == True:
+                        dayHolderArray = []
+                        if newEventRecurrenceCheckboxArray[0] == "1":
+                            dayHolderArray = [1,1,1,1,1,0,0]
+                        elif newEventRecurrenceCheckboxArray[1] == "1":
+                            dayHolderArray = [1,0,1,0,1,0,0]
+                        elif newEventRecurrenceCheckboxArray[2] == "1":
+                            dayHolderArray = [0,1,0,1,0,0,0]
+                        else:
+                            indexTracker = 0
+                            for i in range(4,10):
+                                dayHolderArray.append(newEventRecurrenceCheckboxArray[i])
+                                indexTracker = indexTracker + 1
+                            dayHolderArray.append(newEventRecurrenceCheckboxArray[3])
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        print(newEventRecurrenceEndOptions[0])
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        print(newEventRecurrenceEndOptions[1])
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        print(newEventRecurrenceEndOptions[1])
+
+                # Monthly Recurrence
+                elif newEventRecurrenceType == "2":
+                    sameDayNextMonth = True
+                    checkBoxFound = False
+                    for x in newEventRecurrenceCheckboxArray:
+                        if x == "1":
+                            checkBoxFound = True
+                    if checkBoxFound == True:
+                        if newEventRecurrenceCheckboxArray[10] == "1":
+                            pass
+                        else:
+                            sameDayNextMonth = False
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        print(newEventRecurrenceEndOptions[0])
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        print(newEventRecurrenceEndOptions[1])
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        print(newEventRecurrenceEndOptions[1])
+                
+                # Yearly Recurrence
+                elif newEventRecurrenceType == "3":
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        print(newEventRecurrenceEndOptions[0])
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        print(newEventRecurrenceEndOptions[1])
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        print(newEventRecurrenceEndOptions[1])
+
+                else:
+                    pass
 
     return HttpResponse('')
 
