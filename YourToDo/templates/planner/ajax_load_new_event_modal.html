@@ -1240,7 +1240,14 @@
                 {
                     for (i = 0; i < multipleMarked - 1; i++)
                     {
-                        creationString = creationString.replace("|", ", ");
+                        if (i == multipleMarked - 2)
+                        {
+                            creationString = creationString.replace("|", " and ");
+                        }
+                        else
+                        {
+                            creationString = creationString.replace("|", ", ");
+                        }
                     }
 
                     creationString = creationString.replace("|", "");
