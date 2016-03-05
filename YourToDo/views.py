@@ -671,22 +671,17 @@ def createNewEvent(request):
 
             # Store necessary data if user specifies the event should reccur & call create
             if newEventRecurrenceType == "None":
-                # Check to see if user assigned timeStart AND timeEnd to event
-                if newEventStartTime == "" or newEventEndTime == "":
-                    Event.objects.create_event_no_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate)
-                else:
-                    # else user has given time frame for event so create with timeBox
-                    Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
+                Event.objects.create_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
             else:
                 # Daily Recurrence
                 if newEventRecurrenceType == "0":
                     if newEventRecurrenceEndOptions[0] == "never":
                         print(newEventRecurrenceEndOptions[0])
                     elif newEventRecurrenceEndOptions[0] == "number":
-                        print(newEventRecurrenceEndOptions[1])
+                        Event.objects.create_daily_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
                     else:
                         # Last statement recognizes that the end option was specified to stop on a given date
-                        print(newEventRecurrenceEndOptions[1])
+                        Event.objects.create_daily_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
                 # Weekly Recurrence
                 elif newEventRecurrenceType == "1":
                     # The following checks build an array holding the corresponding days of the week the user specified in the modal
