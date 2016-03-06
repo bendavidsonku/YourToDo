@@ -155,7 +155,7 @@
                             <div id="create-event-monthly-repeat-choice-container" style="display:none">
                                 <p class="custom-options-spacing">
                                 </p>
-                                <label>Repeat same day next month</label><input id="event-creation-same-day-next-month-checkbox" type="checkbox">
+                                <label>Repeat same day next month</label><input id="event-creation-same-day-next-month-checkbox" type="checkbox"><label>&nbsp;&nbsp;(default)</label>
                                 <label>Repeat same day of the week next month</label><input id="event-creation-same-day-week-next-month-checkbox" type="checkbox">
                             </div>
                             <p id="event-creation-recurrence-explanation" style="display:none">
@@ -707,6 +707,34 @@
                 {
                     $('#event-creation-recurrence-explanation').text('This event will occur every ' + repeatNumber +' months on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
                 }
+
+                $('#event-creation-recurrence-explanation').show();
+            }
+
+            if (recurrenceSelectionTracker == 2 && $('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
+            {
+                var tempString = $('.event-creation-date-input').val();
+                    tempString = dateParcer(tempString);
+
+                if (tempString == "31")
+                {
+                    $('#event-creation-recurrence-explanation').text('This event will occur on the last day of the month');
+                }
+                else
+                {
+                    $('#event-creation-recurrence-explanation').text('This event will occur on day ' + tempString + ' of the month');
+                }
+        
+
+                $('#event-creation-recurrence-explanation').show();
+            }
+
+            if (recurrenceSelectionTracker == 2 && $('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
+            {
+                var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
+
+                $('#event-creation-recurrence-explanation').text('This event will occur on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+        
 
                 $('#event-creation-recurrence-explanation').show();
             }
