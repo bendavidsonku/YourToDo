@@ -587,6 +587,25 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
+            else if ($('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
+            {
+                if ($('.event-creation-date-input').val() != "")
+                {
+                    var tempString = $('.event-creation-date-input').val();
+                    tempString = dateParcer(tempString);
+
+                    if (tempString == "31")
+                    {
+                        $('#event-creation-recurrence-explanation').text('This event will occur on the last day of the month');
+                    }
+                    else
+                    {
+                        $('#event-creation-recurrence-explanation').text('This event will occur on day ' + tempString + ' of the month');
+                    }
+
+                    $('#event-creation-recurrence-explanation').show();
+                }
+            }
         });
 
         $('#event-creation-same-day-week-next-month-checkbox').change(function() {
@@ -626,6 +645,18 @@
                 }
 
                 $('#event-creation-recurrence-explanation').show();
+            }
+
+            else if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
+            {
+                if ($('.event-creation-date-input').val() != "")
+                {
+                    var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
+
+                    $('#event-creation-recurrence-explanation').text('This event will occur on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
+
+                    $('#event-creation-recurrence-explanation').show();
+                }
             }
         });
 
