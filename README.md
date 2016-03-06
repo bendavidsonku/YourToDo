@@ -28,3 +28,6 @@ Copy the html.py file from the shared Google Drive folder into your mezzaine/uti
 
 
 This change will solve an import error with python when attempting to run the server.
+
+Updated 3/5/2016: need to install python dateutil using pip install python-dateutil --upgrade
+We're also using django registration redux, python social auth
