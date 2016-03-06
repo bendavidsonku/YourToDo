@@ -1,5 +1,5 @@
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 import string
 
@@ -232,7 +232,7 @@ class EventManager(models.Manager):
 			return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
 			description = description, important = important, timeEstimate = timeEstimate, timeStart = timeStart, timeEnd = timeEnd)
 
-	# Given a user specified number of times to occur, create the daily event
+	# Given a user specified number of times to occur, create daily event
 	def create_daily_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)
@@ -241,7 +241,6 @@ class EventManager(models.Manager):
 
 		for i in range(0, int(numberOfTimesToRepeat)):
 			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
-
 			dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
 
 		return
@@ -256,8 +255,92 @@ class EventManager(models.Manager):
 
 		while dateOfEvent <= dateToStop:
 			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
-
 			dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
+
+		return
+
+	# Given a user specified number of times to occur, create weekly event
+	def create_weekly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat, dayHolderArray):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		if dayHolderArray == None:
+			for i in range(0, int(numberOfTimesToRepeat)):
+				Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence) * 7)
+
+		else:
+			firstDayOfWeekEventStarts = dateOfEvent
+
+			while dayHolderArray[firstDayOfWeekEventStarts.weekday()] == 0:
+				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = 1)
+
+			for i in range(0, int(numberOfTimesToRepeat)):
+				tempDate = firstDayOfWeekEventStarts
+				for j in range(0,7):
+					if dayHolderArray[tempDate.weekday()] == 1:
+						Event.objects.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+					tempDate = tempDate + timedelta(days = 1)
+
+				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = int(periodOfRecurrence) * 7)
+
+		return
+
+
+
+	# Given a user specified date to stop, create event until stop date is reached
+	def create_weekly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, dayHolderArray):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		if dayHolderArray == None:
+			while dateOfEvent <= dateToStop:
+				Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence) * 7)
+		else:
+			firstDayOfWeekEventStarts = dateOfEvent
+
+			while dayHolderArray[firstDayOfWeekEventStarts.weekday()] == 0:
+				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = 1)
+
+			while firstDayOfWeekEventStarts <= dateToStop:
+				tempDate = firstDayOfWeekEventStarts
+				for i in range(0,7):
+					if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop:
+						Event.objects.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+					tempDate = tempDate + timedelta(days = 1)
+
+				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = int(periodOfRecurrence) * 7)
+
+		return
+
+	def create_yearly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		for i in range(0, int(numberOfTimesToRepeat)):
+			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
+
+		return
+
+	def create_yearly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+		
+		while dateOfEvent <= dateToStop:
+			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
 
 		return
 
