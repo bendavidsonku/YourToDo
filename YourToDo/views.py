@@ -731,7 +731,7 @@ def createNewEvent(request):
                         Event.objects.create_monthly_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], sameDayNextMonth, newEventNthOccurrenceOfSelectedDate)
                     else:
                         # Last statement recognizes that the end option was specified to stop on a given date
-                        print(newEventRecurrenceEndOptions[1])
+                        Event.objects.create_monthly_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], sameDayNextMonth, newEventNthOccurrenceOfSelectedDate)
                 
                 # Yearly Recurrence
                 elif newEventRecurrenceType == "3":

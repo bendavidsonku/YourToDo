@@ -241,7 +241,7 @@ class EventManager(models.Manager):
 		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
 
 		for i in range(0, int(numberOfTimesToRepeat)):
-			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 			dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
 
 		return
@@ -255,7 +255,7 @@ class EventManager(models.Manager):
 		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
 
 		while dateOfEvent <= dateToStop:
-			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 			dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
 
 		return
@@ -269,8 +269,8 @@ class EventManager(models.Manager):
 
 		if dayHolderArray == None:
 			for i in range(0, int(numberOfTimesToRepeat)):
-				Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
-				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence) * 7)
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+				dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 
 		else:
 			firstDayOfWeekEventStarts = dateOfEvent
@@ -282,10 +282,10 @@ class EventManager(models.Manager):
 				tempDate = firstDayOfWeekEventStarts
 				for j in range(0,7):
 					if dayHolderArray[tempDate.weekday()] == 1:
-						Event.objects.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 					tempDate = tempDate + timedelta(days = 1)
 
-				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = int(periodOfRecurrence) * 7)
+				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(weeks = int(periodOfRecurrence))
 
 		return
 
@@ -301,8 +301,8 @@ class EventManager(models.Manager):
 
 		if dayHolderArray == None:
 			while dateOfEvent <= dateToStop:
-				Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
-				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence) * 7)
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+				dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 		else:
 			firstDayOfWeekEventStarts = dateOfEvent
 
@@ -313,10 +313,10 @@ class EventManager(models.Manager):
 				tempDate = firstDayOfWeekEventStarts
 				for i in range(0,7):
 					if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop:
-						Event.objects.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 					tempDate = tempDate + timedelta(days = 1)
 
-				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = int(periodOfRecurrence) * 7)
+				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(weeks = int(periodOfRecurrence))
 
 		return
 
@@ -331,11 +331,11 @@ class EventManager(models.Manager):
 			if dateOfEvent.day == 31:
 				for i in range(0, int(numberOfTimesToRepeat)):
 					dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
-					Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
 			else:
 				for i in range(0, int(numberOfTimesToRepeat)):
-					Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
 
 		else:
@@ -344,9 +344,39 @@ class EventManager(models.Manager):
 			nthOccurenceOfSelectedDateAsInt = int(nthOccurenceOfSelectedDate)
 
 			for i in range(0, int(numberOfTimesToRepeat)):
-				tempDate = Event.objects.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurenceOfSelectedDateAsInt, originalDayOfEventDate)
-				print(tempDate)
-				Event.objects.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurenceOfSelectedDateAsInt, originalDayOfEventDate)
+				self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
+
+		return
+
+	def create_monthly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, sameDayOrSameDayOfWeek, nthOccurenceOfSelectedDate):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)		
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# If sameDayOrSameDayOfWeek is true, treat as same-day-next-month creation, else treat as same-day-of-week-next-month creation
+		if sameDayOrSameDayOfWeek == True:
+			if dateOfEvent.day == 31:
+				while dateOfEvent <= dateToStop:
+					dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+			else:
+				while dateOfEvent <= dateToStop:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+		else:
+			originalDayOfEventDate = dateOfEvent.weekday()
+			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
+			nthOccurenceOfSelectedDateAsInt = int(nthOccurenceOfSelectedDate)
+
+			while firstDayOfMonthOfEventDate <= dateToStop:
+				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurenceOfSelectedDateAsInt, originalDayOfEventDate)
+				if tempDate <= dateToStop:
+					self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
 
 		return
@@ -375,7 +405,7 @@ class EventManager(models.Manager):
 		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
 
 		for i in range(0, int(numberOfTimesToRepeat)):
-			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
 
 		return
@@ -388,7 +418,7 @@ class EventManager(models.Manager):
 		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
 
 		while dateOfEvent <= dateToStop:
-			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
 
 		return
