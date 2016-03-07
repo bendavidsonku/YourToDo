@@ -970,6 +970,7 @@
         var periodOfRecurrence = $('.create-event-repeat-event-occurance-dropdown-button').text();
         var recurrenceCheckBoxes = [];
         var recurrenceEndOptions = [];
+        var nthOccuranceOfSelectedDate = "";
 
         var validForm = true;
 
@@ -1078,6 +1079,7 @@
                             if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked"))
                             {
                                 recurrenceCheckBoxes[11] = 1;
+                                nthOccuranceOfSelectedDate = findNthDayOfTheWeekInMonth(eventDate)[2];
                             }
                         }
                         break;
@@ -1100,7 +1102,7 @@
         {
             recurrenceSelectionTracker = "None";
         }
-        
+
         if (validForm == true)
         {
             $.ajax({
@@ -1122,6 +1124,7 @@
                     ajax_event_recurrence_checkbox_array: recurrenceCheckBoxes,
                     ajax_event_period_of_recurrence: periodOfRecurrence,
                     ajax_event_recurrence_end_options_array: recurrenceEndOptions,
+                    ajax_event_nth_occurrence_of_selected_date: nthOccuranceOfSelectedDate,
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#ajax-create-event-modal').modal('hide');
@@ -1450,6 +1453,8 @@
             returnDate = "Saturday";
         }
 
+        var returnNthNumber = nthOccuranceOfSelectedDay;
+
         if (nthOccuranceOfSelectedDay == 1)
         {
             nthOccuranceOfSelectedDay = "first";
@@ -1471,7 +1476,7 @@
             nthOccuranceOfSelectedDay = "last";
         }
         
-        var dayAndOccurance = [returnDate, nthOccuranceOfSelectedDay];
+        var dayAndOccurance = [returnDate, nthOccuranceOfSelectedDay, returnNthNumber];
         return dayAndOccurance;
     }
 

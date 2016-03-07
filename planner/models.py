@@ -1,3 +1,4 @@
+import calendar
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -319,6 +320,54 @@ class EventManager(models.Manager):
 
 		return
 
+	def create_monthly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat, sameDayOrSameDayOfWeek, nthOccurenceOfSelectedDate):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)		
+
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# If sameDayOrSameDayOfWeek is true, treat as same-day-next-month creation, else treat as same-day-of-week-next-month creation
+		if sameDayOrSameDayOfWeek == True:
+			if dateOfEvent.day == 31:
+				for i in range(0, int(numberOfTimesToRepeat)):
+					dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+					Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+			else:
+				for i in range(0, int(numberOfTimesToRepeat)):
+					Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+
+		else:
+			originalDayOfEventDate = dateOfEvent.weekday()
+			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
+			nthOccurenceOfSelectedDateAsInt = int(nthOccurenceOfSelectedDate)
+
+			for i in range(0, int(numberOfTimesToRepeat)):
+				tempDate = Event.objects.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurenceOfSelectedDateAsInt, originalDayOfEventDate)
+				print(tempDate)
+				Event.objects.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
+				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
+
+		return
+
+	# Helper function for creating monthly recurring events
+	def find_date_of_nth_recurrence_of_given_weekday(self, dateOfEvent, nthOccurenceOfSelectedDate, weekday):
+		if (nthOccurenceOfSelectedDate == 5):
+			tempDate = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+
+			while tempDate.weekday() != weekday:
+				tempDate = tempDate - timedelta(days = 1)
+
+			return tempDate
+
+		else:
+			tempDate = dateOfEvent
+			tempAdjust = (weekday - tempDate.weekday()) % 7
+			tempDate = tempDate + timedelta(days = tempAdjust)
+
+			return (tempDate + timedelta(weeks = nthOccurenceOfSelectedDate - 1))
+
 	def create_yearly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)
@@ -337,7 +386,7 @@ class EventManager(models.Manager):
 
 		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
 		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
-		
+
 		while dateOfEvent <= dateToStop:
 			Event.objects.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))

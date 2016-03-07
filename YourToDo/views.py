@@ -632,6 +632,7 @@ def createNewEvent(request):
             newEventRecurrenceCheckboxArray = request.POST.getlist("ajax_event_recurrence_checkbox_array[]", "")
             newEventPeriodOfRecurrence = request.POST.get("ajax_event_period_of_recurrence", "")
             newEventRecurrenceEndOptions = request.POST.getlist("ajax_event_recurrence_end_options_array[]", "")
+            newEventNthOccurrenceOfSelectedDate = request.POST.get("ajax_event_nth_occurrence_of_selected_date", "")
 
             # Fix the Event Time Estimate Field
             if newEventTimeEstimate == "" or newEventTimeEstimate == "None":
@@ -727,7 +728,7 @@ def createNewEvent(request):
                     if newEventRecurrenceEndOptions[0] == "never":
                         print(newEventRecurrenceEndOptions[0])
                     elif newEventRecurrenceEndOptions[0] == "number":
-                        print(newEventRecurrenceEndOptions[1])
+                        Event.objects.create_monthly_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], sameDayNextMonth, newEventNthOccurrenceOfSelectedDate)
                     else:
                         # Last statement recognizes that the end option was specified to stop on a given date
                         print(newEventRecurrenceEndOptions[1])
