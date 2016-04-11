@@ -683,6 +683,7 @@ def createNewEvent(request):
                     else:
                         # Last statement recognizes that the end option was specified to stop on a given date
                         Event.objects.create_daily_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
+                        
                 # Weekly Recurrence
                 elif newEventRecurrenceType == "1":
                     # The following checks build an array holding the corresponding days of the week the user specified in the modal
@@ -700,10 +701,8 @@ def createNewEvent(request):
                         elif newEventRecurrenceCheckboxArray[2] == "1":
                             dayHolderArray = [0,1,0,1,0,0,0]
                         else:
-                            indexTracker = 0
                             for i in range(4,10):
                                 dayHolderArray.append(int(newEventRecurrenceCheckboxArray[i]))
-                                indexTracker = indexTracker + 1
                             dayHolderArray.append(int(newEventRecurrenceCheckboxArray[3]))
                     if newEventRecurrenceEndOptions[0] == "never":
                         print(newEventRecurrenceEndOptions[0])
@@ -715,6 +714,7 @@ def createNewEvent(request):
 
                 # Monthly Recurrence
                 elif newEventRecurrenceType == "2":
+                    # Default way that recurring monthly events are to be created
                     sameDayNextMonth = True
                     checkBoxFound = False
                     for x in newEventRecurrenceCheckboxArray:

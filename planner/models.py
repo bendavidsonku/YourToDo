@@ -273,19 +273,19 @@ class EventManager(models.Manager):
 				dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 
 		else:
-			firstDayOfWeekEventStarts = dateOfEvent
+			sundayOfCurrentWeek = dateOfEvent
 
-			while dayHolderArray[firstDayOfWeekEventStarts.weekday()] == 0:
-				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = 1)
+			while sundayOfCurrentWeek.weekday() != 6:
+				sundayOfCurrentWeek = sundayOfCurrentWeek - timedelta(days = 1)
 
 			for i in range(0, int(numberOfTimesToRepeat)):
-				tempDate = firstDayOfWeekEventStarts
+				tempDate = sundayOfCurrentWeek
 				for j in range(0,7):
-					if dayHolderArray[tempDate.weekday()] == 1:
+					if dayHolderArray[tempDate.weekday()] == 1 and tempDate >= dateOfEvent:
 						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 					tempDate = tempDate + timedelta(days = 1)
 
-				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(weeks = int(periodOfRecurrence))
+				sundayOfCurrentWeek = sundayOfCurrentWeek + timedelta(weeks = int(periodOfRecurrence))
 
 		return
 
@@ -304,19 +304,19 @@ class EventManager(models.Manager):
 				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd)
 				dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 		else:
-			firstDayOfWeekEventStarts = dateOfEvent
+			sundayOfCurrentWeek = dateOfEvent
 
-			while dayHolderArray[firstDayOfWeekEventStarts.weekday()] == 0:
-				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(days = 1)
+			while sundayOfCurrentWeek.weekday() != 6:
+				sundayOfCurrentWeek = sundayOfCurrentWeek - timedelta(days = 1)
 
-			while firstDayOfWeekEventStarts <= dateToStop:
-				tempDate = firstDayOfWeekEventStarts
+			while sundayOfCurrentWeek <= dateToStop:
+				tempDate = sundayOfCurrentWeek
 				for i in range(0,7):
-					if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop:
+					if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop and tempDate >= dateOfEvent:
 						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 					tempDate = tempDate + timedelta(days = 1)
 
-				firstDayOfWeekEventStarts = firstDayOfWeekEventStarts + timedelta(weeks = int(periodOfRecurrence))
+				sundayOfCurrentWeek = sundayOfCurrentWeek + timedelta(weeks = int(periodOfRecurrence))
 
 		return
 
