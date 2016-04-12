@@ -465,6 +465,7 @@ class Event(models.Model):
 	dateOfEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now)
 	complete = models.BooleanField(default = False)
 	neverEnding = models.BooleanField(default = False)
+	recurringReference = models.ForeignKey(RecurringEventReference, null = True)
 
 	objects = EventManager()
 
