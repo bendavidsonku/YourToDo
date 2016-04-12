@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 import string
+import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -444,6 +445,13 @@ class EventManager(models.Manager):
 		eventToDelete = Event.objects.get_single_event_by_user_and_id(request, id)
 		return eventToDelete.delete()
 
+class RecurringEventReference(models.Model):
+	listOfDaysToOccur = models.TextField(max_length = 7)
+	periodOfRecurrence = models.IntegerField(default = 0)
+	# 0: daily, 1: weekly, 2: monthly, 3: yearly
+	recurrenceType = models.IntegerField(default = 0)
+	sameDayOrSameDayOfWeek = models.BooleanField(default = True)
+	nthOccurenceOfSelectedDateAsInt = models.CharField(max_length = 1, null = True)
 
 class Event(models.Model):
 	parentPlanner = models.ForeignKey(Planner)
@@ -456,6 +464,7 @@ class Event(models.Model):
 	timeEnd = models.TimeField(auto_now = False, auto_now_add = False, null = True)
 	dateOfEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now)
 	complete = models.BooleanField(default = False)
+	neverEnding = models.BooleanField(default = False)
 
 	objects = EventManager()
 
