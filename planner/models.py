@@ -222,6 +222,49 @@ class Category(models.Model):
 		return self.order
 
 
+class RecurringEventReference(models.Model):
+	listOfDaysToOccur = models.TextField(max_length = 7)
+	periodOfRecurrence = models.IntegerField(default = 0)
+	# 0: daily, 1: weekly, 2: monthly, 3: yearly
+	recurrenceType = models.IntegerField(default = 0)
+	sameDayOrSameDayOfWeek = models.BooleanField(default = True)
+	nthOccurrenceOfEventDate = models.CharField(max_length = 1, null = True)
+	dateOfFirstEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now)
+
+	#objects = RecurringEventReferenceManager()
+
+	def get_recurringEventReference_id(self):
+		return self.id
+
+	def get_periodOfRecurrence(self):
+		return self.periodOfRecurrence
+
+	def set_periodOfRecurrence(self, periodOfRecurrence):
+		self.periodOfRecurrence = periodOfRecurrence
+		self.save()
+
+	def get_sameDayOrSameDayOfWeek(self):
+		return self.sameDayOrSameDayOfWeek
+
+	def set_sameDayORSameDayOfWeek(self, sameDayOrSameDayOfWeek):
+		self.sameDayOrSameDayOfWeek = sameDayOrSameDayOfWeek
+		self.save()
+
+	def get_nthOccurrenceOfEventDate(self):
+		return self.nthOccurrenceOfEventDate
+
+	def set_nthOccurrenceOfEventDate(self, nthOccurrenceOfEventDate):
+		self.nthOccurrenceOfEventDate = nthOccurrenceOfEventDate
+		self.save()
+
+	def get_dateOfFirstEvent(self):
+		return self.dateOfFirstEvent
+
+	def set_dateOFFirstEvent(self, dateOfFirstEvent):
+		self.dateOfFirstEvent = dateOfFirstEvent
+		self.save()
+
+
 class EventManager(models.Manager):
 	def create_event(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd):
 		plannerId = request.planner
@@ -321,7 +364,7 @@ class EventManager(models.Manager):
 
 		return
 
-	def create_monthly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat, sameDayOrSameDayOfWeek, nthOccurenceOfSelectedDate):
+	def create_monthly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat, sameDayOrSameDayOfWeek, nthOccurrenceOfSelectedDate):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)		
 
@@ -342,16 +385,16 @@ class EventManager(models.Manager):
 		else:
 			originalDayOfEventDate = dateOfEvent.weekday()
 			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
-			nthOccurenceOfSelectedDateAsInt = int(nthOccurenceOfSelectedDate)
+			nthOccurrenceOfSelectedDateAsInt = int(nthOccurrenceOfSelectedDate)
 
 			for i in range(0, int(numberOfTimesToRepeat)):
-				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurenceOfSelectedDateAsInt, originalDayOfEventDate)
+				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
 				self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
 
 		return
 
-	def create_monthly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, sameDayOrSameDayOfWeek, nthOccurenceOfSelectedDate):
+	def create_monthly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, sameDayOrSameDayOfWeek, nthOccurrenceOfSelectedDate):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)		
 
@@ -372,10 +415,10 @@ class EventManager(models.Manager):
 		else:
 			originalDayOfEventDate = dateOfEvent.weekday()
 			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
-			nthOccurenceOfSelectedDateAsInt = int(nthOccurenceOfSelectedDate)
+			nthOccurrenceOfSelectedDateAsInt = int(nthOccurrenceOfSelectedDate)
 
 			while firstDayOfMonthOfEventDate <= dateToStop:
-				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurenceOfSelectedDateAsInt, originalDayOfEventDate)
+				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
 				if tempDate <= dateToStop:
 					self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd)
 				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
@@ -383,8 +426,8 @@ class EventManager(models.Manager):
 		return
 
 	# Helper function for creating monthly recurring events
-	def find_date_of_nth_recurrence_of_given_weekday(self, dateOfEvent, nthOccurenceOfSelectedDate, weekday):
-		if (nthOccurenceOfSelectedDate == 5):
+	def find_date_of_nth_recurrence_of_given_weekday(self, dateOfEvent, nthOccurrenceOfSelectedDate, weekday):
+		if (nthOccurrenceOfSelectedDate == 5):
 			tempDate = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
 
 			while tempDate.weekday() != weekday:
@@ -397,7 +440,7 @@ class EventManager(models.Manager):
 			tempAdjust = (weekday - tempDate.weekday()) % 7
 			tempDate = tempDate + timedelta(days = tempAdjust)
 
-			return (tempDate + timedelta(weeks = nthOccurenceOfSelectedDate - 1))
+			return (tempDate + timedelta(weeks = nthOccurrenceOfSelectedDate - 1))
 
 	def create_yearly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat):
 		plannerId = request.planner
@@ -444,14 +487,6 @@ class EventManager(models.Manager):
 	def delete_event(self, request, id):
 		eventToDelete = Event.objects.get_single_event_by_user_and_id(request, id)
 		return eventToDelete.delete()
-
-class RecurringEventReference(models.Model):
-	listOfDaysToOccur = models.TextField(max_length = 7)
-	periodOfRecurrence = models.IntegerField(default = 0)
-	# 0: daily, 1: weekly, 2: monthly, 3: yearly
-	recurrenceType = models.IntegerField(default = 0)
-	sameDayOrSameDayOfWeek = models.BooleanField(default = True)
-	nthOccurenceOfSelectedDateAsInt = models.CharField(max_length = 1, null = True)
 
 class Event(models.Model):
 	parentPlanner = models.ForeignKey(Planner)
