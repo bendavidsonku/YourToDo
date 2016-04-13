@@ -672,7 +672,7 @@ def createNewEvent(request):
 
             # Store necessary data if user specifies the event should reccur & call create
             if newEventRecurrenceType == "None":
-                Event.objects.create_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
+                Event.objects.create_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, None, None)
             else:
                 # Daily Recurrence
                 if newEventRecurrenceType == "0":
@@ -683,7 +683,7 @@ def createNewEvent(request):
                     else:
                         # Last statement recognizes that the end option was specified to stop on a given date
                         Event.objects.create_daily_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
-                        
+
                 # Weekly Recurrence
                 elif newEventRecurrenceType == "1":
                     # The following checks build an array holding the corresponding days of the week the user specified in the modal
