@@ -202,8 +202,7 @@
 </div>
 
 <script>
-
-    // Variable to keep track of which button (daily/weekly/...) was pressed
+    // Variable to keep track of which button (daily/weekly/...) was pressed last
     var recurrenceSelectionTracker = null;
 
     $(document).ready(function() {
@@ -325,7 +324,6 @@
 
             if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--" && $('#event-creation-weekdays-checkbox').is(":checked"))
             {
-
                 repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
 
                 if (repeatNumber == 1)
@@ -339,7 +337,6 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             else if ($('event-creation-weekdays-checkbox').is(":checked") == false)
             {
                 if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
@@ -355,7 +352,6 @@
                         $('#event-creation-recurrence-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
-
                 else
                 {
                     $('#event-creation-recurrence-explanation').hide();
@@ -389,7 +385,6 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             else if ($('event-creation-mwf-checkbox').is(":checked") == false)
             {
                 if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
@@ -405,7 +400,6 @@
                         $('#event-creation-recurrence-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
-
                 else
                 {
                     $('#event-creation-recurrence-explanation').hide();
@@ -439,7 +433,6 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             else if ($('event-creation-tr-checkbox').is(":checked") == false)
             {
                 if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
@@ -455,7 +448,6 @@
                         $('#event-creation-recurrence-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
-
                 else
                 {
                     $('#event-creation-recurrence-explanation').hide();
@@ -463,49 +455,7 @@
             }
         });
 
-        $('#event-creation-week-day-choice-sunday').change(function() {
-            $('#event-creation-weekdays-checkbox').prop("checked", false);
-            $('#event-creation-mwf-checkbox').prop("checked", false);
-            $('#event-creation-tr-checkbox').prop("checked", false);
-            weekdaySelectionCreator();
-        });
-
-        $('#event-creation-week-day-choice-monday').change(function() {
-            $('#event-creation-weekdays-checkbox').prop("checked", false);
-            $('#event-creation-mwf-checkbox').prop("checked", false);
-            $('#event-creation-tr-checkbox').prop("checked", false);
-            weekdaySelectionCreator();
-        });
-
-        $('#event-creation-week-day-choice-tuesday').change(function() {
-            $('#event-creation-weekdays-checkbox').prop("checked", false);
-            $('#event-creation-mwf-checkbox').prop("checked", false);
-            $('#event-creation-tr-checkbox').prop("checked", false);
-            weekdaySelectionCreator();
-        });
-
-        $('#event-creation-week-day-choice-wednesday').change(function() {
-            $('#event-creation-weekdays-checkbox').prop("checked", false);
-            $('#event-creation-mwf-checkbox').prop("checked", false);
-            $('#event-creation-tr-checkbox').prop("checked", false);
-            weekdaySelectionCreator();
-        });
-
-        $('#event-creation-week-day-choice-thursday').change(function() {
-            $('#event-creation-weekdays-checkbox').prop("checked", false);
-            $('#event-creation-mwf-checkbox').prop("checked", false);
-            $('#event-creation-tr-checkbox').prop("checked", false);
-            weekdaySelectionCreator();
-        });
-
-        $('#event-creation-week-day-choice-friday').change(function() {
-            $('#event-creation-weekdays-checkbox').prop("checked", false);
-            $('#event-creation-mwf-checkbox').prop("checked", false);
-            $('#event-creation-tr-checkbox').prop("checked", false);
-            weekdaySelectionCreator();
-        });
-
-        $('#event-creation-week-day-choice-saturday').change(function() {
+        $('#event-creation-week-day-choice-sunday, #event-creation-week-day-choice-monday, #event-creation-week-day-choice-tuesday, #event-creation-week-day-choice-wednesday, #event-creation-week-day-choice-thursday, #event-creation-week-day-choice-friday, #event-creation-week-day-choice-saturday').change(function() {
             $('#event-creation-weekdays-checkbox').prop("checked", false);
             $('#event-creation-mwf-checkbox').prop("checked", false);
             $('#event-creation-tr-checkbox').prop("checked", false);
@@ -571,8 +521,7 @@
                     $('#event-creation-recurrence-explanation').show();
                 }
             }
-
-            else if ($('#event-creation-same-day-next-month-checkbox').is(":checked") == false && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            else if (!$('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
             {
                 repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
 
@@ -630,8 +579,7 @@
                     $('#event-creation-recurrence-explanation').show();
                 }
             }
-
-            else if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked") == false && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
+            else if (!$('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
             {
                 repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
 
@@ -646,7 +594,6 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             else if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
             {
                 if ($('.event-creation-date-input').val() != "")
@@ -693,7 +640,6 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             if (recurrenceSelectionTracker == 2 && $('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
             {
                 repeatNumber = parseInt($('.create-event-repeat-event-occurance-dropdown-button').text());
@@ -710,7 +656,6 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             if (recurrenceSelectionTracker == 2 && $('#event-creation-same-day-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
             {
                 var tempString = $('.event-creation-date-input').val();
@@ -724,18 +669,14 @@
                 {
                     $('#event-creation-recurrence-explanation').text('This event will occur on day ' + tempString + ' of the month');
                 }
-        
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             if (recurrenceSelectionTracker == 2 && $('#event-creation-same-day-week-next-month-checkbox').is(":checked") && $('.create-event-repeat-event-occurance-dropdown-button').text() == "--")
             {
                 var explanationInfo = findNthDayOfTheWeekInMonth($('.event-creation-date-input').val());
 
                 $('#event-creation-recurrence-explanation').text('This event will occur on the ' + explanationInfo[1] + ' ' + explanationInfo [0] + ' of the month');
-        
-
                 $('#event-creation-recurrence-explanation').show();
             }
         });
@@ -762,7 +703,6 @@
             $('#event-creation-recurrence-duration-amount-text').val("");
             $('#event-creation-recurrence-duration-date-date').val("");
         });
-        
     });
 
     // Event Drop Down Menu Function - replaces default value with user-specified value
@@ -798,12 +738,11 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
             if (recurrenceSelectionTracker == 1)
             {
                 if (weekdaySelectionCreator() > 0)
                 {
-                    // Let the function call from above run and do nothing inside this 
+                    // Let the function call from if-statement run and do nothing inside this 
                 }
                 else if ($('#event-creation-weekdays-checkbox').is(":checked"))
                 {
@@ -858,7 +797,6 @@
                     $('#event-creation-recurrence-explanation').show();
                 }
             }
-
             if (recurrenceSelectionTracker == 2)
             {
                 if ($('#event-creation-same-day-next-month-checkbox').is(":checked"))
@@ -894,7 +832,6 @@
                         $('#event-creation-recurrence-explanation').show();
                     }
                 }
-
                 else if ($('#event-creation-same-day-week-next-month-checkbox').is(":checked"))
                 {
                     if ($('.event-creation-date-input').val() != "")
@@ -912,7 +849,6 @@
                         $('#event-creation-recurrence-explanation').show();
                     }
                 }
-
                 else
                 {
                     if (repeatNumber == 1)
@@ -928,7 +864,6 @@
                 }
 
             }
-
             if (recurrenceSelectionTracker == 3)
             {
                 if (repeatNumber == 1)
@@ -942,57 +877,43 @@
 
                 $('#event-creation-recurrence-explanation').show();
             }
-
-
         });
-
     });
 
     // Handles event creation AJAX form submission and validates form before .ajax call
     $('#create-event-submit').click(function(){
         var eventName = $('.event-creation-name-input').val();
-
         var eventParentCategory = $('.event-parentCategory-dropdown-button').text();
         eventParentCategory = eventParentCategory.replace("Event's Category", "");
-
         var eventDescription = $('#event-creation-description-input').val();
-
         var eventDate = $('.event-creation-date-input').val();
-
         var eventTimeEstimate = $('.create-event-timeEstimate-dropdown-button').text();
         eventTimeEstimate = eventTimeEstimate.replace("Time Estimate", "");
-
         var eventStartTime = $('.event-creation-startTime-input').val();
         var eventEndTime = $('.event-creation-endTime-input').val();
-
         var eventImportant = $('.event-creation-important-input').is(":checked");
-
         var periodOfRecurrence = $('.create-event-repeat-event-occurance-dropdown-button').text();
         var recurrenceCheckBoxes = [];
         var recurrenceEndOptions = [];
         var nthOccuranceOfSelectedDate = "";
-
         var validForm = true;
 
         if (eventTimeEstimate == "Time Estimate")
         {
             eventTimeEstimate = "None";
         }
-
         if ((eventStartTime != "" && eventEndTime == "") || (eventStartTime == "" && eventEndTime != ""))
         {
             $('#create-event-error-message-1').hide();
             $('#create-event-error-message-2').fadeIn('fast').delay(3500).fadeOut('slow');
             validForm = false;
         }
-
         if ((eventName.length == 0 || eventParentCategory == "" || eventDate == "" || eventParentCategory == "Event's Category") && validForm != false)
         {
             $('create-event-error-message-2').hide();
             $('#create-event-error-message-1').fadeIn('fast').delay(3500).fadeOut('slow');
             validForm = false;
         }
-
         // Validation of recurring options
         if ($('.event-creation-repeat-input').is(":checked") && validForm != false)
         {
@@ -1002,7 +923,7 @@
                 $("#create-event-error-message-1").fadeIn('fast').delay(3500).fadeOut('slow');
                 validForm = false;
             }
-            if (validForm != false)
+            if (validForm)
             {
                 switch(recurrenceSelectionTracker)
                 {
@@ -1010,7 +931,6 @@
                     case 0:
                         validForm = validateRecurrenceEnd(recurrenceEndOptions);
                         break;
-
                     // Weekly
                     case 1:
                         validForm = validateRecurrenceEnd(recurrenceEndOptions);
@@ -1062,7 +982,6 @@
                             }
                         }
                         break;
-
                     // Monthly
                     case 2:
                         validForm = validateRecurrenceEnd(recurrenceEndOptions);
@@ -1083,12 +1002,10 @@
                             }
                         }
                         break;
-
                     // Yearly
                     case 3:
                         validForm = validateRecurrenceEnd(recurrenceEndOptions);
                         break;
-
                     // No Choice
                     case null:
                         validForm = false;
@@ -1096,14 +1013,12 @@
                 }
             }
         }
-
         // Pass in recurrence tracker in form that Python can understand
         if (recurrenceSelectionTracker == null)
         {
             recurrenceSelectionTracker = "None";
         }
-
-        if (validForm == true)
+        if (validForm)
         {
             $.ajax({
                 url: "/create-event/",
@@ -1134,7 +1049,6 @@
                 error: function() {
                     
                 },
-
             });
         }
     });
@@ -1210,49 +1124,42 @@
             creationString = "Sunday|";
             multipleMarked++;
         }
-
         if ($('#event-creation-week-day-choice-monday').is(":checked"))
         {
             monday = true;
             creationString = creationString + "Monday|";
             multipleMarked++;
         }
-
         if ($('#event-creation-week-day-choice-tuesday').is(":checked"))
         {
             tuesday = true;
             creationString = creationString + "Tuesday|";
             multipleMarked++;
         }
-
         if ($('#event-creation-week-day-choice-wednesday').is(":checked"))
         {
             wednesday = true;
             creationString = creationString + "Wednesday|";
             multipleMarked++;
         }
-
         if ($('#event-creation-week-day-choice-thursday').is(":checked"))
         {
             thursday = true;
             creationString = creationString + "Thursday|";
             multipleMarked++;
         }
-
         if ($('#event-creation-week-day-choice-friday').is(":checked"))
         {
             friday = true;
             creationString = creationString + "Friday|";
             multipleMarked++;
         }
-
         if ($('#event-creation-week-day-choice-saturday').is(":checked"))
         {
             saturday = true;
             creationString = creationString + "Saturday|";
             multipleMarked++;
         }
-
         if (sunday == true && monday == true && tuesday == true && wednesday == true && thursday == true && friday == true && saturday == true)
         {
             if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
@@ -1271,7 +1178,6 @@
                 $('#event-creation-recurrence-explanation').show();
             }
         }
-
         else if (sunday == false && monday == true && tuesday == true && wednesday == true && thursday == true && friday == true && saturday == false)
         {
             if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
@@ -1290,7 +1196,6 @@
                 $('#event-creation-recurrence-explanation').show();
             }
         }
-
         else
         {
             if ($('.create-event-repeat-event-occurance-dropdown-button').text() != "--")
@@ -1313,17 +1218,10 @@
 
                     creationString = creationString.replace("|", "");
                 }
-
                 else if (multipleMarked == 1)
                 {   
                     creationString = creationString.replace("|", "");
                 }
-
-                else
-                {
-                    // Do Nothing
-                }
-
                 if (repeatNumber == 1)
                 {
                     $('#event-creation-recurrence-explanation').text('This event will occur weekly on ' + creationString);
@@ -1332,7 +1230,6 @@
                 {
                     $('#event-creation-recurrence-explanation').text('This event will occur every ' + repeatNumber + ' weeks on ' + creationString);
                 }
-
                 if (multipleMarked == 0)
                 {
                     if (repeatNumber == 1)
@@ -1344,17 +1241,14 @@
                         $('#event-creation-recurrence-explanation').text('This event will occur every ' + repeatNumber + ' weeks');
                     }
                 }
-
                 else
                 {
                     $('#event-creation-recurrence-explanation').show();
                 }
-                
             }
         }
 
         return multipleMarked;
-
     }
 
     function dateParcer(date)
@@ -1365,7 +1259,6 @@
         {
             return date.charAt(9);
         }
-
         else
         {
             return(date.charAt(8) + date.charAt(9));
@@ -1377,22 +1270,16 @@
         var year = selectedDate.substring(0,4);
         var month = selectedDate.substring(5,7);
         var day = selectedDate.substring(8,10);
-
         // Gives a Javascript date object of the date passed in as a parameter
         selectedDate = new Date(year, month - 1, day);
-
         // Gets "day identifying index" of the passed in date
         var selectedDay = selectedDate.getDay();
-
         // Gives a Javascript date object of the first day of the month of the date passed in as a parameter
         var dateTracker = new Date(year, month - 1, 1);
-
         // Gets first day of the month in the given "selectedDate"
         var dayTracker = new Date(year, month - 1, 1).getDay();
-
         // Gets how many days are in the month of the given "selectedDate"
         var daysInTheMonth = new Date(year, month, 0).getDate();
-
         var nthOccuranceOfSelectedDay = 0;
 
         for(i = 0; i < daysInTheMonth; i++)
@@ -1401,15 +1288,14 @@
             {
                 if (selectedDate.getTime() == dateTracker.getTime())
                 {
-                    i = 40; // stop loop
                     nthOccuranceOfSelectedDay++;
+                    break;
                 }
                 else 
                 {
                     nthOccuranceOfSelectedDay++;
                 }
             }
-
             if (dayTracker == 6)
             {
                 dayTracker = 0;
@@ -1418,7 +1304,6 @@
             {
                 dayTracker++;
             }
-
             dateTracker.setDate(dateTracker.getDate() + 1);
         }
 
@@ -1538,5 +1423,4 @@
             }
         }
     }
-
 </script>
