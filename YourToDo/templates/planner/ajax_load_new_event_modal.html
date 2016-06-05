@@ -2,77 +2,190 @@
 <div id="ajax-create-event-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ajax-create-event-modal-label">
     <div class = "modal-dialog">
         <div class = "modal-content">
-             <div class = "modal-header">
+            <div class = "modal-header">
                 <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">×</button>
                 <h4 class = "modal-title" id = "ajax-create-event-modal-label">
                    Create New Event
                 </h4>
-             </div>
-             <div class = "modal-body">
-                <p>
-                    <label for="event-name">Name: (required)</label><input class="form-control event-creation-name-input" type="text">
-                </p>
-                <p>
-                    <label for="event-parentCategory">To which category does this event belong? (required)</label>
-                    <div id="create-event-parentCategory-dropdown" class="dropdown">
-                        <button href="#create-event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-create-event-parentCategory">
-                            {% if categoriesInPlanner|length == 0 %}
-                                <li><a href="#">Make a new category!</a></li>
-                            {% else %}
-                                {% for category in categoriesInPlanner %}
-                                    <li><a href="#">{{ category.get_name }}</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        </ul>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>
+                            <label for="event-name">Name: (required)</label><input class="form-control event-creation-name-input" type="text">
+                        </p>
+                        <p>
+                            <label for="event-parentCategory">Select category for event: (required)</label>
+                            <div id="create-event-parentCategory-dropdown" class="dropdown">
+                                <button href="#create-event-parentCategory-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle event-parentCategory-dropdown-button"><span class="attribute-label">Event's Category</span><span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-create-event-parentCategory">
+                                    {% if categoriesInPlanner|length == 0 %}
+                                        <li><a href="#">Make a new category!</a></li>
+                                    {% else %}
+                                        {% for category in categoriesInPlanner %}
+                                            <li><a href="#">{{ category.get_name }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </p>
+                        <p> 
+                            <label for="event-description">Description (optional):</label>
+                            <p>
+                            <textarea name="event-description" id="event-creation-description-input"></textarea>
+                            </p>
+                        </p>
                     </div>
-                </p>
-                <p> 
-                    <label for="event-description">Description (optional):</label>
-                    <p>
-                    <textarea name="event-description" id="event-creation-description-input"></textarea>
-                    <p>
-                </p>
-                <p>
-                    <label for=".event-creation-date-input">Date of Event: (required)<input class="form-control event-creation-date-input" type="date"></label>
-                </p>
-                <p>
-                    <label for="event-timeEstimate">Time Estimate (optional):</label>
-                    <div id="create-event-timeEstimate-dropdown" class="dropdown">
-                        <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-create-event-timeEstimate">
-                            <li><a href="#">None</a></li>
-                            <li><a href="#">15 minutes</a></li>
-                            <li><a href="#">30 minutes</a></li>
-                            <li><a href="#">45 minutes</a></li>
-                            <li><a href="#">1 hour</a></li>
-                            <li><a href="#">2 hours</a></li>
-                            <li><a href="#">3 hours</a></li>
-                            <li><a href="#">4 hours</a></li>
-                            <li><a href="#">5 hours</a></li>
-                            <li><a href="#">6 hours</a></li>
-                            <li><a href="#">7 hours</a></li>
-                            <li><a href="#">8 hours</a></li>
-                            <li><a href="#">More than 8 hours</a></li>
-                        </ul>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>
+                            <label for=".event-creation-date-input">Date of Event: (required)</label><input class="form-control event-creation-date-input" type="date">
+                        </p>
+                        <p>
+                            <label for="event-timeEstimate">Time Estimate (optional):</label>
+                            <div id="create-event-timeEstimate-dropdown" class="dropdown">
+                                <button href="#create-event-timeEstimate-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-timeEstimate-dropdown-button"><span class="attribute-label">Time Estimate</span><span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-create-event-timeEstimate">
+                                    <li><a href="#">None</a></li>
+                                    <li><a href="#">15 minutes</a></li>
+                                    <li><a href="#">30 minutes</a></li>
+                                    <li><a href="#">45 minutes</a></li>
+                                    <li><a href="#">1 hour</a></li>
+                                    <li><a href="#">2 hours</a></li>
+                                    <li><a href="#">3 hours</a></li>
+                                    <li><a href="#">4 hours</a></li>
+                                    <li><a href="#">5 hours</a></li>
+                                    <li><a href="#">6 hours</a></li>
+                                    <li><a href="#">7 hours</a></li>
+                                    <li><a href="#">8 hours</a></li>
+                                    <li><a href="#">More than 8 hours</a></li>
+                                </ul>
+                            </div>
+                        </p>
+                        <p>
+                            <label for=".event-creation-startTime-input">Start Time (optional):</label><input class="form-control event-creation-startTime-input" type="time">
+                        </p>
+                        <p>
+                            <label for=".event-creation-endTime-input">End Time (optional):</label><input class="form-control event-creation-endTime-input" type="time">
+                        </p>
+                        <p>
+                            <label for=".event-creation-important-input">Important:<input class="event-creation-important-input" type="checkbox"></label> 
+                        </p>
                     </div>
-                </p>
-                <p>
-                    <label for=".event-creation-startTime-input">Start Time (optional):</label><input class="form-control event-creation-startTime-input" type="time">
-                </p>
-                <p>
-                    <label for=".event-creation-endTime-input">End Time (optional):</label><input class="form-control event-creation-endTime-input" type="time">
-                </p>
-                <p>
-                    <label for=".event-creation-important-input">Important:<input class="form control event-creation-important-input" type="checkbox"></label> 
-                </p>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                    <label for=".event-creation-repeat-input">Recurring:</label><input class="event-creation-repeat-input" type="checkbox">
+                        <div id="create-event-repeat-options-container" style="display:none">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-daily">Daily</button>
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-weekly">Weekly</button>
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-monthly">Monthly</button>
+                                <button type="button" class="btn btn-default btn-layout-selector" id="button-repeat-yearly">Yearly</button>
+                            </div>
+                            <p>
+                                <div id="repeat-options" style="display:none">
+                                    Repeat every 
+                                    <div id="create-event-repeat-occurance-number-dropdown" class="dropdown">
+                                        <button href="#create-event-repeat-occurance-number-dropdown" data-toggle="dropdown" type="button" class="btn dropdown-toggle create-event-repeat-event-occurance-dropdown-button"><span id="create-event-repeat-occurance-number-label" class="attribute-label">--</span><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-create-event-repeat-occurance-number">
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li><a href="#">6</a></li>
+                                            <li><a href="#">7</a></li>
+                                            <li><a href="#">8</a></li>
+                                            <li><a href="#">9</a></li>
+                                            <li><a href="#">10</a></li>
+                                            <li><a href="#">11</a></li>
+                                            <li><a href="#">12</a></li>
+                                            <li><a href="#">13</a></li>
+                                            <li><a href="#">14</a></li>
+                                            <li><a href="#">15</a></li>
+                                            <li><a href="#">16</a></li>
+                                            <li><a href="#">17</a></li>
+                                            <li><a href="#">18</a></li>
+                                            <li><a href="#">19</a></li>
+                                            <li><a href="#">20</a></li>
+                                            <li><a href="#">21</a></li>
+                                            <li><a href="#">22</a></li>
+                                            <li><a href="#">23</a></li>
+                                            <li><a href="#">24</a></li>
+                                            <li><a href="#">25</a></li>
+                                            <li><a href="#">26</a></li>
+                                            <li><a href="#">27</a></li>
+                                            <li><a href="#">28</a></li>
+                                            <li><a href="#">29</a></li>
+                                            <li><a href="#">30</a></li>
+                                        </ul> 
+                                    </div>
+                                    <span id="daily-repeat-options" style="display:none">
+                                        days
+                                    </span>
+                                    <span id="weekly-repeat-options" style="display:none">
+                                        weeks
+                                    </span>
+                                    <span id="monthly-repeat-options" style="display:none">
+                                        months
+                                    </span>
+                                    <span id="yearly-repeat-options" style="display:none">
+                                        years
+                                    </span>
+                                </div>
+                            </p>
+                            <div id="create-event-weekly-repeat-choice-container" style="display:none">
+                                <p class="custom-options-spacing">
+                                </p>
+                                <p>
+                                    <label>Weekdays</label><input id="event-creation-weekdays-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
+                                    <br>
+                                    <label>Monday, Wednesday, Friday</label><input id="event-creation-mwf-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
+                                    <br>
+                                    <label>Tuesday, Thursday</label><input id="event-creation-tr-checkbox" class="event-creation-weekly-repeat-choice" type="checkbox">
+                                    <br>
+                                    or choose custom days:
+                                    <br>
+                                    <label class="event-creation-day-label">S</label><input id="event-creation-week-day-choice-sunday" type="checkbox">
+                                    <label class="event-creation-day-label">M</label><input id="event-creation-week-day-choice-monday" type="checkbox">
+                                    <label class="event-creation-day-label">T</label><input id="event-creation-week-day-choice-tuesday" type="checkbox">
+                                    <label class="event-creation-day-label">W</label><input id="event-creation-week-day-choice-wednesday" type="checkbox">
+                                    <label class="event-creation-day-label">T</label><input id="event-creation-week-day-choice-thursday" type="checkbox">
+                                    <label class="event-creation-day-label">F</label><input id="event-creation-week-day-choice-friday" type="checkbox">
+                                    <label class="event-creation-day-label">S</label><input id="event-creation-week-day-choice-saturday" type="checkbox">
+                            </div>
+                            <div id="create-event-monthly-repeat-choice-container" style="display:none">
+                                <p class="custom-options-spacing">
+                                </p>
+                                <label>Repeat same day next month</label><input id="event-creation-same-day-next-month-checkbox" type="checkbox"><label>&nbsp;&nbsp;(default)</label>
+                                <label>Repeat same day of the week next month</label><input id="event-creation-same-day-week-next-month-checkbox" type="checkbox">
+                            </div>
+                            <p id="event-creation-recurrence-explanation" style="display:none">
+                            </p>
+                            <p class="event-creation-recurrence-duration" style="display:none">
+                                <span style="font-weight: bold">Recurrence Ends:</span><br>
+                                <input id="event-creation-recurrence-duration-never" type="radio" name="recurrence-option"> Never<br>
+                                <p class="custom-duration-options-spacing"></p>
+                                <span class="event-creation-recurrence-duration" style="display:none">
+                                    <input id="event-creation-recurrence-duration-amount-radio" type="radio" name="recurrence-option">
+                                    After
+                                    <input class="input-disabled" id="event-creation-recurrence-duration-amount-text" type="text"> occurances<br>
+                                </span>
+                                <p class="custom-duration-options-spacing"></p>
+                                <span class="event-creation-recurrence-duration" style="display:none">
+                                    <input id="event-creation-recurrence-duration-date-radio" type="radio" name="recurrence-option">
+                                    On
+                                    <input class="input-disabled" id="event-creation-recurrence-duration-date-date" type="date">
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <div>
                     <br>
                     <p id="create-event-error-message-1" style="display:none">
-                        <span id='event-creation-error'>Invalid new event information</span>
+                        Invalid new event information
                     </p>
                     <p id="create-event-error-message-2" style="display:none">
-                        <span id='event-creation-error'>An event cannot have only a start time/only an end time</span>
+                        An event cannot have only a start time/only an end time
                     </p>
                 </div>
              </div>
@@ -86,113 +199,6 @@
              </div>
         </div>
     </div>
+    {% load staticfiles %}
+    <script src="{% static 'js/new_event_modal.js' %}"></script>
 </div>
-
-<script>
-
-    // Event Drop Down Menu Function - replaces default value with user-specified value
-    $(function(){
-
-        $(".dropdown-menu-create-event-parentCategory li a").click(function(){
-
-          $(this).parents('#create-event-parentCategory-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
-        });
-
-        $(".dropdown-menu-create-event-timeEstimate li a").click(function(){
-
-            $(this).parents('#create-event-timeEstimate-dropdown').find('.btn').html('<span class="attribute-label">' + $(this).text() +'</span></span><span class="caret"></span>');
-        });
-
-    });
-
-    // Handles event creation AJAX form submission and validates form before .ajax call
-    $('#create-event-submit').click(function(){
-        var eventName = $('.event-creation-name-input').val();
-
-        var eventParentCategory = $('.event-parentCategory-dropdown-button').text();
-        eventParentCategory = eventParentCategory.replace("Event's Category", "");
-
-        var eventDescription = $('#event-creation-description-input').val();
-        var eventDate = $('.event-creation-date-input').val();
-
-        var eventTimeEstimate = $('.create-event-timeEstimate-dropdown-button').text();
-        eventTimeEstimate = eventTimeEstimate.replace("Time Estimate", "");
-
-        var eventStartTime = $('.event-creation-startTime-input').val();
-        var eventEndTime = $('.event-creation-endTime-input').val();
-        var eventImportant = $('.event-creation-important-input').is(":checked");
-
-        var validForm = true;
-
-        if (eventTimeEstimate == "Time Estimate")
-        {
-            eventTimeEstimate = "None";
-        }
-
-        if ((eventStartTime != "" && eventEndTime == "") || (eventStartTime == "" && eventEndTime != ""))
-        {
-            console.log("entered");
-            $('#create-event-error-message-1').hide();
-            $('#create-event-error-message-2').show();
-            validForm = false;
-        }
-
-        if (eventName.length == 0 || eventParentCategory == "" || eventDate == "" || eventParentCategory == "Event's Category")
-        {
-            $('create-event-error-message-2').hide();
-            $('#create-event-error-message-1').show();
-            validForm = false;
-        }
-
-        if (eventName.length != 0 && eventParentCategory != "" && eventDate != "" && validForm != false)
-        {
-            $('create-event-error-message-2').hide();
-            $('#create-event-error-message-1').hide();
-        }
-
-        if (validForm == true)
-        {
-            $.ajax({
-                url: "/create-event/",
-                type: "POST",
-                dataType: 'html',
-                data:
-                {
-                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                    ajax_event_name: eventName,
-                    ajax_event_parentCategory: eventParentCategory,
-                    ajax_event_description: eventDescription,
-                    ajax_event_date: eventDate,
-                    ajax_event_timeEstimate: eventTimeEstimate,
-                    ajax_event_startTime: eventStartTime,
-                    ajax_event_endTime: eventEndTime,
-                    ajax_event_important: eventImportant,
-                },
-                success: function(data, textStatus, jqXHR) {
-                    $('#ajax-create-event-modal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    changeViewDate("NONE");
-                },
-                error: function() {
-                    
-                },
-
-            });
-        }
-    });
-
-    // Handles reseting the event creation modal on close or create
-    $('#ajax-create-event-modal').on('hidden.bs.modal', function(){
-        $('.event-creation-name-input').val("");
-        $('.event-parentCategory-dropdown-button').html("<span class='attribute-label'>Event's Category</span><span class='caret'></span>");
-        $('#event-creation-description-input').val("");
-        $('.event-creation-date-input').val("");
-        $('.create-event-timeEstimate-dropdown-button').html("<span class='attribute-label'>Time Estimate</span><span class='caret'></span>");
-        $('.event-creation-startTime-input').val("");
-        $('.event-creation-endTime-input').val("");
-        $('.event-creation-important-input').prop("checked", false);
-        $('#create-event-error-message-1').hide();
-        $('#create-event-error-message-2').hide();
-    });
-
-</script>

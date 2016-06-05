@@ -1217,13 +1217,12 @@ div.planner-day-timed-event {
 }
 
 #ajax-create-category-modal {
-	top: 20%;
-	left: 45%;
+	top: 5%;
 	outline: none;
 }
 
 #ajax-create-category-modal .modal-dialog {
-	width: 275px;
+	width: 400px;
 }
 
 #create-category-error-message-container {
@@ -1282,12 +1281,11 @@ div.planner-day-timed-event {
 
 #ajax-create-event-modal {
 	top: 2%;
-	left: 44.25%;
 	outline: none;
 }
 
 #ajax-create-event-modal .modal-dialog {
-	width: 290px;
+	width: 880px;
 }
 
 .event-creation-name-input {
@@ -1295,7 +1293,7 @@ div.planner-day-timed-event {
 }
 
 #event-creation-description-input {
-	height: 86px;
+	height: 122px;
 	width: 242px;
 	resize: none;
 }
@@ -1334,10 +1332,28 @@ div.planner-day-timed-event {
 
 input[type="checkbox"] {
 	transform: scale(1.5);
+	vertical-align: middle;
+	position: relative;
+	bottom: 1px;
+}
+
+#create-event-repeat-options-container {
+	width: 100%;
+}
+
+.repeat-occurance-number {
+	width: 21px;
+	margin-left: 2px;
+	margin-right: 2px;
+	text-align: center;
 }
 
 .event-creation-important-input {
 	width: 35px;
+}
+
+.event-creation-repeat-input {
+	width: 25px;
 }
 
 .event-creation-completed-input {
@@ -1534,8 +1550,20 @@ input[type="checkbox"] {
 
 #misc-planner-notes-textarea {
 	resize: none;
+	overflow: auto;
 	width: 550px;
-	height: 200px;
+}
+
+#planner-misc-notes {
+	color: #fff;
+	resize: none;
+	width: 85%;
+	height: 135px;
+	background-color: #5F648D;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	white-space: normal;
 }
 
 #create-new-category-placeholder {
@@ -1657,3 +1685,138 @@ input[type="checkbox"] {
 	margin-right: 1px;
 	margin-top: 1px;
 }
+
+
+/* Styles for reoccuring events dialog */
+#create-event-repeat-occurance-number-dropdown {
+	display: inline;
+}
+
+.dropdown-menu-create-event-repeat-occurance-number {
+	width: 65px;
+	margin-top: 11px;
+	max-height: 240px;
+	overflow: auto;
+}
+
+#event-creation-weekdays-checkbox {
+	transform: scale(1.25);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 6px;
+	bottom: 2px;
+}
+
+#event-creation-mwf-checkbox {
+	transform: scale(1.25);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 6px;
+	bottom: 2px;
+}
+
+#event-creation-tr-checkbox {
+	transform: scale(1.25);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 6px;
+	bottom: 2px;
+}
+
+.custom-options-spacing {
+	line-height: 25px;
+}
+
+.event-creation-day-label {
+	margin-left: 3px; 
+}
+
+#event-creation-week-day-choice-sunday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-week-day-choice-monday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-week-day-choice-tuesday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-week-day-choice-wednesday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-week-day-choice-thursday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-week-day-choice-friday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-week-day-choice-saturday {
+	transform: scale(1.15);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 3px;
+}
+
+#event-creation-same-day-next-month-checkbox {
+	transform: scale(1.25);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 2px;
+}
+
+#event-creation-same-day-week-next-month-checkbox {
+	transform: scale(1.25);
+	vertical-align: middle;
+	position: relative;
+	margin-left: 4px;
+	bottom: 2px;
+}
+
+#event-creation-recurrance-explanation {
+	font-weight: bold;
+}
+
+#event-creation-recurrance-duration-amount-text {
+	width: 60px;
+}
+
+#event-creation-recurrance-duration-amount-text {
+	height: 23px;
+}
+
+.input-disabled {
+	background-color: #EBEBE4;
+	border: 1px solid #ABADB3;
+}
+

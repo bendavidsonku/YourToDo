@@ -1,5 +1,7 @@
 import datetime
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+import math
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -16,7 +18,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from YourToDo.forms import ContactForm
-from planner.models import Planner, Category, Event
+from planner.models import Planner, Category, Event, RecurringEventReference
 from userprofile.models import UserProfile
 from userprofile.forms import UserAccountSettingsImageUploadForm
 
@@ -243,6 +245,7 @@ def loadPlannerDayEvents(request):
 def loadPlannerWeekEvents(request):
     if request.method == 'POST':
         username = None
+
         if request.user.is_authenticated():
             username = request.user.username
 
@@ -265,9 +268,61 @@ def loadPlannerWeekEvents(request):
             sixthDayInViewAsDateTime = plannerViewStartDateAsDateTime + datetime.timedelta(days = 5)
             plannerViewEndDateAsDateTime = datetime.datetime.strptime(plannerViewEndDate, "%Y-%m-%d")
 
+            allEventsInPlanner = Event.objects.get_all_events(user)
+            baseNeverEndingEventsInPlanner = allEventsInPlanner.filter(neverEnding = True)
+            potentialNonBaseNeverEndingEventsInPlanner = allEventsInPlanner.filter(neverEnding = False)
 
-            allEventsInPlannerWithTimeBox = Event.objects.get_all_events(user).exclude(timeStart = None)
-            allEventsInPlannerWithoutTimeBox = Event.objects.get_all_events(user).filter(timeStart = None)
+            plannerViewStartDateAsDate = plannerViewStartDateAsDateTime.date()
+            plannerViewEndDateAsDate = plannerViewEndDateAsDateTime.date()
+            # Cleanup never ending events that aren't in current view date range then
+            # Generate never ending events for current view date range
+            for event in baseNeverEndingEventsInPlanner:
+                tempRecurrenceReference = event.get_recurrenceReference()
+                nonBaseNeverEndingEventsInPlanner = potentialNonBaseNeverEndingEventsInPlanner.filter(recurrenceReference = tempRecurrenceReference)
+                for nonBaseEvent in nonBaseNeverEndingEventsInPlanner:
+                    Event.objects.delete_event(user, nonBaseEvent.get_event_id())
+
+                recurrenceType = tempRecurrenceReference.get_recurrenceType()
+                originalDateOfEvent = tempRecurrenceReference.get_dateOfFirstEvent()
+                if recurrenceType == 0:
+                    if originalDateOfEvent >= plannerViewStartDateAsDate and originalDateOfEvent <= plannerViewEndDateAsDate:
+                        originalDateOfEvent = originalDateOfEvent.strftime("%Y-%m-%d")
+                        Event.objects.create_never_ending_daily_event_dynamically(user, event.get_parentCategory(), originalDateOfEvent, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, None, tempRecurrenceReference)
+                    else:
+                        gapBetweenOriginalDateAndViewStartDate = (plannerViewStartDateAsDate - originalDateOfEvent).days
+                        gapBetweenOriginalDateAndViewStartDate = math.ceil(gapBetweenOriginalDateAndViewStartDate / tempRecurrenceReference.get_periodOfRecurrence())
+                        firstDateEventShouldOccurInCurrentViewDate = originalDateOfEvent + timedelta(days = gapBetweenOriginalDateAndViewStartDate * tempRecurrenceReference.get_periodOfRecurrence())
+                        firstDateEventShouldOccurInCurrentViewDate = firstDateEventShouldOccurInCurrentViewDate.strftime("%Y-%m-%d")
+                        Event.objects.create_never_ending_daily_event_dynamically(user, event.get_parentCategory(), firstDateEventShouldOccurInCurrentViewDate, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, originalDateOfEvent, tempRecurrenceReference)
+                elif recurrenceType == 1:
+                    if originalDateOfEvent >= plannerViewStartDateAsDate and originalDateOfEvent <= plannerViewEndDateAsDate:
+                        originalDateOfEvent = originalDateOfEvent.strftime("%Y-%m-%d")
+                        tempDayHolderArray = RecurringEventReference.objects.get_listOfDaysToOccurAsList(tempRecurrenceReference.get_listOfDaysToOccur())
+                        Event.objects.create_never_ending_weekly_event_dynamically(user, event.get_parentCategory(), originalDateOfEvent, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, tempDayHolderArray, None, tempRecurrenceReference)
+                    else:
+                        gapBetweenOriginalDateAndViewStartDate = math.ceil((plannerViewStartDateAsDate - originalDateOfEvent).days / 7)
+                        gapBetweenOriginalDateAndViewStartDate = math.ceil(gapBetweenOriginalDateAndViewStartDate / tempRecurrenceReference.get_periodOfRecurrence())
+                        firstDateEventShouldOccurInCurrentViewDate = originalDateOfEvent + timedelta(weeks = gapBetweenOriginalDateAndViewStartDate * tempRecurrenceReference.get_periodOfRecurrence())
+                        firstDateEventShouldOccurInCurrentViewDate = firstDateEventShouldOccurInCurrentViewDate.strftime("%Y-%m-%d")
+                        tempDayHolderArray = RecurringEventReference.objects.get_listOfDaysToOccurAsList(tempRecurrenceReference.get_listOfDaysToOccur())
+                        Event.objects.create_never_ending_weekly_event_dynamically(user, event.get_parentCategory(), firstDateEventShouldOccurInCurrentViewDate, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, tempDayHolderArray, originalDateOfEvent, tempRecurrenceReference)
+                elif recurrenceType == 2:
+                    if originalDateOfEvent >= plannerViewStartDateAsDate and originalDateOfEvent <= plannerViewEndDateAsDate:
+                        originalDateOfEvent = originalDateOfEvent.strftime("%Y-%m-%d")
+                        Event.objects.create_never_ending_monthly_event_dynamically(user, event.get_parentCategory(), originalDateOfEvent, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, tempRecurrenceReference.get_sameDayOrSameDayOfWeek(), tempRecurrenceReference.get_nthOccurrenceOfEventDate(), None, tempRecurrenceReference)
+                    else:
+                        originalDateOfEvent = originalDateOfEvent.strftime("%Y-%m-%d")
+                        Event.objects.create_never_ending_monthly_event_dynamically(user, event.get_parentCategory(), originalDateOfEvent, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, tempRecurrenceReference.get_sameDayOrSameDayOfWeek(), tempRecurrenceReference.get_nthOccurrenceOfEventDate(), plannerViewStartDate, tempRecurrenceReference)
+                elif recurrenceType == 3:
+                    if originalDateOfEvent >= plannerViewStartDateAsDate and originalDateOfEvent <= plannerViewEndDateAsDate:
+                        originalDateOfEvent = originalDateOfEvent.strftime("%Y-%m-%d")
+                        Event.objects.create_never_ending_yearly_event_dynamically(user, event.get_parentCategory(), originalDateOfEvent, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, None, tempRecurrenceReference)
+                    else:
+                        originalDateOfEvent = originalDateOfEvent.strftime("%Y-%m-%d")
+                        Event.objects.create_never_ending_yearly_event_dynamically(user, event.get_parentCategory(), originalDateOfEvent, event.get_name(), event.get_description(), event.get_important(), event.get_timeEstimate(), event.get_timeStart(), event.get_timeEnd(), tempRecurrenceReference.get_periodOfRecurrence(), plannerViewEndDate, plannerViewStartDate, tempRecurrenceReference)
+
+            allEventsInPlannerWithTimeBox = Event.objects.get_all_events(user).exclude(timeStart = None).exclude(neverEnding = True)
+            allEventsInPlannerWithoutTimeBox = Event.objects.get_all_events(user).filter(timeStart = None).exclude(neverEnding = True)
 
             context['eventsInViewStartDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = plannerViewStartDateAsDateTime)
             context['eventsInViewSecondDateWithTimeBox'] = allEventsInPlannerWithTimeBox.filter(dateOfEvent = secondDayInViewAsDateTime)
@@ -619,6 +674,7 @@ def createNewEvent(request):
 
             user = User.objects.get(username = username)
 
+            # Get all information from ajax call
             newEventName = request.POST.get("ajax_event_name", "")
             newEventParentCategory = request.POST.get("ajax_event_parentCategory", "")
             newEventDescription = request.POST.get("ajax_event_description", "")
@@ -627,6 +683,11 @@ def createNewEvent(request):
             newEventStartTime = request.POST.get("ajax_event_startTime", "")
             newEventEndTime = request.POST.get("ajax_event_endTime", "")
             newEventImportant = request.POST.get("ajax_event_important", "")
+            newEventRecurrenceType = request.POST.get("ajax_event_recurrence_type", "")
+            newEventRecurrenceCheckboxArray = request.POST.getlist("ajax_event_recurrence_checkbox_array[]", "")
+            newEventPeriodOfRecurrence = request.POST.get("ajax_event_period_of_recurrence", "")
+            newEventRecurrenceEndOptions = request.POST.getlist("ajax_event_recurrence_end_options_array[]", "")
+            newEventNthOccurrenceOfSelectedDate = request.POST.get("ajax_event_nth_occurrence_of_selected_date", "")
 
             # Fix the Event Time Estimate Field
             if newEventTimeEstimate == "" or newEventTimeEstimate == "None":
@@ -658,17 +719,87 @@ def createNewEvent(request):
             else:
                 pass
 
+            # Check if event is important
             if newEventImportant == "false":
                 newEventImportant = False
             else:
                 newEventImportant = True
 
-            # Check to see if user assigned timeStart AND timeEnd to event
-            if newEventStartTime == "" or newEventEndTime == "":
-                Event.objects.create_event_no_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate)
+            # Store necessary data if user specifies the event should reccur & call create
+            if newEventRecurrenceType == "None":
+                Event.objects.create_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, None, False)
             else:
-                # else user has given time frame for event so create with timeBox
-                Event.objects.create_event_with_timeBox(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime)
+                # Daily Recurrence
+                if newEventRecurrenceType == "0":
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        Event.objects.create_never_ending_daily_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence)
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        Event.objects.create_daily_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        Event.objects.create_daily_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
+
+                # Weekly Recurrence
+                elif newEventRecurrenceType == "1":
+                    # The following checks build an array holding the corresponding days of the week the user specified in the modal
+                    checkBoxFound = False
+                    dayHolderArray = None
+                    for x in newEventRecurrenceCheckboxArray:
+                        if x == "1":
+                            checkBoxFound = True
+                    if checkBoxFound == True:
+                        dayHolderArray = []
+                        if newEventRecurrenceCheckboxArray[0] == "1":
+                            dayHolderArray = [1,1,1,1,1,0,0]
+                        elif newEventRecurrenceCheckboxArray[1] == "1":
+                            dayHolderArray = [1,0,1,0,1,0,0]
+                        elif newEventRecurrenceCheckboxArray[2] == "1":
+                            dayHolderArray = [0,1,0,1,0,0,0]
+                        else:
+                            for i in range(4,10):
+                                dayHolderArray.append(int(newEventRecurrenceCheckboxArray[i]))
+                            dayHolderArray.append(int(newEventRecurrenceCheckboxArray[3]))
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        Event.objects.create_never_ending_weekly_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, dayHolderArray)
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        Event.objects.create_weekly_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], dayHolderArray)
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        Event.objects.create_weekly_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], dayHolderArray, None, None)
+
+                # Monthly Recurrence
+                elif newEventRecurrenceType == "2":
+                    # Default way that recurring monthly events are to be created
+                    sameDayNextMonth = True
+                    checkBoxFound = False
+                    for x in newEventRecurrenceCheckboxArray:
+                        if x == "1":
+                            checkBoxFound = True
+                    if checkBoxFound == True:
+                        if newEventRecurrenceCheckboxArray[10] == "1":
+                            pass
+                        else:
+                            sameDayNextMonth = False
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        Event.objects.create_never_ending_monthly_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, sameDayNextMonth, newEventNthOccurrenceOfSelectedDate)
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        Event.objects.create_monthly_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], sameDayNextMonth, newEventNthOccurrenceOfSelectedDate)
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        Event.objects.create_monthly_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1], sameDayNextMonth, newEventNthOccurrenceOfSelectedDate)
+                
+                # Yearly Recurrence
+                elif newEventRecurrenceType == "3":
+                    if newEventRecurrenceEndOptions[0] == "never":
+                        Event.objects.create_never_ending_yearly_event(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence)
+                    elif newEventRecurrenceEndOptions[0] == "number":
+                        Event.objects.create_yearly_recurring_event_given_number_to_repeat(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
+                    else:
+                        # Last statement recognizes that the end option was specified to stop on a given date
+                        Event.objects.create_yearly_recurring_event_given_stop_date(user, newEventParentCategory, newEventDate, newEventName, newEventDescription, newEventImportant, newEventTimeEstimate, newEventStartTime, newEventEndTime, newEventPeriodOfRecurrence, newEventRecurrenceEndOptions[1])
+
+                else:
+                    pass
 
     return HttpResponse('')
 

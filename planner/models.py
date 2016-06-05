@@ -1,5 +1,9 @@
-from datetime import datetime
+import calendar
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
 import string
+import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -217,21 +221,547 @@ class Category(models.Model):
 	def get_order(self):
 		return self.order
 
+class RecurringEventReferenceManager(models.Manager):
+	def create_recurringEventReference(self, listOfDaysToOccur, periodOfRecurrence, recurrenceType, sameDayOrSameDayOfWeek, nthOccurrenceOfEventDate, dateOfFirstEvent):
+		return self.create(listOfDaysToOccur = listOfDaysToOccur, periodOfRecurrence = periodOfRecurrence, recurrenceType = recurrenceType, sameDayOrSameDayOfWeek = sameDayOrSameDayOfWeek, nthOccurrenceOfEventDate = nthOccurrenceOfEventDate, dateOfFirstEvent = dateOfFirstEvent)
+
+	def generate_listOfDaysToOccur_String(self, dayHolderArray):
+		generatedString = ""
+		for i in range(0, 7):
+			generatedString = generatedString + str(dayHolderArray[i])
+
+		return generatedString
+
+	def get_listOfDaysToOccurAsList(self, dayHolderString):
+		dayHolderArray = []
+		for i in range(0, 7):
+			dayHolderArray.append(int(dayHolderString[i]))
+
+		return dayHolderArray
+
+class RecurringEventReference(models.Model):
+	listOfDaysToOccur = models.TextField(max_length = 7, null = True)
+	periodOfRecurrence = models.IntegerField(default = 0)
+	# 0: daily, 1: weekly, 2: monthly, 3: yearly
+	recurrenceType = models.IntegerField(default = 0)
+	sameDayOrSameDayOfWeek = models.NullBooleanField(default = True, null = True)
+	nthOccurrenceOfEventDate = models.CharField(max_length = 1, null = True)
+	dateOfFirstEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now, null = True)
+
+	objects = RecurringEventReferenceManager()
+
+	def get_recurringEventReference_id(self):
+		return self.id
+
+	def get_listOfDaysToOccur(self):
+		return self.listOfDaysToOccur
+
+	def set_listOfDaysToOccur(self, listOfDaysToOccur):
+		self.listOfDaysToOccur = listOfDaysToOccur
+		self.save()
+
+	def get_periodOfRecurrence(self):
+		return self.periodOfRecurrence
+
+	def set_periodOfRecurrence(self, periodOfRecurrence):
+		self.periodOfRecurrence = periodOfRecurrence
+		self.save()
+
+	def get_recurrenceType(self):
+		return self.recurrenceType
+
+	def set_recurrenceType(self, recurrenceType):
+		self.recurrenceType = recurrenceType
+		self.save()
+
+	def get_sameDayOrSameDayOfWeek(self):
+		return self.sameDayOrSameDayOfWeek
+
+	def set_sameDayOrSameDayOfWeek(self, sameDayOrSameDayOfWeek):
+		self.sameDayOrSameDayOfWeek = sameDayOrSameDayOfWeek
+		self.save()
+
+	def get_nthOccurrenceOfEventDate(self):
+		return self.nthOccurrenceOfEventDate
+
+	def set_nthOccurrenceOfEventDate(self, nthOccurrenceOfEventDate):
+		self.nthOccurrenceOfEventDate = nthOccurrenceOfEventDate
+		self.save()
+
+	def get_dateOfFirstEvent(self):
+		return self.dateOfFirstEvent
+
+	def set_dateOFFirstEvent(self, dateOfFirstEvent):
+		self.dateOfFirstEvent = dateOfFirstEvent
+		self.save()
+
+	def get_neverEnding(self):
+		return self.neverEnding
+
+	def set_neverEnding(self, neverEnding):
+		self.neverEnding = neverEnding
+		self.save()
+
 
 class EventManager(models.Manager):
-	def create_event_with_timeBox(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd):
+	def create_event(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, neverEnding):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)
 
-		return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
-			description = description, important = important, timeEstimate = timeEstimate, timeStart = timeStart, timeEnd = timeEnd)
+		if (timeStart == "" or timeEnd == ""):
+			return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
+			description = description, important = important, timeEstimate = timeEstimate, recurrenceReference = recurrenceReference, neverEnding = neverEnding)
+		else:
+			return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
+			description = description, important = important, timeEstimate = timeEstimate, timeStart = timeStart, timeEnd = timeEnd, recurrenceReference = recurrenceReference, neverEnding = neverEnding)
 
-	def create_event_no_timeBox(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate):
+	# Given a user specified number of times to occur, create daily event
+	def create_daily_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat):
 		plannerId = request.planner
 		categoryId = Category.objects.get_category_by_name(request, categoryName)
 
-		return self.create(parentPlanner = plannerId, parentCategory = categoryId, dateOfEvent = dateOfEvent, name = name,
-			description = description, important = important, timeEstimate = timeEstimate)
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 0, None, None, None)
+
+		for i in range(0, int(numberOfTimesToRepeat)):
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+			dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
+
+		return
+
+	# Given a user specified date to stop, create event until stop date is reached
+	def create_daily_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 0, None, None, None)
+
+		while dateOfEvent <= dateToStop:
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+			dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
+
+		return
+
+	# User specified that daily recurring event should never end
+	def create_never_ending_daily_event(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfFirstEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+		
+		tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 0, None, None, dateOfFirstEvent)
+
+		self.create_event(request, categoryName, dateOfFirstEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, True)
+
+		return
+
+	def create_never_ending_daily_event_dynamically(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, originalDateOfNeverEndingEvent, recurrenceReference):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+		
+		if originalDateOfNeverEndingEvent == None:
+			while dateOfEvent <= dateToStop:
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
+		else:
+			originalDateOfNeverEndingEvent = datetime.combine(originalDateOfNeverEndingEvent, datetime.min.time())
+			while dateOfEvent <= dateToStop and dateOfEvent >= originalDateOfNeverEndingEvent:
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
+
+		return
+
+	# Given a user specified number of times to occur, create weekly event
+	def create_weekly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat, dayHolderArray):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		if dayHolderArray == None:
+			tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 1, None, None, None)
+			for i in range(0, int(numberOfTimesToRepeat)):
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+				dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
+
+		else:
+			# Fix dateOfEvent for example case: user chooses Saturday, 4/16 but specifies Tues & Wednesday for event to repeat
+			# This fix will effectively change dateOfEvent to the next available Tuesday
+			dateOfEventFixed = self.fix_dateOfEvent_for_weekly_events(dateOfEvent, dayHolderArray)
+
+			dayHolderString = RecurringEventReference.objects.generate_listOfDaysToOccur_String(dayHolderArray)
+			tempRecurrenceReference =  RecurringEventReference.objects.create_recurringEventReference(dayHolderString, periodOfRecurrence, 1, None, None, None)
+
+			sundayOfCurrentWeek = dateOfEventFixed
+
+			while sundayOfCurrentWeek.weekday() != 6:
+				sundayOfCurrentWeek = sundayOfCurrentWeek - timedelta(days = 1)
+
+			for i in range(0, int(numberOfTimesToRepeat)):
+				tempDate = sundayOfCurrentWeek
+				for j in range(0,7):
+					if dayHolderArray[tempDate.weekday()] == 1 and tempDate >= dateOfEventFixed:
+						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+					tempDate = tempDate + timedelta(days = 1)
+
+				sundayOfCurrentWeek = sundayOfCurrentWeek + timedelta(weeks = int(periodOfRecurrence))
+
+		return
+
+
+
+	# Given a user specified date to stop, create event until stop date is reached
+	def create_weekly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, dayHolderArray):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		if dayHolderArray == None:
+			tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 1, None, None, None)
+
+			while dateOfEvent <= dateToStop:
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+				dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
+
+		else:
+			# Fix dateOfEvent for example case: user chooses Saturday, 4/16 but specifies Tues & Wednesday for event to repeat
+			# This fix will effectively change dateOfEvent to the next available Tuesday
+			dateOfEventFixed = self.fix_dateOfEvent_for_weekly_events(dateOfEvent, dayHolderArray)
+
+			dayHolderString = RecurringEventReference.objects.generate_listOfDaysToOccur_String(dayHolderArray)
+
+			tempRecurrenceReference =  RecurringEventReference.objects.create_recurringEventReference(dayHolderString, periodOfRecurrence, 1, None, None, None)
+
+			sundayOfCurrentWeek = dateOfEventFixed
+
+			while sundayOfCurrentWeek.weekday() != 6:
+				sundayOfCurrentWeek = sundayOfCurrentWeek - timedelta(days = 1)
+
+			while sundayOfCurrentWeek <= dateToStop:
+				tempDate = sundayOfCurrentWeek
+				for i in range(0,7):
+					if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop and tempDate >= dateOfEventFixed:
+						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+					tempDate = tempDate + timedelta(days = 1)
+
+				sundayOfCurrentWeek = sundayOfCurrentWeek + timedelta(weeks = int(periodOfRecurrence))
+
+		return
+
+	# User specified that weekly recurring event should never end
+	def create_never_ending_weekly_event(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dayHolderArray):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfFirstEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		if dayHolderArray == None:
+			pass
+		else:
+			dateOFFirstEventFixed = self.fix_dateOfEvent_for_weekly_events(dateOfFirstEvent, dayHolderArray)
+			tempDayHolderString = RecurringEventReference.objects.generate_listOfDaysToOccur_String(dayHolderArray)
+
+		tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(tempDayHolderString, periodOfRecurrence, 1, None, None, dateOFFirstEventFixed)
+
+		return self.create_event(request, categoryName, dateOFFirstEventFixed, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, True)
+
+	def create_never_ending_weekly_event_dynamically(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, dayHolderArray, originalDateOfNeverEndingEvent, recurrenceReference):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		if dayHolderArray == None:
+			if originalDateOfNeverEndingEvent != None:
+				originalDateOfNeverEndingEvent = datetime.combine(originalDateOfNeverEndingEvent, datetime.min.time())
+				while dateOfEvent <= dateToStop and dateOfEvent >= originalDateOfNeverEndingEvent:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
+
+			else:
+				while dateOfEvent <= dateToStop:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
+		else:
+			# Fix dateOfEvent for example case: user chooses Saturday, 4/16 but specifies Tues & Wednesday for event to repeat
+			# This fix will effectively change dateOfEvent to the next available Tuesday
+			dateOfEventFixed = self.fix_dateOfEvent_for_weekly_events(dateOfEvent, dayHolderArray)
+
+			dayHolderString = RecurringEventReference.objects.generate_listOfDaysToOccur_String(dayHolderArray)
+
+			sundayOfCurrentWeek = dateOfEventFixed
+
+			while sundayOfCurrentWeek.weekday() != 6:
+				sundayOfCurrentWeek = sundayOfCurrentWeek - timedelta(days = 1)
+
+			if originalDateOfNeverEndingEvent != None:
+				originalDateOfNeverEndingEvent = datetime.combine(originalDateOfNeverEndingEvent, datetime.min.time())
+				while sundayOfCurrentWeek <= dateToStop:
+					tempDate = sundayOfCurrentWeek
+					for i in range(0,7):
+						if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop and tempDate >= dateOfEventFixed and tempDate >= originalDateOfNeverEndingEvent:
+							self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						tempDate = tempDate + timedelta(days = 1)
+
+					sundayOfCurrentWeek = sundayOfCurrentWeek + timedelta(weeks = int(periodOfRecurrence))
+			else:
+				while sundayOfCurrentWeek <= dateToStop:
+					tempDate = sundayOfCurrentWeek
+					for i in range(0,7):
+						if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop and tempDate >= dateOfEventFixed:
+							self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						tempDate = tempDate + timedelta(days = 1)
+
+					sundayOfCurrentWeek = sundayOfCurrentWeek + timedelta(weeks = int(periodOfRecurrence))
+
+			return
+
+	# Returns corrected DateOfEvent
+	def fix_dateOfEvent_for_weekly_events(self, dateOfEvent, dayHolderArray):
+		if dateOfEvent.weekday() == 6:
+			return dateOfEvent
+		else:
+			lastDayOfTheWeekInDayHolderArray = 0
+			for i in range(0,6):
+				if dayHolderArray[i] == 1:
+					lastDayOfTheWeekInDayHolderArray = i
+
+			while dateOfEvent.weekday() > lastDayOfTheWeekInDayHolderArray:
+				dateOfEvent = dateOfEvent + timedelta(days = 1)
+
+			return dateOfEvent
+
+	def create_monthly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat, sameDayOrSameDayOfWeek, nthOccurrenceOfSelectedDate):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)		
+
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# If sameDayOrSameDayOfWeek is true, treat as same-day-next-month creation, else treat as same-day-of-week-next-month creation
+		if sameDayOrSameDayOfWeek == True:
+			tempRecurrenceReference =  RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 2, True, None, None)
+
+			if dateOfEvent.day == 31:
+				for i in range(0, int(numberOfTimesToRepeat)):
+					dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+			else:
+				for i in range(0, int(numberOfTimesToRepeat)):
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+
+		else:
+			originalDayOfEventDate = dateOfEvent.weekday()
+			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
+			nthOccurrenceOfSelectedDateAsInt = int(nthOccurrenceOfSelectedDate)
+
+			tempRecurrenceReference =  RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 2, False, nthOccurrenceOfSelectedDate, None)
+
+			for i in range(0, int(numberOfTimesToRepeat)):
+				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
+				self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
+
+		return
+
+	def create_monthly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, sameDayOrSameDayOfWeek, nthOccurrenceOfSelectedDate):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)		
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# If sameDayOrSameDayOfWeek is true, treat as same-day-next-month creation, else treat as same-day-of-week-next-month creation
+		if sameDayOrSameDayOfWeek == True:
+
+			tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 2, True, None, None)
+
+			if dateOfEvent.day == 31:
+				while dateOfEvent <= dateToStop:
+					dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+			else:
+				while dateOfEvent <= dateToStop:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+					dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+
+		else:
+			originalDayOfEventDate = dateOfEvent.weekday()
+			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
+			nthOccurrenceOfSelectedDateAsInt = int(nthOccurrenceOfSelectedDate)
+
+			tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 2, True, None, None)
+
+			while firstDayOfMonthOfEventDate <= dateToStop:
+				tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
+				if tempDate <= dateToStop:
+					self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+				firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
+
+		return
+
+	def create_never_ending_monthly_event(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, sameDayOrSameDayOfWeek, nthOccurrenceOfSelectedDate):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfFirstEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# If sameDayOrSameDayOfWeek is true, treat as same-day-next-month creation, else treat as same-day-of-week-next-month creation
+		if sameDayOrSameDayOfWeek == True:
+			tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 2, True, None, dateOfFirstEvent)
+		else:
+			tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 2, False, nthOccurrenceOfSelectedDate, dateOfFirstEvent)
+
+		self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, True)
+
+		return
+
+	def create_never_ending_monthly_event_dynamically(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, sameDayOrSameDayOfWeek, nthOccurrenceOfSelectedDate, plannerViewStartDate, recurrenceReference):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)		
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# Fix plannerViewStartDate
+		if plannerViewStartDate != None:
+			plannerViewStartDate = datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
+
+		# If sameDayOrSameDayOfWeek is true, treat as same-day-next-month creation, else treat as same-day-of-week-next-month creation
+		if sameDayOrSameDayOfWeek == True:
+			if plannerViewStartDate == None:
+				if dateOfEvent.day == 31:
+					while dateOfEvent <= dateToStop:
+						dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+				else:
+					while dateOfEvent <= dateToStop:
+						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+			else:
+				if dateOfEvent.day == 31:
+					while dateOfEvent <= dateToStop:
+						dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+						if dateOfEvent >= plannerViewStartDate:
+							self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+				else:
+					while dateOfEvent <= dateToStop:
+						if dateOfEvent >= plannerViewStartDate:
+							self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
+		else:
+			originalDayOfEventDate = dateOfEvent.weekday()
+			firstDayOfMonthOfEventDate = dateOfEvent.replace(day = 1)
+			nthOccurrenceOfSelectedDateAsInt = int(nthOccurrenceOfSelectedDate)
+
+			if plannerViewStartDate == None:
+				while firstDayOfMonthOfEventDate <= dateToStop:
+					tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
+					if tempDate <= dateToStop:
+						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
+			else:
+				while firstDayOfMonthOfEventDate <= dateToStop:
+					tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
+					if tempDate <= dateToStop and tempDate >= plannerViewStartDate:
+						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
+
+		return
+
+	# Helper function for creating monthly recurring events
+	def find_date_of_nth_recurrence_of_given_weekday(self, dateOfEvent, nthOccurrenceOfSelectedDate, weekday):
+		if (nthOccurrenceOfSelectedDate == 5):
+			tempDate = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
+
+			while tempDate.weekday() != weekday:
+				tempDate = tempDate - timedelta(days = 1)
+
+			return tempDate
+
+		else:
+			tempDate = dateOfEvent
+			tempAdjust = (weekday - tempDate.weekday()) % 7
+			tempDate = tempDate + timedelta(days = tempAdjust)
+
+			return (tempDate + timedelta(weeks = nthOccurrenceOfSelectedDate - 1))
+
+	def create_yearly_recurring_event_given_number_to_repeat(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, numberOfTimesToRepeat):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 3, None, None, None)
+
+		for i in range(0, int(numberOfTimesToRepeat)):
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
+
+		return
+
+	def create_yearly_recurring_event_given_stop_date(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 3, None, None, None)
+
+		while dateOfEvent <= dateToStop:
+			self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, False)
+			dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
+
+		return
+
+	def create_never_ending_yearly_event(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateOfFirstEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		tempRecurrenceReference = tempRecurrenceReference = RecurringEventReference.objects.create_recurringEventReference(None, periodOfRecurrence, 3, None, None, dateOfFirstEvent)
+
+		self.create_event(request, categoryName, dateOfFirstEvent, name, description, important, timeEstimate, timeStart, timeEnd, tempRecurrenceReference, True)
+
+		return
+
+	def create_never_ending_yearly_event_dynamically(self, request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, periodOfRecurrence, dateToStop, plannerViewStartDate, recurrenceReference):
+		plannerId = request.planner
+		categoryId = Category.objects.get_category_by_name(request, categoryName)
+
+		dateToStop = datetime.strptime(dateToStop, "%Y-%m-%d")
+		dateOfEvent = datetime.strptime(dateOfEvent, "%Y-%m-%d")
+
+		# Fix plannerViewStartDate
+		if plannerViewStartDate != None:
+			plannerViewStartDate = datetime.strptime(plannerViewStartDate, "%Y-%m-%d")
+
+			while dateOfEvent <= dateToStop:
+				if dateOfEvent >= plannerViewStartDate:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
+		else:
+			while dateOfEvent <= dateToStop:
+				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
+
+		return
 
 	def get_single_event_by_user_and_id(self, request, id):
 		existingEventsInPlanner = Event.objects.get_all_events(request)
@@ -254,7 +784,6 @@ class EventManager(models.Manager):
 		eventToDelete = Event.objects.get_single_event_by_user_and_id(request, id)
 		return eventToDelete.delete()
 
-
 class Event(models.Model):
 	parentPlanner = models.ForeignKey(Planner)
 	parentCategory = models.ForeignKey(Category)
@@ -266,6 +795,8 @@ class Event(models.Model):
 	timeEnd = models.TimeField(auto_now = False, auto_now_add = False, null = True)
 	dateOfEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now)
 	complete = models.BooleanField(default = False)
+	recurrenceReference = models.ForeignKey(RecurringEventReference, null = True)
+	neverEnding = models.BooleanField(default = False)
 
 	objects = EventManager()
 
@@ -383,5 +914,9 @@ class Event(models.Model):
 	def get_complete(self):
 		return self.complete
 
+	def get_recurrenceReference(self):
+		return self.recurrenceReference
 
-
+	def set_recurrenceReference(self, recurrenceReference):
+		self.recurrenceReference = recurrenceReference
+		self.save()
