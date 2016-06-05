@@ -11,11 +11,8 @@
              <div class = "modal-body">
                 <h4>Enter planner notes below:</h4>
                 <p>
-                    {% if planner.get_miscellaneousNotes != None %}
-                        <textarea rows="6" name="planner-notes-textarea" id="misc-planner-notes-textarea">{{ planner.get_miscellaneousNotes }}</textarea>
-                    {% else %}
-                        <textarea rows = "6" name="planner-notes-textarea" id="misc-planner-notes-textarea"></textarea>
-                    {% endif %}
+                    <!-- Formatted in one line for no whitespace in textarea -->
+                    <textarea rows="6" name="planner-notes-textarea" id="misc-planner-notes-textarea">{% if planner.get_miscellaneousNotes != None %}{{ planner.get_miscellaneousNotes }}{% endif %}</textarea>
                 </p>
              </div>
              <div class = "modal-footer">
