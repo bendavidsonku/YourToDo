@@ -7,6 +7,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 
 from planner.category_color_choices import *
@@ -239,6 +240,12 @@ class RecurringEventReferenceManager(models.Manager):
 
 		return dayHolderArray
 
+	def is_in_listOfDatesNotToOccur(self, listOfDatesNotToOccurParam, searchDate):
+		if listOfDatesNotToOccurParam is not None:
+			return searchDate.date() in listOfDatesNotToOccurParam
+		else:
+			return False
+
 class RecurringEventReference(models.Model):
 	listOfDaysToOccur = models.TextField(max_length = 7, null = True)
 	periodOfRecurrence = models.IntegerField(default = 0)
@@ -247,6 +254,7 @@ class RecurringEventReference(models.Model):
 	sameDayOrSameDayOfWeek = models.NullBooleanField(default = True, null = True)
 	nthOccurrenceOfEventDate = models.CharField(max_length = 1, null = True)
 	dateOfFirstEvent = models.DateField(auto_now = False, auto_now_add = False, default = datetime.now, null = True)
+	listOfDatesNotToOccur = ArrayField(models.DateField(auto_now = False, auto_now_add = False, default = datetime.now, null = True), null = True)
 
 	objects = RecurringEventReferenceManager()
 
@@ -368,12 +376,14 @@ class EventManager(models.Manager):
 		
 		if originalDateOfNeverEndingEvent == None:
 			while dateOfEvent <= dateToStop:
-				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
 		else:
 			originalDateOfNeverEndingEvent = datetime.combine(originalDateOfNeverEndingEvent, datetime.min.time())
 			while dateOfEvent <= dateToStop and dateOfEvent >= originalDateOfNeverEndingEvent:
-				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 				dateOfEvent = dateOfEvent + timedelta(days = int(periodOfRecurrence))
 
 		return
@@ -483,12 +493,14 @@ class EventManager(models.Manager):
 			if originalDateOfNeverEndingEvent != None:
 				originalDateOfNeverEndingEvent = datetime.combine(originalDateOfNeverEndingEvent, datetime.min.time())
 				while dateOfEvent <= dateToStop and dateOfEvent >= originalDateOfNeverEndingEvent:
-					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 					dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 
 			else:
 				while dateOfEvent <= dateToStop:
-					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 					dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 		else:
 			if originalDateOfNeverEndingEvent != None:
@@ -497,7 +509,8 @@ class EventManager(models.Manager):
 					tempDate = dateOfEvent
 					for i in range(0,7):
 						if dayHolderArray[tempDate.weekday()] == 1 and tempDate >= originalDateOfNeverEndingEvent:
-							self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+							if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, tempDate) is False:
+								self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						tempDate = tempDate + timedelta(days = 1)
 					dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 			else:
@@ -511,10 +524,12 @@ class EventManager(models.Manager):
 					for i in range(0,7):
 						if firstIteration == True:
 							if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop and tempDate <= firstIterationEndDate:
-								self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+								if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, tempDate) is False:
+									self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						else:
 							if dayHolderArray[tempDate.weekday()] == 1 and tempDate <= dateToStop:
-								self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+								if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, tempDate) is False:
+									self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						tempDate = tempDate + timedelta(days = 1)
 					dateOfEvent = dateOfEvent + timedelta(weeks = int(periodOfRecurrence))
 					if firstIteration == True:
@@ -627,23 +642,27 @@ class EventManager(models.Manager):
 				if dateOfEvent.day == 31:
 					while dateOfEvent <= dateToStop:
 						dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
-						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+							self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
 				else:
 					while dateOfEvent <= dateToStop:
-						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+							self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
 			else:
 				if dateOfEvent.day == 31:
 					while dateOfEvent <= dateToStop:
 						dateOfEvent = datetime(dateOfEvent.year, dateOfEvent.month, 1) + relativedelta(months = 1, days = -1)
 						if dateOfEvent >= plannerViewStartDate:
-							self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+							if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+								self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
 				else:
 					while dateOfEvent <= dateToStop:
 						if dateOfEvent >= plannerViewStartDate:
-							self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+							if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+								self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 						dateOfEvent = dateOfEvent + relativedelta(months = int(periodOfRecurrence))
 		else:
 			originalDayOfEventDate = dateOfEvent.weekday()
@@ -654,13 +673,15 @@ class EventManager(models.Manager):
 				while firstDayOfMonthOfEventDate <= dateToStop:
 					tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
 					if tempDate <= dateToStop:
-						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, tempDate) is False:
+							self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 					firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
 			else:
 				while firstDayOfMonthOfEventDate <= dateToStop:
 					tempDate = self.find_date_of_nth_recurrence_of_given_weekday(firstDayOfMonthOfEventDate, nthOccurrenceOfSelectedDateAsInt, originalDayOfEventDate)
 					if tempDate <= dateToStop and tempDate >= plannerViewStartDate:
-						self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+						if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, tempDate) is False:
+							self.create_event(request, categoryName, tempDate, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 					firstDayOfMonthOfEventDate = firstDayOfMonthOfEventDate + relativedelta(months = int(periodOfRecurrence))
 
 		return
@@ -736,11 +757,13 @@ class EventManager(models.Manager):
 
 			while dateOfEvent <= dateToStop:
 				if dateOfEvent >= plannerViewStartDate:
-					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+					if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+						self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 				dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
 		else:
 			while dateOfEvent <= dateToStop:
-				self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
+				if RecurringEventReference.objects.is_in_listOfDatesNotToOccur(recurrenceReference.listOfDatesNotToOccur, dateOfEvent) is False:
+					self.create_event(request, categoryName, dateOfEvent, name, description, important, timeEstimate, timeStart, timeEnd, recurrenceReference, False)
 				dateOfEvent = dateOfEvent + relativedelta(years = int(periodOfRecurrence))
 
 		return
@@ -762,8 +785,20 @@ class EventManager(models.Manager):
 		plannerId = request.planner.id
 		return super(EventManager, self).filter(parentPlanner = plannerId)
 
+	def cleanup_dynamically_generated_event(self, request, id):
+		eventToDelete = Event.objects.get_single_event_by_user_and_id(request, id)
+		return eventToDelete.delete()
+
 	def delete_event(self, request, id):
 		eventToDelete = Event.objects.get_single_event_by_user_and_id(request, id)
+		eventToDeleteRecurrenceReference = eventToDelete.get_recurrenceReference()
+		if eventToDeleteRecurrenceReference != None:
+			if eventToDeleteRecurrenceReference.listOfDatesNotToOccur != None:
+				eventToDeleteRecurrenceReference.listOfDatesNotToOccur.append(eventToDelete.get_dateOfEvent())
+			else:
+				eventToDeleteRecurrenceReference.listOfDatesNotToOccur = []
+				eventToDeleteRecurrenceReference.listOfDatesNotToOccur.append(eventToDelete.get_dateOfEvent())
+			eventToDeleteRecurrenceReference.save()
 		return eventToDelete.delete()
 
 class Event(models.Model):

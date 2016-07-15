@@ -280,7 +280,7 @@ def loadPlannerWeekEvents(request):
                 tempRecurrenceReference = event.get_recurrenceReference()
                 nonBaseNeverEndingEventsInPlanner = potentialNonBaseNeverEndingEventsInPlanner.filter(recurrenceReference = tempRecurrenceReference)
                 for nonBaseEvent in nonBaseNeverEndingEventsInPlanner:
-                    Event.objects.delete_event(user, nonBaseEvent.get_event_id())
+                    Event.objects.cleanup_dynamically_generated_event(user, nonBaseEvent.get_event_id())
 
                 recurrenceType = tempRecurrenceReference.get_recurrenceType()
                 originalDateOfEvent = tempRecurrenceReference.get_dateOfFirstEvent()
